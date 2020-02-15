@@ -14,7 +14,6 @@ import { name as appName } from './app.json';
 const ProviderConfigured = () => (
     <Provider {...Stores}>
         <ApplicationProvider mapping={mapping} theme={lightTheme}>
-
             <SafeAreaView style={{ flex: 1 }}>
                 <Routes />
             </SafeAreaView>

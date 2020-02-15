@@ -1,10 +1,9 @@
-import { Button, Card, Text } from '@ui-kitten/components';
+import { Button, Card, Input, Text } from '@ui-kitten/components';
 import React, { Component, } from 'react';
-import { StyleSheet, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
 
 import HomeStore from '../../stores/home.store';
-import { TextInput } from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
 
 interface Props {
     homeStore: HomeStore
@@ -18,17 +17,15 @@ export default class Home extends Component<Props> {
         const { etanol, gasolina, resultado, calculate, handleForm } = this.props.homeStore;
 
         return (<>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Card>
-                    <Text>Etanol:</Text>
-                    <TextInput value={etanol.toString()} onChangeText={(etanol) => handleForm({ etanol })} />
-                    <Text>Gasolina:</Text>
-                    <TextInput value={gasolina.toString()} onChangeText={(gasolina) => handleForm({ gasolina })} />
+            <Card >
+                <Text>Etanol:</Text>
+                <Input value={etanol.toString()} onChangeText={(etanol) => handleForm({ etanol })} />
+                <Text>Gasolina:</Text>
+                <Input value={gasolina.toString()} onChangeText={(gasolina) => handleForm({ gasolina })} />
 
-                    <Button onPress={() => calculate()}>Calcular</Button>
-                    <Text style={styles.paragraph}>{resultado}</Text>
-                </Card>
-            </View>
+                <Button onPress={() => calculate()}>Calcular</Button>
+                <Text style={styles.paragraph}>{resultado}</Text>
+            </Card>
         </>);
     }
 }
