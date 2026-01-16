@@ -1,25 +1,47 @@
-import * as React from 'react';
-
-import Home from '../containers/home';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
+import Home from '../containers/home';
+import Stations from '../containers/stations';
+import Favorites from '../containers/favorites';
 
-const Stack = createStackNavigator();
+const { Navigator, Screen } = createBottomTabNavigator();
 
-function Routes() {
+const CalculatorIcon = (props) => (
+    <Icon {...props} name='pricetags-outline'/>
+);
+
+const MapIcon = (props) => (
+    <Icon {...props} name='map-outline'/>
+);
+
+const HeartIcon = (props) => (
+    <Icon {...props} name='heart-outline'/>
+);
+
+const BottomTabBar = ({ navigation, state }) => (
+    <BottomNavigation
+        selectedIndex={state.index}
+        onSelect={index => navigation.navigate(state.routeNames[index])}>
+        <BottomNavigationTab title='Calculadora' icon={CalculatorIcon}/>
+        <BottomNavigationTab title='Postos' icon={MapIcon}/>
+        <BottomNavigationTab title='Favoritos' icon={HeartIcon}/>
+    </BottomNavigation>
+);
+
+const TabNavigator = () => (
+    <Navigator tabBar={props => <BottomTabBar {...props} />}>
+        <Screen name='Calculator' component={Home}/>
+        <Screen name='Stations' component={Stations}/>
+        <Screen name='Favorites' component={Favorites}/>
+    </Navigator>
+);
+
+export default function Routes() {
     return (
-            <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen options={{
-                        headerTitle: 'Etanol ou Gasolina?',
-                        headerTintColor: '#ffffff',
-                        headerStyle: {
-                            backgroundColor: '#2b7cd7',
-                        }
-                    }} name="Home" component={Home} />
-                </Stack.Navigator>
-            </NavigationContainer>
-       
+        <NavigationContainer>
+            <TabNavigator />
+        </NavigationContainer>
     );
 }
-export default Routes;
