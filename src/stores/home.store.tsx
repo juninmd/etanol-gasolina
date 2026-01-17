@@ -2,24 +2,31 @@ import { action, observable } from 'mobx';
 
 export default class HomeStore {
 
-  @observable etanol = 0;
-  @observable gasolina = 0;
+  @observable etanol = '';
+  @observable gasolina = '';
   @observable resultado = '';
+  @observable recommendation = ''; // 'gas', 'ethanol', 'equal', ''
 
   @action calculate = () => {
-    const etanolValue = Number(this.etanol);
-    const gasolinaValue = Number(this.gasolina);
+    const etanolValue = parseFloat(this.etanol.replace(',', '.'));
+    const gasolinaValue = parseFloat(this.gasolina.replace(',', '.'));
 
-    if (!isNaN(etanolValue) && !isNaN(gasolinaValue)) {
+    if (!isNaN(etanolValue) && !isNaN(gasolinaValue) && gasolinaValue > 0) {
       const value = etanolValue / gasolinaValue;
 
       if (value > 0.70) {
-        this.resultado = 'Vale a pena gasolina';
+        this.resultado = 'Abasteça com Gasolina';
+        this.recommendation = 'gas';
       } else if (value < 0.70) {
-        this.resultado = 'Vale a pena etanol';
+        this.resultado = 'Abasteça com Etanol';
+        this.recommendation = 'ethanol';
       } else {
-        this.resultado = 'São equivalentes';
+        this.resultado = 'Tanto faz';
+        this.recommendation = 'equal';
       }
+    } else {
+        this.resultado = '';
+        this.recommendation = '';
     }
   }
 
@@ -27,6 +34,7 @@ export default class HomeStore {
     const key = Object.keys(input)[0];
     const value = input[key];
     this[key] = value;
+    this.calculate(); // Auto calculate
   }
 
 }
