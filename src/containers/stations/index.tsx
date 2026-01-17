@@ -7,6 +7,7 @@ import StationsStore from '../../stores/stations.store';
 
 interface Props {
     stationsStore: StationsStore;
+    navigation: any;
 }
 
 interface State {
@@ -33,12 +34,17 @@ export default class Stations extends Component<Props, State> {
         );
     };
 
+    onItemPress = (stationId: number) => {
+        this.props.navigation.navigate('StationDetails', { stationId });
+    };
+
     renderItem = ({ item }) => (
         <ListItem
-            title={`${item.name}`}
+            title={`${item.name} ${item.isPromo ? '(Promoção!)' : ''}`}
             description={`${item.address}\nGas: R$ ${item.priceGas} | Etanol: R$ ${item.priceEthanol}`}
             accessory={() => this.renderItemAccessory(item.id)}
             style={styles.item}
+            onPress={() => this.onItemPress(item.id)}
         />
     );
 
@@ -79,6 +85,8 @@ export default class Stations extends Component<Props, State> {
                                 }}
                                 title={station.name}
                                 description={`Gas: ${station.priceGas} | Etanol: ${station.priceEthanol}`}
+                                onCalloutPress={() => this.onItemPress(station.id)}
+                                pinColor={station.isPromo ? 'gold' : 'red'}
                             />
                         ))}
                     </MapView>
