@@ -7,9 +7,11 @@ export default class HomeStore {
   @observable resultado = '';
 
   @action calculate = () => {
-    const { etanol, gasolina } = this;
-    if (!isNaN(Number(etanol)) && !isNaN(Number(gasolina))) {
-      const value = Number(etanol) / Number(gasolina);
+    const etanolValue = Number(this.etanol);
+    const gasolinaValue = Number(this.gasolina);
+
+    if (!isNaN(etanolValue) && !isNaN(gasolinaValue)) {
+      const value = etanolValue / gasolinaValue;
 
       if (value > 0.70) {
         this.resultado = 'Vale a pena gasolina';
