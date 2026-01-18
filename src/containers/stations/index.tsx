@@ -21,6 +21,24 @@ export default class Stations extends Component<Props, State> {
         showMap: false,
     };
 
+    mapRef: MapView | null = null;
+
+    handleFindBestPrice = () => {
+        const { bestStation } = this.props.stationsStore;
+        if (bestStation) {
+            this.setState({ showMap: true }, () => {
+                 if (this.mapRef) {
+                    this.mapRef.animateToRegion({
+                        latitude: bestStation.latitude,
+                        longitude: bestStation.longitude,
+                        latitudeDelta: 0.005,
+                        longitudeDelta: 0.005,
+                    }, 1000);
+                }
+            });
+        }
+    };
+
     renderItemAccessory = (id: number) => {
         const { isFavorite, toggleFavorite } = this.props.stationsStore;
         return (
@@ -53,7 +71,7 @@ export default class Stations extends Component<Props, State> {
     };
 
     render() {
-        const { stations } = this.props.stationsStore;
+        const { filteredStations, filterPromo, toggleFilterPromo } = this.props.stationsStore;
         const { showMap } = this.state;
 
         return (
@@ -66,8 +84,17 @@ export default class Stations extends Component<Props, State> {
                     </View>
                 </View>
 
+                <View style={styles.controls}>
+                     <View style={styles.toggleContainer}>
+                        <Text style={styles.toggleLabel}>Só Promo</Text>
+                        <Toggle checked={filterPromo} onChange={toggleFilterPromo} status='warning'/>
+                    </View>
+                    <Button size='tiny' status='success' onPress={this.handleFindBestPrice}>Melhor Preço</Button>
+                </View>
+
                 {showMap ? (
                     <MapView
+                        ref={ref => this.mapRef = ref}
                         style={styles.map}
                         initialRegion={{
                             latitude: -23.561684,
@@ -76,7 +103,7 @@ export default class Stations extends Component<Props, State> {
                             longitudeDelta: 0.05,
                         }}
                     >
-                        {stations.map(station => (
+                        {filteredStations.map(station => (
                             <Marker
                                 key={station.id}
                                 coordinate={{
@@ -92,7 +119,7 @@ export default class Stations extends Component<Props, State> {
                     </MapView>
                 ) : (
                     <List
-                        data={stations}
+                        data={filteredStations}
                         renderItem={this.renderItem}
                     />
                 )}
@@ -107,6 +134,13 @@ const styles = StyleSheet.create({
         paddingTop: 40,
     },
     header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 15,
+        marginBottom: 10,
+    },
+    controls: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
