@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, ScrollView, View, Linking } from 'react-native';
 import { Layout, Text, Button, Icon, Input, List, ListItem, Card, TopNavigation, TopNavigationAction, Divider } from '@ui-kitten/components';
 import { inject, observer } from 'mobx-react';
 import StationsStore from '../../stores/stations.store';
@@ -62,6 +62,11 @@ export default class StationDetails extends Component<Props, State> {
         }
     };
 
+    handleRoute = (station) => {
+        const url = `https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}`;
+        Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    };
+
     renderCommentItem = ({ item }) => (
         <ListItem
             title={item.author}
@@ -99,6 +104,14 @@ export default class StationDetails extends Component<Props, State> {
                             <Button status='warning' size='small' style={styles.promoBadge}>Em Promoção!</Button>
                         )}
                     </Card>
+
+                    <Button
+                        style={styles.button}
+                        status='info'
+                        onPress={() => this.handleRoute(station)}
+                    >
+                        Traçar Rota
+                    </Button>
 
                     <Button
                         style={styles.button}

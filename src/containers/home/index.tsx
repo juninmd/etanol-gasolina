@@ -35,7 +35,7 @@ export default class Home extends Component<Props> {
     }
 
     render() {
-        const { etanol, gasolina, handleForm } = this.props.homeStore;
+        const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
 
         return (
             <Layout style={styles.container}>
@@ -56,6 +56,27 @@ export default class Home extends Component<Props> {
                         placeholder='R$ 0.00'
                         value={gasolina}
                         onChangeText={(gasolina) => handleForm({ gasolina })}
+                        keyboardType='numeric'
+                        style={styles.input}
+                    />
+                </Card>
+
+                <Card style={styles.inputCard}>
+                    <Text category='h6' style={styles.cardTitle}>Consumo (Opcional)</Text>
+                    <Text category='label' style={styles.label}>Km/l no Etanol</Text>
+                    <Input
+                        placeholder='Ex: 7.0'
+                        value={etanolConsumption}
+                        onChangeText={(etanolConsumption) => handleForm({ etanolConsumption })}
+                        keyboardType='numeric'
+                        style={styles.input}
+                    />
+
+                    <Text category='label' style={styles.label}>Km/l na Gasolina</Text>
+                    <Input
+                        placeholder='Ex: 10.0'
+                        value={gasolinaConsumption}
+                        onChangeText={(gasolinaConsumption) => handleForm({ gasolinaConsumption })}
                         keyboardType='numeric'
                         style={styles.input}
                     />
@@ -101,5 +122,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
         color: '#666'
+    },
+    cardTitle: {
+        marginBottom: 15,
+        textAlign: 'center',
+        color: '#888',
     },
 });

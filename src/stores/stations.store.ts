@@ -1,4 +1,5 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
+import { homeStore } from './home.store';
 
 export interface Comment {
     id: number;
@@ -59,6 +60,46 @@ export default class StationsStore {
     ];
 
     @observable favorites: number[] = [];
+    @observable filterPromo = false;
+
+    @computed get filteredStations() {
+        if (this.filterPromo) {
+            return this.stations.filter(s => s.isPromo);
+        }
+        return this.stations;
+    }
+
+    @computed get bestStation() {
+        if (this.stations.length === 0) return null;
+
+        const etanolCons = parseFloat(homeStore.etanolConsumption.replace(',', '.'));
+        const gasCons = parseFloat(homeStore.gasolinaConsumption.replace(',', '.'));
+        const useCustomCons = !isNaN(etanolCons) && !isNaN(gasCons) && etanolCons > 0 && gasCons > 0;
+
+        return this.stations.slice().sort((a, b) => {
+            let costA, costB;
+
+            if (useCustomCons) {
+                const costAEthanol = a.priceEthanol / etanolCons;
+                const costAGas = a.priceGas / gasCons;
+                const costBEthanol = b.priceEthanol / etanolCons;
+                const costBGas = b.priceGas / gasCons;
+                costA = Math.min(costAEthanol, costAGas);
+                costB = Math.min(costBEthanol, costBGas);
+            } else {
+                const costAEthanol = a.priceEthanol / 0.7;
+                const costBEthanol = b.priceEthanol / 0.7;
+                costA = Math.min(a.priceGas, costAEthanol);
+                costB = Math.min(b.priceGas, costBEthanol);
+            }
+
+            return costA - costB;
+        })[0];
+    }
+
+    @action toggleFilterPromo = () => {
+        this.filterPromo = !this.filterPromo;
+    }
 
     @action toggleFavorite = (id: number) => {
         if (this.favorites.includes(id)) {
