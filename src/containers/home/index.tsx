@@ -4,14 +4,60 @@ import { inject, observer } from 'mobx-react';
 import { StyleSheet, View } from 'react-native';
 
 import HomeStore from '../../stores/home.store';
+import StationsStore from '../../stores/stations.store';
+import { Alert } from 'react-native';
+import { reaction } from 'mobx';
 
 interface Props {
-    homeStore: HomeStore
+    homeStore: HomeStore;
+    stationsStore: StationsStore;
 }
 
-@inject('homeStore')
+@inject('homeStore', 'stationsStore')
 @observer
 export default class Home extends Component<Props> {
+    promoReaction: any;
+
+    componentDidMount() {
+        this.checkPromos();
+
+        // Reactive check for future updates
+        this.promoReaction = reaction(
+            () => {
+                const { favorites, stations } = this.props.stationsStore;
+                // React if favorites change or if promo status of a favorite changes
+                return stations
+                    .filter(s => favorites.includes(s.id) && s.isPromo)
+                    .map(s => s.id)
+                    .join(',');
+            },
+            (promoIds) => {
+                if (promoIds) {
+                    this.checkPromos();
+                }
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        if (this.promoReaction) {
+            this.promoReaction();
+        }
+    }
+
+    checkPromos = () => {
+        const { favorites, stations } = this.props.stationsStore;
+        if (favorites.length > 0) {
+            const promoStations = stations.filter(s => favorites.includes(s.id) && s.isPromo);
+            if (promoStations.length > 0) {
+                const stationNames = promoStations.map(s => s.name).join(', ');
+                Alert.alert(
+                    'Promoção Detectada!',
+                    `Os seguintes postos favoritos estão em promoção: ${stationNames}. Aproveite!`
+                );
+            }
+        }
+    }
 
     renderResult = () => {
         const { resultado, recommendation } = this.props.homeStore;
