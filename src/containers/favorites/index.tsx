@@ -6,6 +6,7 @@ import StationsStore from '../../stores/stations.store';
 
 interface Props {
     stationsStore: StationsStore;
+    navigation: any;
 }
 
 @inject('stationsStore')
@@ -25,12 +26,17 @@ export default class Favorites extends Component<Props> {
         );
     };
 
+    onItemPress = (stationId: number) => {
+        this.props.navigation.navigate('StationDetails', { stationId });
+    };
+
     renderItem = ({ item }) => (
         <ListItem
             title={`${item.name}`}
             description={`${item.address}\nGas: R$ ${item.priceGas} | Etanol: R$ ${item.priceEthanol}`}
             accessory={() => this.renderItemAccessory(item.id)}
             style={styles.item}
+            onPress={() => this.onItemPress(item.id)}
         />
     );
 
