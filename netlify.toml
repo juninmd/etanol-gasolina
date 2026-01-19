@@ -1,0 +1,6 @@
+[build]
+  command = "# No web build command yet. Install react-native-web to deploy as a website."
+  publish = "public"
+
+[dev]
+  command = "yarn start"
