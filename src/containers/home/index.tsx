@@ -87,6 +87,50 @@ export default class Home extends Component<Props> {
 
         return (
             <Layout style={styles.container}>
+                <Text category='h1' style={styles.title}>Calculadora Flex</Text>
+
+                <Card style={styles.inputCard}>
+                    <Text category='label' style={styles.label}>Preço do Etanol</Text>
+                    <Input
+                        placeholder='R$ 0.00'
+                        value={etanol}
+                        onChangeText={(etanol) => handleForm('etanol', etanol)}
+                        keyboardType='numeric'
+                        style={styles.input}
+                    />
+
+                    <Text category='label' style={styles.label}>Preço da Gasolina</Text>
+                    <Input
+                        placeholder='R$ 0.00'
+                        value={gasolina}
+                        onChangeText={(gasolina) => handleForm('gasolina', gasolina)}
+                        keyboardType='numeric'
+                        style={styles.input}
+                    />
+                </Card>
+
+                <Card style={styles.inputCard}>
+                    <Text category='h6' style={styles.cardTitle}>Consumo (Opcional)</Text>
+                    <Text category='label' style={styles.label}>Km/l no Etanol</Text>
+                    <Input
+                        placeholder='Ex: 7.0'
+                        value={etanolConsumption}
+                        onChangeText={(etanolConsumption) => handleForm('etanolConsumption', etanolConsumption)}
+                        keyboardType='numeric'
+                        style={styles.input}
+                    />
+
+                    <Text category='label' style={styles.label}>Km/l na Gasolina</Text>
+                    <Input
+                        placeholder='Ex: 10.0'
+                        value={gasolinaConsumption}
+                        onChangeText={(gasolinaConsumption) => handleForm('gasolinaConsumption', gasolinaConsumption)}
+                        keyboardType='numeric'
+                        style={styles.input}
+                    />
+                </Card>
+
+                {this.renderResult()}
                 <ScrollView contentContainerStyle={styles.scrollContent}>
 
                     {/* Dashboard Header */}
