@@ -7,7 +7,7 @@ export default class HomeStore {
   @observable etanolConsumption = '';
   @observable gasolinaConsumption = '';
   @observable resultado = '';
-  @observable recommendation = ''; // 'gas', 'ethanol', 'equal', ''
+  @observable recommendation: string = ''; // 'gas', 'ethanol', 'equal', ''
 
   @action calculate = () => {
     const etanolValue = parseFloat(this.etanol.replace(',', '.'));
@@ -49,9 +49,7 @@ export default class HomeStore {
     }
   }
 
-  @action handleForm = (input) => {
-    const key = Object.keys(input)[0];
-    const value = input[key];
+  @action handleForm = (key, value) => {
     this[key] = value;
     this.calculate(); // Auto calculate
   }
