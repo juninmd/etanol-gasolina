@@ -60,6 +60,22 @@ export default class Home extends Component<Props> {
         }
     }
 
+    handleEtanolChange = (etanol: string) => {
+        this.props.homeStore.handleForm({ etanol });
+    }
+
+    handleGasolinaChange = (gasolina: string) => {
+        this.props.homeStore.handleForm({ gasolina });
+    }
+
+    handleEtanolConsumptionChange = (etanolConsumption: string) => {
+        this.props.homeStore.handleForm({ etanolConsumption });
+    }
+
+    handleGasolinaConsumptionChange = (gasolinaConsumption: string) => {
+        this.props.homeStore.handleForm({ gasolinaConsumption });
+    }
+
     renderResult = () => {
         const { resultado, recommendation } = this.props.homeStore;
         if (!resultado) return null;
