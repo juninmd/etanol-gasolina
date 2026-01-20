@@ -41,12 +41,13 @@ export default class Stations extends Component<Props, State> {
 
     renderItemAccessory = (id: number) => {
         const { isFavorite, toggleFavorite } = this.props.stationsStore;
+        const fav = isFavorite(id);
         return (
             <Button
                 size='tiny'
                 appearance='ghost'
-                status={isFavorite(id) ? 'danger' : 'basic'}
-                icon={(style) => <Icon {...style} name={isFavorite(id) ? 'heart' : 'heart-outline'} />}
+                status={fav ? 'danger' : 'basic'}
+                icon={(style) => <Icon {...style} name={fav ? 'heart' : 'heart-outline'} />}
                 onPress={() => toggleFavorite(id)}
             />
         );
