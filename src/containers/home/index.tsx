@@ -59,6 +59,22 @@ export default class Home extends Component<Props> {
         }
     }
 
+    handleEtanolChange = (etanol: string) => {
+        this.props.homeStore.handleForm({ etanol });
+    }
+
+    handleGasolinaChange = (gasolina: string) => {
+        this.props.homeStore.handleForm({ gasolina });
+    }
+
+    handleEtanolConsumptionChange = (etanolConsumption: string) => {
+        this.props.homeStore.handleForm({ etanolConsumption });
+    }
+
+    handleGasolinaConsumptionChange = (gasolinaConsumption: string) => {
+        this.props.homeStore.handleForm({ gasolinaConsumption });
+    }
+
     renderResult = () => {
         const { resultado, recommendation } = this.props.homeStore;
         if (!resultado) return null;
@@ -92,7 +108,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='R$ 0.00'
                         value={etanol}
-                        onChangeText={(etanol) => handleForm({ etanol })}
+                        onChangeText={this.handleEtanolChange}
                         keyboardType='numeric'
                         style={styles.input}
                     />
@@ -101,7 +117,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='R$ 0.00'
                         value={gasolina}
-                        onChangeText={(gasolina) => handleForm({ gasolina })}
+                        onChangeText={this.handleGasolinaChange}
                         keyboardType='numeric'
                         style={styles.input}
                     />
@@ -113,7 +129,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='Ex: 7.0'
                         value={etanolConsumption}
-                        onChangeText={(etanolConsumption) => handleForm({ etanolConsumption })}
+                        onChangeText={this.handleEtanolConsumptionChange}
                         keyboardType='numeric'
                         style={styles.input}
                     />
@@ -122,7 +138,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='Ex: 10.0'
                         value={gasolinaConsumption}
-                        onChangeText={(gasolinaConsumption) => handleForm({ gasolinaConsumption })}
+                        onChangeText={this.handleGasolinaConsumptionChange}
                         keyboardType='numeric'
                         style={styles.input}
                     />
