@@ -6,6 +6,7 @@ module.exports = {
       {
         "legacy": true
       }
-    ]
+    ],
+    "@babel/plugin-transform-flow-strip-types"
   ]
 };
