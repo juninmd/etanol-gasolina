@@ -1,4 +1,4 @@
-import { action, observable, computed } from 'mobx';
+import { action, observable, computed, runInAction } from 'mobx';
 import { homeStore } from './home.store';
 
 export interface Comment {
@@ -61,6 +61,42 @@ export default class StationsStore {
 
     @observable favorites: number[] = [];
     @observable filterPromo = false;
+    @observable totalSavings = 125.50;
+    @observable checkinStation: Station | null = null;
+
+    constructor() {
+        this.startRealTimeUpdates();
+        this.startGeofenceSimulation();
+    }
+
+    startRealTimeUpdates() {
+        // Simulates real-time price updates from an API
+        setInterval(() => {
+            runInAction(() => {
+                this.stations.forEach(station => {
+                    if (Math.random() > 0.7) { // 30% chance to update
+                        const change = (Math.random() - 0.5) * 0.10; // +/- 0.05
+                        station.priceGas = Math.max(3.0, parseFloat((station.priceGas + change).toFixed(2)));
+                        station.priceEthanol = Math.max(2.0, parseFloat((station.priceEthanol + change * 0.7).toFixed(2)));
+                    }
+                });
+            });
+        }, 5000);
+    }
+
+    startGeofenceSimulation() {
+        // Simulates detecting that the user is near a station (Geofencing)
+        setTimeout(() => {
+            runInAction(() => {
+                // Randomly pick a station to "be at"
+                this.checkinStation = this.stations[Math.floor(Math.random() * this.stations.length)];
+            });
+        }, 8000);
+    }
+
+    @action dismissCheckin = () => {
+        this.checkinStation = null;
+    }
 
     @computed get filteredStations() {
         if (this.filterPromo) {
