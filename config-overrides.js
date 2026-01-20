@@ -13,17 +13,18 @@ module.exports = override(
   addDecoratorsLegacy(),
   babelInclude([
     path.resolve(__dirname, 'src'),
-    path.resolve(__dirname, 'node_modules/@ui-kitten'),
-    path.resolve(__dirname, 'node_modules/@eva-design'),
-    path.resolve(__dirname, 'node_modules/react-native-svg'),
-    path.resolve(__dirname, 'node_modules/react-native-gesture-handler'),
-    path.resolve(__dirname, 'node_modules/react-native-reanimated'),
-    path.resolve(__dirname, 'node_modules/react-native-screens'),
-    path.resolve(__dirname, 'node_modules/@react-navigation'),
-    path.resolve(__dirname, 'node_modules/react-native-safe-area-context'),
-    path.resolve(__dirname, 'node_modules/@react-native-community'),
-    path.resolve(__dirname, 'node_modules/mobx-react'),
-    path.resolve(__dirname, 'node_modules/react-native-maps'),
+    // With pnpm, node_modules structure is nested.
+    // We can't rely on simple path.resolve(__dirname, 'node_modules/...') because pnpm uses symlinks
+    // and the actual path might be deeper.
+    // However, babel-loader usually resolves symlinks.
+    // The issue might be that pnpm's strictness requires us to include the actual real paths of the packages.
+    // But listing every single package path is tedious and fragile.
+    // A better approach with customize-cra/babelInclude is to include 'src' and then
+    // let babel process node_modules if they are explicitly included.
+
+    // For pnpm, we might need to verify where these packages actually live or just include the root node_modules
+    // but allow babel to process them.
+    path.resolve(__dirname, 'node_modules'),
   ]),
   addWebpackAlias({
     'react-native': path.resolve(__dirname, 'src/react-native-patch.js'),
