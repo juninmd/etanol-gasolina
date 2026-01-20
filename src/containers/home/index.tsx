@@ -92,7 +92,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='R$ 0.00'
                         value={etanol}
-                        onChangeText={(etanol) => handleForm({ etanol })}
+                        onChangeText={(etanol) => handleForm('etanol', etanol)}
                         keyboardType='numeric'
                         style={styles.input}
                     />
@@ -101,7 +101,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='R$ 0.00'
                         value={gasolina}
-                        onChangeText={(gasolina) => handleForm({ gasolina })}
+                        onChangeText={(gasolina) => handleForm('gasolina', gasolina)}
                         keyboardType='numeric'
                         style={styles.input}
                     />
@@ -113,7 +113,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='Ex: 7.0'
                         value={etanolConsumption}
-                        onChangeText={(etanolConsumption) => handleForm({ etanolConsumption })}
+                        onChangeText={(etanolConsumption) => handleForm('etanolConsumption', etanolConsumption)}
                         keyboardType='numeric'
                         style={styles.input}
                     />
@@ -122,7 +122,7 @@ export default class Home extends Component<Props> {
                     <Input
                         placeholder='Ex: 10.0'
                         value={gasolinaConsumption}
-                        onChangeText={(gasolinaConsumption) => handleForm({ gasolinaConsumption })}
+                        onChangeText={(gasolinaConsumption) => handleForm('gasolinaConsumption', gasolinaConsumption)}
                         keyboardType='numeric'
                         style={styles.input}
                     />
