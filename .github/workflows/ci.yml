@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '16.x'
+    - run: yarn install
+    - run: yarn test --coverage
+
+    - name: Upload Preview (Coverage)
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage/
