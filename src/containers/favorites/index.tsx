@@ -20,8 +20,9 @@ export default class Favorites extends Component<Props> {
                 size='tiny'
                 appearance='ghost'
                 status='danger'
-                icon={(style) => <Icon {...style} name='heart' />}
+                icon={(style: any) => <Icon {...style} name='heart' />}
                 onPress={() => toggleFavorite(id)}
+                children={undefined}
             />
         );
     };
