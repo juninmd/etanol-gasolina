@@ -49,9 +49,7 @@ export default class HomeStore {
     }
   }
 
-  @action handleForm = (input) => {
-    const key = Object.keys(input)[0];
-    const value = input[key];
+  @action handleForm = (key, value) => {
     this[key] = value;
     this.calculate(); // Auto calculate
   }
