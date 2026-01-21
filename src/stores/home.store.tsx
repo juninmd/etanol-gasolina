@@ -49,8 +49,14 @@ export default class HomeStore {
     }
   }
 
-  @action handleForm = (key, value) => {
-    this[key] = value;
+  @action handleForm = (keyOrObject: string | Record<string, any>, value?: any) => {
+    if (typeof keyOrObject === 'string') {
+        this[keyOrObject] = value;
+    } else if (typeof keyOrObject === 'object') {
+        Object.keys(keyOrObject).forEach(key => {
+            this[key] = keyOrObject[key];
+        });
+    }
     this.calculate(); // Auto calculate
   }
 
