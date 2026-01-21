@@ -47,6 +47,7 @@ export default class StationDetails extends Component<Props, State> {
         if (commentText.trim()) {
             stationsStore.addComment(stationId, commentText);
             this.setState({ commentText: '' });
+            alert('Comentário adicionado! Você ganhou 5 pontos.');
         }
     };
 
@@ -58,7 +59,7 @@ export default class StationDetails extends Component<Props, State> {
         if (newGasPrice && newEthanolPrice) {
             stationsStore.updatePrice(stationId, parseFloat(newGasPrice), parseFloat(newEthanolPrice));
             this.setState({ showUpdatePrice: false, newGasPrice: '', newEthanolPrice: '' });
-            alert('Preços atualizados com sucesso!');
+            alert('Preços atualizados com sucesso! Você ganhou 10 pontos.');
         }
     };
 
@@ -73,6 +74,14 @@ export default class StationDetails extends Component<Props, State> {
             description={`${item.date}\n${item.text}`}
             style={styles.commentItem}
         />
+    );
+
+    renderHistoryItem = (item, index) => (
+        <View key={index} style={styles.historyItem}>
+            <Text category='c1'>{item.date}</Text>
+            <Text category='c1' status='info'>G: {item.gas.toFixed(2)}</Text>
+            <Text category='c1' status='success'>E: {item.ethanol.toFixed(2)}</Text>
+        </View>
     );
 
     render() {
@@ -104,6 +113,16 @@ export default class StationDetails extends Component<Props, State> {
                             <Button status='warning' size='small' style={styles.promoBadge}>Em Promoção!</Button>
                         )}
                     </Card>
+
+                    {/* Price History Section */}
+                    {station.priceHistory && station.priceHistory.length > 0 && (
+                        <Card style={styles.card}>
+                            <Text category='h6' style={styles.sectionTitle}>Histórico de Preços</Text>
+                            <View style={styles.historyContainer}>
+                                {station.priceHistory.slice(-5).map(this.renderHistoryItem)}
+                            </View>
+                        </Card>
+                    )}
 
                     <Button
                         style={styles.button}
@@ -212,5 +231,13 @@ const styles = StyleSheet.create({
     commentInput: {
         flex: 1,
         marginRight: 10,
+    },
+    historyContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    historyItem: {
+        alignItems: 'center',
     }
 });
