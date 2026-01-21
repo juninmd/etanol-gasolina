@@ -14,10 +14,22 @@ interface Props {
     navigation: any;
 }
 
+interface State {
+    showTripCalculator: boolean;
+    tripDistance: string;
+    tripCost: string;
+}
+
 @inject('homeStore', 'stationsStore')
 @observer
-export default class Home extends Component<Props> {
+export default class Home extends Component<Props, State> {
     promoReaction: any;
+
+    state: State = {
+        showTripCalculator: false,
+        tripDistance: '',
+        tripCost: '',
+    };
 
     componentDidMount() {
         this.checkPromos();
@@ -76,6 +88,31 @@ export default class Home extends Component<Props> {
         this.props.homeStore.handleForm({ gasolinaConsumption });
     }
 
+    calculateTripCost = () => {
+        const { tripDistance } = this.state;
+        const { bestStation } = this.props.stationsStore;
+        const { etanolConsumption, gasolinaConsumption } = this.props.homeStore;
+
+        if (!tripDistance || !bestStation) return;
+
+        const distance = parseFloat(tripDistance.replace(',', '.'));
+        const gasCons = parseFloat(gasolinaConsumption.replace(',', '.')) || 10; // Default 10km/l
+        const ethCons = parseFloat(etanolConsumption.replace(',', '.')) || 7;   // Default 7km/l
+
+        if (isNaN(distance)) return;
+
+        // Calculate cost using best station prices
+        const costGas = (distance / gasCons) * bestStation.priceGas;
+        const costEth = (distance / ethCons) * bestStation.priceEthanol;
+
+        const bestOption = costEth < costGas ? 'Etanol' : 'Gasolina';
+        const bestPrice = Math.min(costGas, costEth);
+
+        this.setState({
+            tripCost: `R$ ${bestPrice.toFixed(2)} com ${bestOption}`
+        });
+    }
+
     renderResult = () => {
         const { resultado, recommendation } = this.props.homeStore;
         if (!resultado) return null;
@@ -99,55 +136,61 @@ export default class Home extends Component<Props> {
 
     render() {
         const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
-        const { totalSavings, bestStation, checkinStation, dismissCheckin } = this.props.stationsStore;
+        const { totalSavings, bestStation, checkinStation, dismissCheckin, points } = this.props.stationsStore;
 
         return (
             <Layout style={styles.container}>
-                <Text category='h1' style={styles.title}>Calculadora Flex</Text>
+                <View style={styles.header}>
+                    <Text category='h1' style={styles.title}>Calculadora Flex</Text>
+                    <View style={styles.pointsBadge}>
+                        <Icon name='award' width={20} height={20} fill='#FFD700' />
+                        <Text style={styles.pointsText}>{points} pts</Text>
+                    </View>
+                </View>
 
-                <Card style={styles.inputCard}>
-                    <Text category='label' style={styles.label}>Preço do Etanol</Text>
-                    <Input
-                        placeholder='R$ 0.00'
-                        value={etanol}
-                        onChangeText={(etanol) => handleForm('etanol', etanol)}
-                        keyboardType='numeric'
-                        style={styles.input}
-                    />
-
-                    <Text category='label' style={styles.label}>Preço da Gasolina</Text>
-                    <Input
-                        placeholder='R$ 0.00'
-                        value={gasolina}
-                        onChangeText={(gasolina) => handleForm('gasolina', gasolina)}
-                        keyboardType='numeric'
-                        style={styles.input}
-                    />
-                </Card>
-
-                <Card style={styles.inputCard}>
-                    <Text category='h6' style={styles.cardTitle}>Consumo (Opcional)</Text>
-                    <Text category='label' style={styles.label}>Km/l no Etanol</Text>
-                    <Input
-                        placeholder='Ex: 7.0'
-                        value={etanolConsumption}
-                        onChangeText={(etanolConsumption) => handleForm('etanolConsumption', etanolConsumption)}
-                        keyboardType='numeric'
-                        style={styles.input}
-                    />
-
-                    <Text category='label' style={styles.label}>Km/l na Gasolina</Text>
-                    <Input
-                        placeholder='Ex: 10.0'
-                        value={gasolinaConsumption}
-                        onChangeText={(gasolinaConsumption) => handleForm('gasolinaConsumption', gasolinaConsumption)}
-                        keyboardType='numeric'
-                        style={styles.input}
-                    />
-                </Card>
-
-                {this.renderResult()}
                 <ScrollView contentContainerStyle={styles.scrollContent}>
+                    <Card style={styles.inputCard}>
+                        <Text category='label' style={styles.label}>Preço do Etanol</Text>
+                        <Input
+                            placeholder='R$ 0.00'
+                            value={etanol}
+                            onChangeText={(etanol) => handleForm('etanol', etanol)}
+                            keyboardType='numeric'
+                            style={styles.input}
+                        />
+
+                        <Text category='label' style={styles.label}>Preço da Gasolina</Text>
+                        <Input
+                            placeholder='R$ 0.00'
+                            value={gasolina}
+                            onChangeText={(gasolina) => handleForm('gasolina', gasolina)}
+                            keyboardType='numeric'
+                            style={styles.input}
+                        />
+                    </Card>
+
+                    <Card style={styles.inputCard}>
+                        <Text category='h6' style={styles.cardTitle}>Consumo (Opcional)</Text>
+                        <Text category='label' style={styles.label}>Km/l no Etanol</Text>
+                        <Input
+                            placeholder='Ex: 7.0'
+                            value={etanolConsumption}
+                            onChangeText={(etanolConsumption) => handleForm('etanolConsumption', etanolConsumption)}
+                            keyboardType='numeric'
+                            style={styles.input}
+                        />
+
+                        <Text category='label' style={styles.label}>Km/l na Gasolina</Text>
+                        <Input
+                            placeholder='Ex: 10.0'
+                            value={gasolinaConsumption}
+                            onChangeText={(gasolinaConsumption) => handleForm('gasolinaConsumption', gasolinaConsumption)}
+                            keyboardType='numeric'
+                            style={styles.input}
+                        />
+                    </Card>
+
+                    {this.renderResult()}
 
                     {/* Dashboard Header */}
                     <Card status='success' style={styles.dashboardCard}>
@@ -179,50 +222,15 @@ export default class Home extends Component<Props> {
                         </Card>
                     )}
 
-                    <Text category='h4' style={styles.title}>Calculadora Flex</Text>
-
-                    <Card style={styles.inputCard}>
-                        <Text category='label' style={styles.label}>Preço do Etanol</Text>
-                        <Input
-                            placeholder='R$ 0.00'
-                            value={etanol}
-                            onChangeText={(etanol) => handleForm({ etanol })}
-                            keyboardType='numeric'
-                            style={styles.input}
-                        />
-
-                        <Text category='label' style={styles.label}>Preço da Gasolina</Text>
-                        <Input
-                            placeholder='R$ 0.00'
-                            value={gasolina}
-                            onChangeText={(gasolina) => handleForm({ gasolina })}
-                            keyboardType='numeric'
-                            style={styles.input}
-                        />
-                    </Card>
-
-                    <Card style={styles.inputCard}>
-                        <Text category='h6' style={styles.cardTitle}>Consumo (Opcional)</Text>
-                        <Text category='label' style={styles.label}>Km/l no Etanol</Text>
-                        <Input
-                            placeholder='Ex: 7.0'
-                            value={etanolConsumption}
-                            onChangeText={(etanolConsumption) => handleForm({ etanolConsumption })}
-                            keyboardType='numeric'
-                            style={styles.input}
-                        />
-
-                        <Text category='label' style={styles.label}>Km/l na Gasolina</Text>
-                        <Input
-                            placeholder='Ex: 10.0'
-                            value={gasolinaConsumption}
-                            onChangeText={(gasolinaConsumption) => handleForm({ gasolinaConsumption })}
-                            keyboardType='numeric'
-                            style={styles.input}
-                        />
-                    </Card>
-
-                    {this.renderResult()}
+                    <Button
+                        style={styles.tripButton}
+                        appearance='outline'
+                        status='info'
+                        onPress={() => this.setState({ showTripCalculator: true })}
+                        accessoryLeft={(props) => <Icon {...props} name='map-outline'/>}
+                    >
+                        Simular Custo de Viagem
+                    </Button>
                 </ScrollView>
 
                 <Modal
@@ -231,7 +239,7 @@ export default class Home extends Component<Props> {
                     onBackdropPress={dismissCheckin}>
                     <Card disabled={true} style={styles.modalCard}>
                         <Text category='h5' style={{marginBottom: 10}}>Você está em {checkinStation?.name}?</Text>
-                        <Text style={{marginBottom: 20}}>Ajude a comunidade atualizando o preço!</Text>
+                        <Text style={{marginBottom: 20}}>Ajude a comunidade atualizando o preço e ganhe pontos!</Text>
                         <Button onPress={() => {
                             const id = checkinStation?.id;
                             dismissCheckin();
@@ -244,6 +252,33 @@ export default class Home extends Component<Props> {
                         </Button>
                     </Card>
                 </Modal>
+
+                <Modal
+                    visible={this.state.showTripCalculator}
+                    backdropStyle={styles.backdrop}
+                    onBackdropPress={() => this.setState({ showTripCalculator: false, tripCost: '' })}
+                >
+                    <Card disabled={true} style={styles.modalCard}>
+                        <Text category='h5' style={{marginBottom: 10}}>Calculadora de Viagem</Text>
+                        <Text style={{marginBottom: 10}}>Distância (Km):</Text>
+                        <Input
+                            placeholder='Ex: 150'
+                            value={this.state.tripDistance}
+                            onChangeText={text => this.setState({ tripDistance: text })}
+                            keyboardType='numeric'
+                            style={styles.input}
+                        />
+                        {this.state.tripCost ? (
+                            <Text status='success' category='h6' style={{marginVertical: 10}}>{this.state.tripCost}</Text>
+                        ) : null}
+                        <Button onPress={this.calculateTripCost} style={{marginBottom: 10}}>
+                            Calcular
+                        </Button>
+                        <Button appearance='ghost' onPress={() => this.setState({ showTripCalculator: false, tripCost: '' })}>
+                            Fechar
+                        </Button>
+                    </Card>
+                </Modal>
             </Layout>
         );
     }
@@ -253,13 +288,32 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 10,
+    },
+    pointsBadge: {
+        position: 'absolute',
+        right: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0',
+        padding: 5,
+        borderRadius: 12,
+    },
+    pointsText: {
+        marginLeft: 5,
+        fontWeight: 'bold',
+        color: '#333',
+    },
     scrollContent: {
         padding: 20,
     },
     title: {
         textAlign: 'center',
-        marginBottom: 20,
-        marginTop: 20,
         color: '#3366FF'
     },
     inputCard: {
@@ -272,7 +326,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     resultCard: {
-        marginTop: 10,
+        marginBottom: 20,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -306,7 +360,7 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     suggestionCard: {
-        marginBottom: 10,
+        marginBottom: 20,
         borderLeftWidth: 5,
         borderLeftColor: '#3366FF',
     },
@@ -330,4 +384,7 @@ const styles = StyleSheet.create({
         padding: 20,
         width: 300,
     },
+    tripButton: {
+        marginBottom: 20
+    }
 });

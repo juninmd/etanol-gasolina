@@ -18,6 +18,7 @@ export interface Station {
     longitude: number;
     isPromo: boolean;
     comments: Comment[];
+    priceHistory: { date: string, gas: number, ethanol: number }[];
 }
 
 export default class StationsStore {
@@ -33,6 +34,11 @@ export default class StationsStore {
             isPromo: true,
             comments: [
                 { id: 1, text: 'Ótimo atendimento!', author: 'João', date: '10/05/2023' }
+            ],
+            priceHistory: [
+                { date: '01/05', gas: 5.49, ethanol: 3.69 },
+                { date: '05/05', gas: 5.55, ethanol: 3.75 },
+                { date: '10/05', gas: 5.59, ethanol: 3.79 },
             ]
         },
         {
@@ -44,7 +50,11 @@ export default class StationsStore {
             latitude: -23.553205,
             longitude: -46.654251,
             isPromo: false,
-            comments: []
+            comments: [],
+            priceHistory: [
+                { date: '01/05', gas: 5.39, ethanol: 3.79 },
+                { date: '10/05', gas: 5.49, ethanol: 3.89 },
+            ]
         },
         {
             id: 3,
@@ -55,13 +65,15 @@ export default class StationsStore {
             latitude: -23.566838,
             longitude: -46.671047,
             isPromo: false,
-            comments: []
+            comments: [],
+            priceHistory: []
         }
     ];
 
     @observable favorites: number[] = [];
     @observable filterPromo = false;
     @observable totalSavings = 125.50;
+    @observable points = 150; // Initial gamification points
     @observable checkinStation: Station | null = null;
 
     constructor() {
@@ -158,6 +170,7 @@ export default class StationsStore {
                 author: 'Você',
                 date: new Date().toLocaleDateString()
             });
+            this.addPoints(5); // 5 points for comment
         }
     }
 
@@ -166,7 +179,21 @@ export default class StationsStore {
         if (station) {
             station.priceGas = gas;
             station.priceEthanol = ethanol;
+
+            // Add to history
+            if (!station.priceHistory) station.priceHistory = [];
+            station.priceHistory.push({
+                date: new Date().toLocaleDateString(undefined, { day: '2-digit', month: '2-digit'}),
+                gas,
+                ethanol
+            });
+
+            this.addPoints(10); // 10 points for update
         }
+    }
+
+    @action addPoints = (amount: number) => {
+        this.points += amount;
     }
 }
 
