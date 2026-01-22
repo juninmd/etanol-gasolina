@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1769077334523" clover="3.2.0">
-  <project timestamp="1769077334523" name="All files">
+<coverage generated="1769096617074" clover="3.2.0">
+  <project timestamp="1769096617074" name="All files">
     <metrics statements="141" coveredstatements="106" conditionals="64" coveredconditionals="38" methods="44" coveredmethods="34" elements="249" coveredelements="178" complexity="0" loc="141" ncloc="141" packages="1" files="3" classes="3"/>
     <file name="garage.store.ts" path="/app/src/stores/garage.store.ts">
       <metrics statements="31" coveredstatements="31" conditionals="10" coveredconditionals="6" methods="19" coveredmethods="19"/>
       <line num="24" count="2" type="stmt"/>
       <line num="34" count="2" type="stmt"/>
       <line num="35" count="2" type="stmt"/>
-      <line num="38" count="5" type="cond" truecount="1" falsecount="1"/>
+      <line num="38" count="4" type="cond" truecount="1" falsecount="1"/>
       <line num="42" count="2" type="stmt"/>
       <line num="43" count="6" type="stmt"/>
       <line num="44" count="2" type="stmt"/>
