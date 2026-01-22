@@ -7,6 +7,9 @@ import Home from '../containers/home';
 import Stations from '../containers/stations';
 import Favorites from '../containers/favorites';
 import StationDetails from '../containers/station-details';
+import Garage from '../containers/garage';
+import AddVehicle from '../containers/garage/add-vehicle';
+import AddFill from '../containers/garage/add-fill';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +26,10 @@ const HeartIcon = (props) => (
     <Icon {...props} name='heart-outline'/>
 );
 
+const CarIcon = (props) => (
+    <Icon {...props} name='car-outline'/>
+);
+
 const BottomTabBar = ({ navigation, state }) => (
     <BottomNavigation
         selectedIndex={state.index}
@@ -30,6 +37,7 @@ const BottomTabBar = ({ navigation, state }) => (
         <BottomNavigationTab title='Calculadora' icon={CalculatorIcon}/>
         <BottomNavigationTab title='Postos' icon={MapIcon}/>
         <BottomNavigationTab title='Favoritos' icon={HeartIcon}/>
+        <BottomNavigationTab title='Garagem' icon={CarIcon}/>
     </BottomNavigation>
 );
 
@@ -38,6 +46,7 @@ const TabNavigator = () => (
         <Screen name='Calculator' component={Home}/>
         <Screen name='Stations' component={Stations}/>
         <Screen name='Favorites' component={Favorites}/>
+        <Screen name='Garage' component={Garage}/>
     </Navigator>
 );
 
@@ -45,6 +54,8 @@ const RootNavigator = () => (
     <Stack.Navigator headerMode='none'>
         <Stack.Screen name='Root' component={TabNavigator}/>
         <Stack.Screen name='StationDetails' component={StationDetails}/>
+        <Stack.Screen name='AddVehicle' component={AddVehicle}/>
+        <Stack.Screen name='AddFill' component={AddFill}/>
     </Stack.Navigator>
 );
 
