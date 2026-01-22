@@ -85,7 +85,7 @@ export default class StationDetails extends Component<Props, State> {
     );
 
     render() {
-        const { route, stationsStore } = this.props;
+        const { route, stationsStore, navigation } = this.props;
         const { stationId } = route.params;
         const station = stationsStore.stations.find(s => s.id === stationId);
 
@@ -128,14 +128,25 @@ export default class StationDetails extends Component<Props, State> {
                         style={styles.button}
                         status='info'
                         onPress={() => this.handleRoute(station)}
+                        accessoryLeft={(props) => <Icon {...props} name='navigation-2-outline'/>}
                     >
                         Traçar Rota
                     </Button>
 
                     <Button
                         style={styles.button}
+                        status='success'
+                        onPress={() => navigation.navigate('AddFill', { stationId: station.id })}
+                        accessoryLeft={(props) => <Icon {...props} name='droplet'/>}
+                    >
+                        Registrar Abastecimento
+                    </Button>
+
+                    <Button
+                        style={styles.button}
                         status='primary'
                         onPress={() => this.setState({ showUpdatePrice: !this.state.showUpdatePrice })}
+                        accessoryLeft={(props) => <Icon {...props} name='edit-outline'/>}
                     >
                         Estou aqui! Atualizar Preço
                     </Button>
