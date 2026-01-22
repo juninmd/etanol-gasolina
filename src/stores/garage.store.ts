@@ -63,7 +63,7 @@ export default class GarageStore {
     @action addVehicle = (vehicle: Omit<Vehicle, 'id'>) => {
         const newVehicle = {
             ...vehicle,
-            id: Date.now().toString()
+            id: (Date.now() + Math.random()).toString()
         };
         this.vehicles.push(newVehicle);
         if (!this.selectedVehicleId) {

@@ -37,9 +37,11 @@ describe('GarageStore', () => {
             avgEthanolConsumption: 8
         });
 
-        const id2 = garageStore.vehicles[1].id;
-        garageStore.selectVehicle(id2);
-        expect(garageStore.selectedVehicleId).toBe(id2);
+        const car2 = garageStore.vehicles.find(v => v.name === 'Car 2');
+        if (!car2) throw new Error('Car 2 not found');
+
+        garageStore.selectVehicle(car2.id);
+        expect(garageStore.selectedVehicleId).toBe(car2.id);
         expect(garageStore.selectedVehicle?.name).toBe('Car 2');
     });
 
