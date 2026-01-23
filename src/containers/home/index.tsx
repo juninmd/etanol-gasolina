@@ -20,6 +20,7 @@ interface State {
     showTripCalculator: boolean;
     tripDistance: string;
     tripCost: string;
+    promoMessage: string | null;
 }
 
 @inject('homeStore', 'stationsStore', 'garageStore')
@@ -31,6 +32,7 @@ export default class Home extends Component<Props, State> {
         showTripCalculator: false,
         tripDistance: '',
         tripCost: '',
+        promoMessage: null,
     };
 
     componentDidMount() {
@@ -66,10 +68,11 @@ export default class Home extends Component<Props, State> {
             const promoStations = stations.filter(s => favorites.includes(s.id) && s.isPromo);
             if (promoStations.length > 0) {
                 const stationNames = promoStations.map(s => s.name).join(', ');
-                Alert.alert(
-                    'Promoção Detectada!',
-                    `Os seguintes postos favoritos estão em promoção: ${stationNames}. Aproveite!`
-                );
+                this.setState({
+                    promoMessage: `Promoção nos favoritos: ${stationNames}!`
+                });
+            } else {
+                this.setState({ promoMessage: null });
             }
         }
     }
@@ -136,10 +139,30 @@ export default class Home extends Component<Props, State> {
         );
     }
 
+    renderGamificationCard = () => {
+        const { level, nextLevelPoints, progress, points } = this.props.stationsStore;
+        return (
+            <Card style={styles.gamificationCard}>
+                <View style={styles.levelHeader}>
+                    <Icon name='shield-outline' width={30} height={30} fill='#3366FF' />
+                    <View style={{marginLeft: 10}}>
+                        <Text category='h6'>Nível: {level}</Text>
+                        <Text category='c1' appearance='hint'>Próximo nível em {nextLevelPoints - points} pts</Text>
+                    </View>
+                </View>
+                <View style={styles.progressBarBackground}>
+                    <View style={[styles.progressBarFill, { width: `${progress * 100}%` }]} />
+                </View>
+                <Text category='c1' style={{textAlign: 'right', marginTop: 5}}>{Math.floor(progress * 100)}%</Text>
+            </Card>
+        );
+    }
+
     render() {
         const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
         const { totalSavings, bestStation, checkinStation, dismissCheckin, points } = this.props.stationsStore;
         const { selectedVehicle } = this.props.garageStore;
+        const { promoMessage } = this.state;
 
         return (
             <Layout style={styles.container}>
@@ -151,7 +174,16 @@ export default class Home extends Component<Props, State> {
                     </View>
                 </View>
 
+                {promoMessage && (
+                    <View style={styles.promoBanner}>
+                        <Icon name='alert-circle-outline' width={24} height={24} fill='#fff' />
+                        <Text style={styles.promoText}>{promoMessage}</Text>
+                    </View>
+                )}
+
                 <ScrollView contentContainerStyle={styles.scrollContent}>
+                    {this.renderGamificationCard()}
+
                     <Card style={styles.inputCard}>
                         <Text category='label' style={styles.label}>Preço do Etanol</Text>
                         <Input
@@ -370,6 +402,41 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         backgroundColor: '#00E096', // Success color
         borderWidth: 0,
+    },
+    gamificationCard: {
+        marginBottom: 20,
+        borderColor: '#3366FF',
+        borderTopWidth: 4,
+    },
+    levelHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    progressBarBackground: {
+        height: 8,
+        backgroundColor: '#eee',
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: '#3366FF',
+    },
+    promoBanner: {
+        backgroundColor: '#FFA500',
+        padding: 10,
+        marginHorizontal: 20,
+        marginTop: 10,
+        borderRadius: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    promoText: {
+        color: 'white',
+        marginLeft: 10,
+        fontWeight: 'bold',
+        flex: 1,
     },
     dashboardHeader: {
         flexDirection: 'row',
