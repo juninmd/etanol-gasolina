@@ -61,4 +61,29 @@ describe('StationsStore', () => {
         expect(station?.comments.length).toBe(1);
         expect(station?.comments[0].text).toBe('Nice!');
     });
+
+    describe('Gamification', () => {
+        it('should calculate levels correctly', () => {
+            stationsStore.points = 0;
+            expect(stationsStore.level).toBe('Novato');
+            expect(stationsStore.progress).toBe(0);
+            expect(stationsStore.nextLevelPoints).toBe(200);
+
+            stationsStore.points = 100;
+            expect(stationsStore.level).toBe('Novato');
+            expect(stationsStore.progress).toBe(0.5);
+
+            stationsStore.points = 200;
+            expect(stationsStore.level).toBe('Explorador');
+            expect(stationsStore.progress).toBe(0);
+            expect(stationsStore.nextLevelPoints).toBe(500);
+
+            stationsStore.points = 350;
+            expect(stationsStore.progress).toBe(0.5);
+
+            stationsStore.points = 500;
+            expect(stationsStore.level).toBe('Mestre');
+            expect(stationsStore.progress).toBe(0);
+        });
+    });
 });

@@ -1,5 +1,6 @@
-const { override, addDecoratorsLegacy, babelInclude, addWebpackAlias } = require('customize-cra');
+const { override, addDecoratorsLegacy, babelInclude, addWebpackAlias, addWebpackPlugin } = require('customize-cra');
 const path = require('path');
+const webpack = require('webpack');
 
 const addWebExtensions = () => (config) => {
   const extensions = config.resolve.extensions;
@@ -29,5 +30,10 @@ module.exports = override(
   addWebpackAlias({
     'react-native': path.resolve(__dirname, 'src/react-native-patch.js'),
   }),
+  addWebpackPlugin(
+    new webpack.ProvidePlugin({
+      React: 'react',
+    })
+  ),
   addWebExtensions()
 );
