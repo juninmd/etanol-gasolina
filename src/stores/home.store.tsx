@@ -1,5 +1,4 @@
-import { action, observable, computed } from 'mobx';
-import { garageStore } from './garage.store';
+import { action, observable } from 'mobx';
 
 export default class HomeStore {
 
@@ -20,21 +19,10 @@ export default class HomeStore {
       let isEthanolBetter = false;
       let isEqual = false;
 
-      // Use Garage Store vehicle if consumption is not manually overridden (empty)
-      const useGarage = this.etanolConsumption === '' && this.gasolinaConsumption === '' && garageStore.selectedVehicle;
-
-      let finalEtanolCons = etanolCons;
-      let finalGasolinaCons = gasolinaCons;
-
-      if (useGarage && garageStore.selectedVehicle) {
-          finalEtanolCons = garageStore.selectedVehicle.avgEthanolConsumption;
-          finalGasolinaCons = garageStore.selectedVehicle.avgGasConsumption;
-      }
-
-      if (!isNaN(finalEtanolCons) && !isNaN(finalGasolinaCons) && finalEtanolCons > 0 && finalGasolinaCons > 0) {
+      if (!isNaN(etanolCons) && !isNaN(gasolinaCons) && etanolCons > 0 && gasolinaCons > 0) {
         // Calculate cost per km
-        const costEthanol = etanolValue / finalEtanolCons;
-        const costGas = gasolinaValue / finalGasolinaCons;
+        const costEthanol = etanolValue / etanolCons;
+        const costGas = gasolinaValue / gasolinaCons;
 
         if (costEthanol < costGas) isEthanolBetter = true;
         else if (costEthanol === costGas) isEqual = true;

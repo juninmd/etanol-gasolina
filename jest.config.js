@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
   preset: 'react-native',
+  testRunner: 'jest-jasmine2',
   transformIgnorePatterns: [
       // Adjust pattern for pnpm nested structure
     'node_modules/(?!(.pnpm|jest-?native|react-native|@react-native-community|@ui-kitten|@eva-design|mobx-react|@react-navigation|react-native-svg))',
