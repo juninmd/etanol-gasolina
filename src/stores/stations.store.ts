@@ -110,6 +110,28 @@ export default class StationsStore {
         this.checkinStation = null;
     }
 
+    @computed get level() {
+        if (this.points < 200) return 'Novato';
+        if (this.points < 500) return 'Explorador';
+        return 'Mestre';
+    }
+
+    @computed get nextLevelPoints() {
+        if (this.points < 200) return 200;
+        if (this.points < 500) return 500;
+        return 1000; // Cap or next huge milestone
+    }
+
+    @computed get progress() {
+        if (this.points < 200) {
+            return this.points / 200;
+        }
+        if (this.points < 500) {
+            return (this.points - 200) / (300);
+        }
+        return Math.min(1, (this.points - 500) / 500);
+    }
+
     @computed get filteredStations() {
         if (this.filterPromo) {
             return this.stations.filter(s => s.isPromo);
