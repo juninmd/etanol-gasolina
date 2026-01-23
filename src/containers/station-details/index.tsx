@@ -39,6 +39,20 @@ export default class StationDetails extends Component<Props, State> {
         <TopNavigationAction icon={BackIcon} onPress={this.navigateBack} />
     );
 
+    renderRightAction = () => {
+        const { stationsStore, route } = this.props;
+        const { stationId } = route.params;
+        const isFav = stationsStore.isFavorite(stationId);
+
+        const HeartIcon = (props) => (
+             <Icon {...props} name={isFav ? 'heart' : 'heart-outline'} fill={isFav ? '#FF3D71' : '#8F9BB3'} />
+        );
+
+        return (
+            <TopNavigationAction icon={HeartIcon} onPress={() => stationsStore.toggleFavorite(stationId)} />
+        );
+    };
+
     handleAddComment = () => {
         const { route, stationsStore } = this.props;
         const { stationId } = route.params;
@@ -93,7 +107,12 @@ export default class StationDetails extends Component<Props, State> {
 
         return (
             <Layout style={styles.container}>
-                <TopNavigation title={station.name} alignment='center' leftControl={this.renderBackAction()} />
+                <TopNavigation
+                    title={station.name}
+                    alignment='center'
+                    leftControl={this.renderBackAction()}
+                    rightControls={[this.renderRightAction()]}
+                />
                 <Divider />
                 <ScrollView contentContainerStyle={styles.content}>
                     <Card style={styles.card}>
