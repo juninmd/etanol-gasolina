@@ -3,4 +3,4 @@
   publish = "build"
 
 [dev]
-  command = "yarn start"
+  command = "pnpm web"
