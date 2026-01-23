@@ -5,14 +5,12 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 
 import HomeStore from '../../stores/home.store';
 import StationsStore from '../../stores/stations.store';
-import GarageStore from '../../stores/garage.store';
 import { Alert } from 'react-native';
 import { reaction } from 'mobx';
 
 interface Props {
     homeStore: HomeStore;
     stationsStore: StationsStore;
-    garageStore: GarageStore;
     navigation: any;
 }
 
@@ -22,7 +20,7 @@ interface State {
     tripCost: string;
 }
 
-@inject('homeStore', 'stationsStore', 'garageStore')
+@inject('homeStore', 'stationsStore')
 @observer
 export default class Home extends Component<Props, State> {
     promoReaction: any;
@@ -139,7 +137,6 @@ export default class Home extends Component<Props, State> {
     render() {
         const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
         const { totalSavings, bestStation, checkinStation, dismissCheckin, points } = this.props.stationsStore;
-        const { selectedVehicle } = this.props.garageStore;
 
         return (
             <Layout style={styles.container}>
@@ -173,29 +170,10 @@ export default class Home extends Component<Props, State> {
                     </Card>
 
                     <Card style={styles.inputCard}>
-                        <Text category='h6' style={styles.cardTitle}>Consumo</Text>
-                        {selectedVehicle && !etanolConsumption && !gasolinaConsumption ? (
-                            <View style={{alignItems: 'center', marginBottom: 15}}>
-                                <Icon name='car' width={24} height={24} fill='#3366FF' />
-                                <Text category='s1' style={{color: '#3366FF'}}>Usando dados de: {selectedVehicle.name}</Text>
-                                <Text category='c1' appearance='hint'>Gas: {selectedVehicle.avgGasConsumption} km/l | Eta: {selectedVehicle.avgEthanolConsumption} km/l</Text>
-                                <Button
-                                    appearance='ghost'
-                                    size='tiny'
-                                    onPress={() => this.props.navigation.navigate('Garage')}
-                                >
-                                    Alterar Veículo
-                                </Button>
-                            </View>
-                        ) : (
-                            <Text category='c1' appearance='hint' style={{textAlign: 'center', marginBottom: 10}}>
-                                Preencha abaixo para sobrescrever o veículo selecionado
-                            </Text>
-                        )}
-
+                        <Text category='h6' style={styles.cardTitle}>Consumo (Opcional)</Text>
                         <Text category='label' style={styles.label}>Km/l no Etanol</Text>
                         <Input
-                            placeholder={selectedVehicle ? `Padrão: ${selectedVehicle.avgEthanolConsumption}` : 'Ex: 7.0'}
+                            placeholder='Ex: 7.0'
                             value={etanolConsumption}
                             onChangeText={(etanolConsumption) => handleForm('etanolConsumption', etanolConsumption)}
                             keyboardType='numeric'
@@ -204,7 +182,7 @@ export default class Home extends Component<Props, State> {
 
                         <Text category='label' style={styles.label}>Km/l na Gasolina</Text>
                         <Input
-                            placeholder={selectedVehicle ? `Padrão: ${selectedVehicle.avgGasConsumption}` : 'Ex: 10.0'}
+                            placeholder='Ex: 10.0'
                             value={gasolinaConsumption}
                             onChangeText={(gasolinaConsumption) => handleForm('gasolinaConsumption', gasolinaConsumption)}
                             keyboardType='numeric'

@@ -9845,10 +9845,10 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@1.13.0(eslint@6.8.0))(eslint@6.8.0)(typescript@3.9.10)':
+  '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@6.8.0)(typescript@3.9.10))(eslint@6.8.0)(typescript@3.9.10)':
     dependencies:
       '@eslint-community/regexpp': 4.12.2
-      '@typescript-eslint/parser': 1.13.0(eslint@6.8.0)
+      '@typescript-eslint/parser': 5.62.0(eslint@6.8.0)(typescript@3.9.10)
       '@typescript-eslint/scope-manager': 5.62.0
       '@typescript-eslint/type-utils': 5.62.0(eslint@6.8.0)(typescript@3.9.10)
       '@typescript-eslint/utils': 5.62.0(eslint@6.8.0)(typescript@3.9.10)
@@ -11683,7 +11683,7 @@ snapshots:
       '@babel/core': 7.28.6
       '@babel/eslint-parser': 7.28.6(@babel/core@7.28.6)(eslint@6.8.0)
       '@rushstack/eslint-patch': 1.15.0
-      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@1.13.0(eslint@6.8.0))(eslint@6.8.0)(typescript@3.9.10)
+      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@6.8.0)(typescript@3.9.10))(eslint@6.8.0)(typescript@3.9.10)
       '@typescript-eslint/parser': 5.62.0(eslint@6.8.0)(typescript@3.9.10)
       babel-preset-react-app: 10.1.0
       confusing-browser-globals: 1.0.11
@@ -11780,7 +11780,7 @@ snapshots:
       '@typescript-eslint/experimental-utils': 5.62.0(eslint@6.8.0)(typescript@3.9.10)
       eslint: 6.8.0
     optionalDependencies:
-      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@1.13.0(eslint@6.8.0))(eslint@6.8.0)(typescript@3.9.10)
+      '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@6.8.0)(typescript@3.9.10))(eslint@6.8.0)(typescript@3.9.10)
       jest: 27.5.1
     transitivePeerDependencies:
       - supports-color
