@@ -72,7 +72,7 @@ export default class StationsStore {
 
     @observable favorites: number[] = [];
     @observable filterPromo = false;
-    @observable totalSavings = 125.50;
+    @observable totalSavings = 0;
     @observable points = 150; // Initial gamification points
     @observable checkinStation: Station | null = null;
 
@@ -216,6 +216,10 @@ export default class StationsStore {
 
     @action addPoints = (amount: number) => {
         this.points += amount;
+    }
+
+    @action addSavings = (amount: number) => {
+        this.totalSavings += amount;
     }
 }
 

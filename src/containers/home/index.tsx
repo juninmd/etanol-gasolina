@@ -1,4 +1,4 @@
-import { Button, Card, Input, Text, Layout, Icon, Modal } from '@ui-kitten/components';
+import { Button, Card, Input, Text, Layout, Icon, Modal, Toggle } from '@ui-kitten/components';
 import React, { Component, } from 'react';
 import { inject, observer } from 'mobx-react';
 import { StyleSheet, View, ScrollView } from 'react-native';
@@ -6,6 +6,7 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import HomeStore from '../../stores/home.store';
 import StationsStore from '../../stores/stations.store';
 import GarageStore from '../../stores/garage.store';
+import ThemeStore from '../../stores/theme.store';
 import { Alert } from 'react-native';
 import { reaction } from 'mobx';
 
@@ -13,6 +14,7 @@ interface Props {
     homeStore: HomeStore;
     stationsStore: StationsStore;
     garageStore: GarageStore;
+    themeStore: ThemeStore;
     navigation: any;
 }
 
@@ -23,7 +25,7 @@ interface State {
     promoMessage: string | null;
 }
 
-@inject('homeStore', 'stationsStore', 'garageStore')
+@inject('homeStore', 'stationsStore', 'garageStore', 'themeStore')
 @observer
 export default class Home extends Component<Props, State> {
     promoReaction: any;
@@ -130,7 +132,7 @@ export default class Home extends Component<Props, State> {
         return (
             <Card status={status} style={styles.resultCard}>
                 <Text category='h5' style={styles.resultText}>{resultado}</Text>
-                <Text category='s1' style={styles.resultSubText}>
+                <Text category='s1' appearance='hint' style={styles.resultSubText}>
                     {recommendation === 'ethanol' && 'O etanol está rendendo mais!'}
                     {recommendation === 'gas' && 'A gasolina está valendo mais a pena!'}
                     {recommendation === 'equal' && 'Ambos têm o mesmo custo-benefício.'}
@@ -162,16 +164,21 @@ export default class Home extends Component<Props, State> {
         const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
         const { totalSavings, bestStation, checkinStation, dismissCheckin, points } = this.props.stationsStore;
         const { selectedVehicle } = this.props.garageStore;
+        const { theme, toggleTheme } = this.props.themeStore;
         const { promoMessage } = this.state;
 
         return (
             <Layout style={styles.container}>
                 <View style={styles.header}>
-                    <Text category='h1' style={styles.title}>Calculadora Flex</Text>
-                    <View style={styles.pointsBadge}>
+                    <View style={{position: 'absolute', left: 20, zIndex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={{marginRight: 5}}>{theme === 'dark' ? '🌙' : '☀️'}</Text>
+                        <Toggle checked={theme === 'dark'} onChange={toggleTheme} testID='theme-toggle' />
+                    </View>
+                    <Text category='h1' status='primary' style={styles.title}>Calculadora Flex</Text>
+                    <Layout level='2' style={styles.pointsBadge}>
                         <Icon name='award' width={20} height={20} fill='#FFD700' />
                         <Text style={styles.pointsText}>{points} pts</Text>
-                    </View>
+                    </Layout>
                 </View>
 
                 {promoMessage && (
@@ -354,21 +361,18 @@ const styles = StyleSheet.create({
         right: 20,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f0f0f0',
         padding: 5,
         borderRadius: 12,
     },
     pointsText: {
         marginLeft: 5,
         fontWeight: 'bold',
-        color: '#333',
     },
     scrollContent: {
         padding: 20,
     },
     title: {
         textAlign: 'center',
-        color: '#3366FF'
     },
     inputCard: {
         marginBottom: 20,
@@ -391,7 +395,6 @@ const styles = StyleSheet.create({
     resultSubText: {
         textAlign: 'center',
         marginTop: 10,
-        color: '#666'
     },
     cardTitle: {
         marginBottom: 15,

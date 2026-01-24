@@ -53,18 +53,67 @@ export default class AddFill extends Component<Props, State> {
 
     handleSave = () => {
         const { stationName, price, liters, odometer, fuelTypeIndex } = this.state;
-        const { garageStore, navigation } = this.props;
+        const { garageStore, stationsStore, navigation, route } = this.props;
 
         if (stationName && price && liters) {
+            const priceVal = parseFloat(price);
+            const litersVal = parseFloat(liters);
+            const fuelType = fuelTypeIndex === 0 ? 'gas' : 'ethanol';
+
             garageStore.addLog({
                 vehicleId: garageStore.selectedVehicleId || '1',
                 stationName,
-                pricePerLiter: parseFloat(price),
-                liters: parseFloat(liters),
+                pricePerLiter: priceVal,
+                liters: litersVal,
                 odometer: parseFloat(odometer) || 0,
                 date: new Date().toLocaleDateString(),
-                fuelType: fuelTypeIndex === 0 ? 'gas' : 'ethanol'
+                fuelType
             });
+
+            // Calculate Savings
+            try {
+                let station = route.params?.stationId ? stationsStore.stations.find(s => s.id === route.params.stationId) : null;
+                if (!station) {
+                    station = stationsStore.stations.find(s => s.name.toLowerCase() === stationName.toLowerCase());
+                }
+
+                const vehicle = garageStore.selectedVehicle;
+
+                if (station && vehicle) {
+                    const ethCons = vehicle.avgEthanolConsumption || 7;
+                    const gasCons = vehicle.avgGasConsumption || 10;
+
+                    let savings = 0;
+
+                    if (fuelType === 'gas') {
+                        const distance = litersVal * gasCons;
+                        const litersEthNeeded = distance / ethCons;
+                        const costEth = litersEthNeeded * station.priceEthanol;
+                        const costGas = litersVal * priceVal;
+
+                        if (costGas < costEth) {
+                            savings = costEth - costGas;
+                        }
+                    } else {
+                        const distance = litersVal * ethCons;
+                        const litersGasNeeded = distance / gasCons;
+                        const costGas = litersGasNeeded * station.priceGas;
+                        const costEth = litersVal * priceVal;
+
+                        if (costEth < costGas) {
+                            savings = costGas - costEth;
+                        }
+                    }
+
+                    if (savings > 0) {
+                        stationsStore.addSavings(savings);
+                        alert(`Economia registrada! Você economizou R$ ${savings.toFixed(2)}.`);
+                    }
+                }
+            } catch (e) {
+                console.warn('Error calculating savings', e);
+            }
+
             navigation.goBack();
         } else {
             alert('Por favor, preencha os campos obrigatórios.');
