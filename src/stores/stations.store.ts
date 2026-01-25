@@ -75,6 +75,8 @@ export default class StationsStore {
     @observable totalSavings = 0;
     @observable points = 150; // Initial gamification points
     @observable checkinStation: Station | null = null;
+    @observable showLevelUp = false;
+    @observable newLevelName = '';
 
     constructor() {
         this.startRealTimeUpdates();
@@ -215,11 +217,21 @@ export default class StationsStore {
     }
 
     @action addPoints = (amount: number) => {
+        const oldLevel = this.level;
         this.points += amount;
+        if (this.level !== oldLevel) {
+            this.newLevelName = this.level;
+            this.showLevelUp = true;
+        }
     }
 
     @action addSavings = (amount: number) => {
         this.totalSavings += amount;
+        this.addPoints(Math.floor(amount * 2));
+    }
+
+    @action resetLevelUp = () => {
+        this.showLevelUp = false;
     }
 }
 
