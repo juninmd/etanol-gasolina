@@ -162,6 +162,24 @@ export default class StationDetails extends Component<Props, State> {
                         )}
                     </Card>
 
+                    {/* Price Forecast Section (AI Mock) */}
+                    <Card style={[styles.card, { borderColor: station.id % 2 === 0 ? '#3366FF' : '#FF3D71', borderTopWidth: 5 }]}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Icon name={station.id % 2 === 0 ? 'trending-down-outline' : 'trending-up-outline'} width={32} height={32} fill={station.id % 2 === 0 ? '#3366FF' : '#FF3D71'} />
+                            <View style={{marginLeft: 15}}>
+                                <Text category='h6'>Tendência de Preço (IA)</Text>
+                                <Text category='c1' appearance='hint'>Previsão para as próximas 24h</Text>
+                            </View>
+                        </View>
+                        <Divider style={{marginVertical: 10}}/>
+                        <Text category='p2'>
+                            Nossa IA analisou o histórico e prevê uma
+                            <Text category='s1' status={station.id % 2 === 0 ? 'success' : 'danger'}> {station.id % 2 === 0 ? 'QUEDA' : 'ALTA'} </Text>
+                            nos preços.
+                            {station.id % 2 === 0 ? ' Pode valer a pena esperar um pouco!' : ' Recomendamos abastecer agora para garantir este preço.'}
+                        </Text>
+                    </Card>
+
                     {/* Price History Section */}
                     {station.priceHistory && station.priceHistory.length > 0 && (
                         <Card style={styles.card}>
