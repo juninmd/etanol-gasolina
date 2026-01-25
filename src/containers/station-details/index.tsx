@@ -61,7 +61,7 @@ export default class StationDetails extends Component<Props, State> {
         if (commentText.trim()) {
             stationsStore.addComment(stationId, commentText);
             this.setState({ commentText: '' });
-            alert('Comentário adicionado! Você ganhou 5 pontos.');
+            alert('🎉 Avaliação enviada!\n\n⭐ +5 PONTOS! Continue ajudando a comunidade.');
         }
     };
 
@@ -73,7 +73,7 @@ export default class StationDetails extends Component<Props, State> {
         if (newGasPrice && newEthanolPrice) {
             stationsStore.updatePrice(stationId, parseFloat(newGasPrice), parseFloat(newEthanolPrice));
             this.setState({ showUpdatePrice: false, newGasPrice: '', newEthanolPrice: '' });
-            alert('Preços atualizados com sucesso! Você ganhou 10 pontos.');
+            alert('⛽ Preços Atualizados!\n\n🏆 +10 PONTOS! Você é um motorista inteligente!');
         }
     };
 
@@ -83,20 +83,49 @@ export default class StationDetails extends Component<Props, State> {
     };
 
     renderCommentItem = ({ item }) => (
-        <ListItem
-            title={item.author}
-            description={`${item.date}\n${item.text}`}
-            style={styles.commentItem}
-        />
-    );
-
-    renderHistoryItem = (item, index) => (
-        <View key={index} style={styles.historyItem}>
-            <Text category='c1'>{item.date}</Text>
-            <Text category='c1' status='info'>G: {item.gas.toFixed(2)}</Text>
-            <Text category='c1' status='success'>E: {item.ethanol.toFixed(2)}</Text>
+        <View key={item.id} style={styles.commentBubbleContainer}>
+            <View style={styles.avatar}>
+                <Text style={{color: '#fff', fontWeight: 'bold'}}>{item.author ? item.author.charAt(0).toUpperCase() : 'U'}</Text>
+            </View>
+            <View style={styles.commentBubble}>
+                <View style={styles.commentHeader}>
+                    <Text category='s2'>{item.author}</Text>
+                    <Text category='c2' appearance='hint'>{item.date}</Text>
+                </View>
+                <Text category='p1' style={{marginTop: 5}}>{item.text}</Text>
+            </View>
         </View>
     );
+
+    renderChart = (history) => {
+        if (!history || history.length === 0) return null;
+
+        const maxPrice = Math.max(
+            ...history.map(h => Math.max(h.gas, h.ethanol))
+        ) || 6.0;
+
+        return (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chartScroll}>
+                <View style={styles.chartContainer}>
+                    {history.map((item, index) => {
+                        const gasHeight = (item.gas / maxPrice) * 120;
+                        const ethHeight = (item.ethanol / maxPrice) * 120;
+
+                        return (
+                            <View key={index} style={styles.chartBarGroup}>
+                                <View style={styles.barsRow}>
+                                    <View style={[styles.bar, { height: gasHeight, backgroundColor: '#3366FF', marginRight: 4 }]} />
+                                    <View style={[styles.bar, { height: ethHeight, backgroundColor: '#00E096' }]} />
+                                </View>
+                                <Text category='c1' style={styles.chartDate}>{item.date}</Text>
+                                <Text category='c2' appearance='hint'>{item.gas.toFixed(2)}</Text>
+                            </View>
+                        );
+                    })}
+                </View>
+            </ScrollView>
+        );
+    }
 
     render() {
         const { route, stationsStore, navigation } = this.props;
@@ -136,10 +165,16 @@ export default class StationDetails extends Component<Props, State> {
                     {/* Price History Section */}
                     {station.priceHistory && station.priceHistory.length > 0 && (
                         <Card style={styles.card}>
-                            <Text category='h6' style={styles.sectionTitle}>Histórico de Preços</Text>
-                            <View style={styles.historyContainer}>
-                                {station.priceHistory.slice(-5).map(this.renderHistoryItem)}
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                                <Text category='h6' style={styles.sectionTitle}>Evolução de Preços</Text>
+                                <View style={{flexDirection: 'row'}}>
+                                    <View style={{width: 10, height: 10, backgroundColor: '#3366FF', marginRight: 5}} />
+                                    <Text category='c2' appearance='hint' style={{marginRight: 10}}>Gas</Text>
+                                    <View style={{width: 10, height: 10, backgroundColor: '#00E096', marginRight: 5}} />
+                                    <Text category='c2' appearance='hint'>Eta</Text>
+                                </View>
                             </View>
+                            {this.renderChart(station.priceHistory)}
                         </Card>
                     )}
 
@@ -191,22 +226,25 @@ export default class StationDetails extends Component<Props, State> {
                         </Card>
                     )}
 
-                    <Text category='h6' style={styles.sectionTitle}>Comentários</Text>
-                    <List
-                        data={station.comments.slice()} // MobX observable array to JS array
-                        renderItem={this.renderCommentItem}
-                        scrollEnabled={false}
-                    />
+                    <Text category='h6' style={styles.sectionTitle}>Comentários da Comunidade ({station.comments.length})</Text>
+                    <View style={styles.commentsList}>
+                        {station.comments.slice().map((item) => this.renderCommentItem({ item }))}
+                    </View>
 
-                    <View style={styles.addCommentContainer}>
+                    <Card style={styles.addCommentCard}>
+                        <Text category='s2' style={{marginBottom: 10}}>Avalie este posto</Text>
                         <Input
-                            placeholder='Adicione um comentário...'
+                            placeholder='Como está o atendimento e o preço?'
                             value={this.state.commentText}
                             onChangeText={text => this.setState({ commentText: text })}
                             style={styles.commentInput}
+                            multiline={true}
+                            textStyle={{ minHeight: 64 }}
                         />
-                        <Button size='small' onPress={this.handleAddComment}>Enviar</Button>
-                    </View>
+                        <Button size='small' onPress={this.handleAddComment} accessoryRight={(p)=><Icon {...p} name='paper-plane-outline'/>}>
+                            Publicar Avaliação
+                        </Button>
+                    </Card>
                 </ScrollView>
             </Layout>
         );
@@ -249,18 +287,39 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
     },
-    commentItem: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
+    commentsList: {
+        marginBottom: 20,
     },
-    addCommentContainer: {
-        marginTop: 15,
+    commentBubbleContainer: {
         flexDirection: 'row',
+        marginBottom: 15,
+    },
+    avatar: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#3366FF',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    commentBubble: {
+        flex: 1,
+        backgroundColor: '#F7F9FC',
+        borderRadius: 12,
+        padding: 12,
+        borderBottomLeftRadius: 0,
+    },
+    commentHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
     },
+    addCommentCard: {
+        marginTop: 10,
+    },
     commentInput: {
-        flex: 1,
-        marginRight: 10,
+        marginBottom: 10,
     },
     historyContainer: {
         flexDirection: 'row',
@@ -269,5 +328,32 @@ const styles = StyleSheet.create({
     },
     historyItem: {
         alignItems: 'center',
+    },
+    chartScroll: {
+        marginTop: 10,
+    },
+    chartContainer: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        height: 150,
+        paddingBottom: 10,
+    },
+    chartBarGroup: {
+        marginRight: 20,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        height: '100%',
+    },
+    barsRow: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        marginBottom: 5,
+    },
+    bar: {
+        width: 12,
+        borderRadius: 4,
+    },
+    chartDate: {
+        marginTop: 2,
     }
 });
