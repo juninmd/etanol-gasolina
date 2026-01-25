@@ -75,6 +75,11 @@ export default class Stations extends Component<Props, State> {
         const { filteredStations, filterPromo, toggleFilterPromo } = this.props.stationsStore;
         const { showMap } = this.state;
 
+        // Calculate Average Gas Price for Color Coding
+        const avgGas = filteredStations.length > 0
+            ? filteredStations.reduce((acc, curr) => acc + curr.priceGas, 0) / filteredStations.length
+            : 0;
+
         return (
             <Layout style={styles.container}>
                 <View style={styles.header}>
@@ -104,19 +109,29 @@ export default class Stations extends Component<Props, State> {
                             longitudeDelta: 0.05,
                         }}
                     >
-                        {filteredStations.map(station => (
-                            <Marker
-                                key={station.id}
-                                coordinate={{
-                                    latitude: station.latitude,
-                                    longitude: station.longitude,
-                                }}
-                                title={station.name}
-                                description={`Gas: ${station.priceGas} | Etanol: ${station.priceEthanol}`}
-                                onCalloutPress={() => this.onItemPress(station.id)}
-                                pinColor={station.isPromo ? 'gold' : 'red'}
-                            />
-                        ))}
+                        {filteredStations.map(station => {
+                            let pinColor = 'orange'; // Average
+                            if (station.isPromo) {
+                                pinColor = 'gold';
+                            } else if (avgGas > 0) {
+                                if (station.priceGas < avgGas * 0.95) pinColor = 'green'; // Cheap
+                                else if (station.priceGas > avgGas * 1.05) pinColor = 'red'; // Expensive
+                            }
+
+                            return (
+                                <Marker
+                                    key={station.id}
+                                    coordinate={{
+                                        latitude: station.latitude,
+                                        longitude: station.longitude,
+                                    }}
+                                    title={station.name}
+                                    description={`Gas: ${station.priceGas} | Etanol: ${station.priceEthanol}`}
+                                    onCalloutPress={() => this.onItemPress(station.id)}
+                                    pinColor={pinColor}
+                                />
+                            );
+                        })}
                     </MapView>
                 ) : (
                     <List
