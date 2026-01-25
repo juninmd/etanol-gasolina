@@ -7,6 +7,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider, observer } from 'mobx-react';
 import * as Stores from './stores';
 import Routes from './routes';
+import Celebration from './components/Celebration';
 
 const ThemedApp = observer(() => {
     const { themeStore } = Stores;
@@ -17,6 +18,7 @@ const ThemedApp = observer(() => {
         <ApplicationProvider mapping={mapping} theme={currentTheme}>
             <View style={{ flex: 1, backgroundColor }}>
                 <Routes />
+                <Celebration />
             </View>
         </ApplicationProvider>
     );
