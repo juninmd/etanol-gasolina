@@ -162,7 +162,7 @@ export default class Home extends Component<Props, State> {
 
     render() {
         const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
-        const { totalSavings, bestStation, checkinStation, dismissCheckin, points } = this.props.stationsStore;
+        const { totalSavings, bestStation, points } = this.props.stationsStore;
         const { selectedVehicle } = this.props.garageStore;
         const { theme, toggleTheme } = this.props.themeStore;
         const { promoMessage } = this.state;
@@ -293,26 +293,6 @@ export default class Home extends Component<Props, State> {
                         Simular Custo de Viagem
                     </Button>
                 </ScrollView>
-
-                <Modal
-                    visible={!!checkinStation}
-                    backdropStyle={styles.backdrop}
-                    onBackdropPress={dismissCheckin}>
-                    <Card disabled={true} style={styles.modalCard}>
-                        <Text category='h5' style={{marginBottom: 10}}>Você está em {checkinStation?.name}?</Text>
-                        <Text style={{marginBottom: 20}}>Ajude a comunidade atualizando o preço e ganhe pontos!</Text>
-                        <Button onPress={() => {
-                            const id = checkinStation?.id;
-                            dismissCheckin();
-                            if (id) this.props.navigation.navigate('StationDetails', { stationId: id });
-                        }}>
-                            Atualizar Agora
-                        </Button>
-                        <Button appearance='ghost' onPress={dismissCheckin} style={{marginTop: 10}}>
-                            Não estou aqui
-                        </Button>
-                    </Card>
-                </Modal>
 
                 <Modal
                     visible={this.state.showTripCalculator}
