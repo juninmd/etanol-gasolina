@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Layout, Text, List, ListItem, Icon, Button, Card, Toggle } from '@ui-kitten/components';
 import { inject, observer } from 'mobx-react';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker } from '../../components/MapWrapper';
 import StationsStore from '../../stores/stations.store';
 
 interface Props {
