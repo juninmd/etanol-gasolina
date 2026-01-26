@@ -8,6 +8,7 @@ import { Provider, observer } from 'mobx-react';
 import * as Stores from './stores';
 import Routes from './routes';
 import Celebration from './components/Celebration';
+import CheckinPrompt from './components/CheckinPrompt';
 
 const ThemedApp = observer(() => {
     const { themeStore } = Stores;
@@ -19,6 +20,7 @@ const ThemedApp = observer(() => {
             <View style={{ flex: 1, backgroundColor }}>
                 <Routes />
                 <Celebration />
+                <CheckinPrompt />
             </View>
         </ApplicationProvider>
     );

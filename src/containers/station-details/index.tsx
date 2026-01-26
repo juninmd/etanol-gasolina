@@ -15,6 +15,7 @@ interface State {
     showUpdatePrice: boolean;
     newGasPrice: string;
     newEthanolPrice: string;
+    simAmount: string;
 }
 
 const BackIcon = (props) => (
@@ -28,7 +29,8 @@ export default class StationDetails extends Component<Props, State> {
         commentText: '',
         showUpdatePrice: false,
         newGasPrice: '',
-        newEthanolPrice: ''
+        newEthanolPrice: '',
+        simAmount: ''
     };
 
     navigateBack = () => {
@@ -162,6 +164,21 @@ export default class StationDetails extends Component<Props, State> {
                         )}
                     </Card>
 
+                    {/* Smart Choice Widget */}
+                    <Card style={[styles.card, { backgroundColor: (station.priceEthanol / station.priceGas) < 0.7 ? '#F0FFF4' : '#FFF5F5' }]}>
+                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                            <View>
+                                <Text category='h6'>Escolha Inteligente</Text>
+                                <Text category='c2' appearance='hint'>Relação Etanol/Gasolina: {((station.priceEthanol / station.priceGas) * 100).toFixed(0)}%</Text>
+                            </View>
+                            <View style={{alignItems: 'flex-end'}}>
+                                <Text category='h6' status={(station.priceEthanol / station.priceGas) < 0.7 ? 'success' : 'danger'}>
+                                    {(station.priceEthanol / station.priceGas) < 0.7 ? 'VÁ DE ETANOL' : 'VÁ DE GASOLINA'}
+                                </Text>
+                            </View>
+                        </View>
+                    </Card>
+
                     {/* Price Forecast Section (AI Mock) */}
                     <Card style={[styles.card, { borderColor: station.id % 2 === 0 ? '#3366FF' : '#FF3D71', borderTopWidth: 5 }]}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -195,6 +212,36 @@ export default class StationDetails extends Component<Props, State> {
                             {this.renderChart(station.priceHistory)}
                         </Card>
                     )}
+
+                    {/* Fuel Simulator */}
+                    <Card style={styles.card}>
+                        <Text category='h6'>Simulador de Abastecimento</Text>
+                        <Text category='c2' appearance='hint' style={{marginBottom: 10}}>Veja quanto rende o seu dinheiro aqui.</Text>
+                        <Input
+                            placeholder='Quanto você quer gastar? (R$)'
+                            value={this.state.simAmount}
+                            onChangeText={text => this.setState({ simAmount: text })}
+                            keyboardType='numeric'
+                            style={styles.input}
+                        />
+                        {this.state.simAmount ? (
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 15 }}>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text category='s2' appearance='hint'>Gasolina</Text>
+                                    <Text category='h4' status='info'>
+                                        {(parseFloat(this.state.simAmount.replace(',', '.')) / station.priceGas).toFixed(2)} L
+                                    </Text>
+                                </View>
+                                <View style={{ width: 1, backgroundColor: '#EEE' }} />
+                                <View style={{ alignItems: 'center' }}>
+                                    <Text category='s2' appearance='hint'>Etanol</Text>
+                                    <Text category='h4' status='success'>
+                                        {(parseFloat(this.state.simAmount.replace(',', '.')) / station.priceEthanol).toFixed(2)} L
+                                    </Text>
+                                </View>
+                            </View>
+                        ) : null}
+                    </Card>
 
                     <Button
                         style={styles.button}
