@@ -54,6 +54,12 @@ const CheckinPrompt = inject('stationsStore')(observer(({ stationsStore }: Props
         });
     };
 
+    const handleConfirm = () => {
+        stationsStore!.verifyPrice(checkinStation.id);
+        alert('Obrigado! Sua confirmação ajuda a comunidade. +5 Pontos!');
+        handleDismiss();
+    };
+
     const handleUpdate = () => {
         const gas = parseFloat(gasPrice);
         const eth = parseFloat(ethPrice);
@@ -79,26 +85,41 @@ const CheckinPrompt = inject('stationsStore')(observer(({ stationsStore }: Props
 
                 {!isUpdating ? (
                     <>
+                         <View style={styles.pricePreview}>
+                            <Text category='s2'>Gas: <Text category='s1' status='info'>R$ {checkinStation.priceGas.toFixed(2)}</Text></Text>
+                            <Text category='s2'>Eta: <Text category='s1' status='success'>R$ {checkinStation.priceEthanol.toFixed(2)}</Text></Text>
+                        </View>
+
                         <Text category='p2' style={{ marginBottom: 15, textAlign: 'center', color: '#8F9BB3' }}>
-                            Ajude a comunidade atualizando os preços e ganhe pontos!
+                            O preço acima está correto?
                         </Text>
                         <View style={styles.buttonRow}>
-                            <Button
-                                status='basic'
-                                appearance='ghost'
-                                onPress={handleDismiss}
-                                style={{ flex: 1, marginRight: 10 }}
+                             <Button
+                                status='success'
+                                onPress={handleConfirm}
+                                style={{ flex: 2, marginRight: 10 }}
+                                accessoryLeft={(props) => <Icon {...props} name='checkmark-circle-2-outline'/>}
                             >
-                                Não estou
+                                Sim, Confirmar
                             </Button>
                             <Button
-                                status='primary'
+                                status='warning'
                                 onPress={() => setIsUpdating(true)}
                                 style={{ flex: 1 }}
+                                appearance='outline'
                             >
-                                Atualizar Preços
+                                Não
                             </Button>
                         </View>
+                        <Button
+                            status='basic'
+                            appearance='ghost'
+                            size='small'
+                            onPress={handleDismiss}
+                            style={{ marginTop: 10 }}
+                        >
+                            Não estou aqui / Cancelar
+                        </Button>
                     </>
                 ) : (
                     <>
@@ -165,6 +186,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    pricePreview: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 10,
+        backgroundColor: '#F7F9FC',
+        padding: 10,
+        borderRadius: 8
     },
     buttonRow: {
         flexDirection: 'row',
