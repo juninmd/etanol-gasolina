@@ -160,9 +160,35 @@ export default class Home extends Component<Props, State> {
         );
     }
 
+    renderActivityItem = (item) => {
+        let iconName = 'activity-outline';
+        let iconColor = '#8F9BB3';
+
+        if (item.type === 'savings') { iconName = 'trending-up-outline'; iconColor = '#00E096'; }
+        if (item.type === 'price_update') { iconName = 'pricetags-outline'; iconColor = '#3366FF'; }
+        if (item.type === 'verification') { iconName = 'checkmark-circle-2-outline'; iconColor = '#FFAAA5'; }
+        if (item.type === 'comment') { iconName = 'message-circle-outline'; iconColor = '#FFD700'; }
+
+        const timeAgo = Math.floor((Date.now() - item.timestamp) / 60000);
+        let timeText = `${timeAgo} min`;
+        if (timeAgo > 60) timeText = `${Math.floor(timeAgo / 60)}h`;
+
+        return (
+            <View key={item.id} style={styles.activityItem}>
+                <Icon name={iconName} width={20} height={20} fill={iconColor} style={{marginRight: 10}} />
+                <View style={{flex: 1}}>
+                    <Text category='s2' style={{fontSize: 13}}>
+                        <Text style={{fontWeight: 'bold'}}>{item.author}</Text> {item.text}
+                    </Text>
+                    <Text category='c2' appearance='hint'>{timeText} atrás</Text>
+                </View>
+            </View>
+        );
+    }
+
     render() {
         const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
-        const { totalSavings, bestStation, points } = this.props.stationsStore;
+        const { totalSavings, bestStation, points, recentActivities } = this.props.stationsStore;
         const { selectedVehicle } = this.props.garageStore;
         const { theme, toggleTheme } = this.props.themeStore;
         const { promoMessage } = this.state;
@@ -190,6 +216,16 @@ export default class Home extends Component<Props, State> {
 
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     {this.renderGamificationCard()}
+
+                    {/* Community Feed */}
+                    {recentActivities.length > 0 && (
+                        <View style={styles.feedContainer}>
+                            <Text category='h6' style={styles.feedTitle}>Comunidade Agora</Text>
+                            <Card style={styles.feedCard}>
+                                {recentActivities.slice(0, 3).map(item => this.renderActivityItem(item))}
+                            </Card>
+                        </View>
+                    )}
 
                     <Card style={styles.inputCard}>
                         <Text category='label' style={styles.label}>Preço do Etanol</Text>
@@ -420,6 +456,23 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontWeight: 'bold',
         flex: 1,
+    },
+    feedContainer: {
+        marginBottom: 20,
+    },
+    feedTitle: {
+        marginBottom: 10,
+        marginLeft: 5,
+    },
+    feedCard: {
+        paddingVertical: 5,
+    },
+    activityItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F7F9FC',
     },
     dashboardHeader: {
         flexDirection: 'row',

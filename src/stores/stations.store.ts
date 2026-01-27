@@ -8,6 +8,15 @@ export interface Comment {
     date: string;
 }
 
+export interface Activity {
+    id: number;
+    type: 'price_update' | 'verification' | 'comment' | 'savings';
+    text: string;
+    author: string;
+    timestamp: number;
+    stationId?: number;
+}
+
 export interface Station {
     id: number;
     name: string;
@@ -19,6 +28,8 @@ export interface Station {
     isPromo: boolean;
     comments: Comment[];
     priceHistory: { date: string, gas: number, ethanol: number }[];
+    lastVerified?: string;
+    verificationsCount?: number;
 }
 
 export default class StationsStore {
@@ -39,7 +50,9 @@ export default class StationsStore {
                 { date: '01/05', gas: 5.49, ethanol: 3.69 },
                 { date: '05/05', gas: 5.55, ethanol: 3.75 },
                 { date: '10/05', gas: 5.59, ethanol: 3.79 },
-            ]
+            ],
+            lastVerified: new Date().toISOString(),
+            verificationsCount: 12
         },
         {
             id: 2,
@@ -54,7 +67,9 @@ export default class StationsStore {
             priceHistory: [
                 { date: '01/05', gas: 5.39, ethanol: 3.79 },
                 { date: '10/05', gas: 5.49, ethanol: 3.89 },
-            ]
+            ],
+            lastVerified: new Date(Date.now() - 86400000 * 2).toISOString(), // 2 days ago
+            verificationsCount: 3
         },
         {
             id: 3,
@@ -66,8 +81,16 @@ export default class StationsStore {
             longitude: -46.671047,
             isPromo: false,
             comments: [],
-            priceHistory: []
+            priceHistory: [],
+            lastVerified: new Date(Date.now() - 86400000 * 5).toISOString(), // 5 days ago
+            verificationsCount: 0
         }
+    ];
+
+    @observable recentActivities: Activity[] = [
+        { id: 1, type: 'savings', text: 'economizou R$ 15,00', author: 'Maria S.', timestamp: Date.now() - 300000 },
+        { id: 2, type: 'price_update', text: 'atualizou preços no Posto Ipiranga', author: 'Carlos A.', timestamp: Date.now() - 900000, stationId: 1 },
+        { id: 3, type: 'verification', text: 'confirmou preços no Posto Shell', author: 'Roberto F.', timestamp: Date.now() - 3600000, stationId: 2 },
     ];
 
     @observable favorites: number[] = [];
@@ -194,6 +217,7 @@ export default class StationsStore {
                 author: 'Você',
                 date: new Date().toLocaleDateString()
             });
+            this.addActivity('comment', `comentou em ${station.name}`, stationId);
             this.addPoints(5); // 5 points for comment
         }
     }
@@ -203,6 +227,8 @@ export default class StationsStore {
         if (station) {
             station.priceGas = gas;
             station.priceEthanol = ethanol;
+            station.lastVerified = new Date().toISOString();
+            station.verificationsCount = (station.verificationsCount || 0) + 1;
 
             // Add to history
             if (!station.priceHistory) station.priceHistory = [];
@@ -212,7 +238,33 @@ export default class StationsStore {
                 ethanol
             });
 
+            this.addActivity('price_update', `atualizou preços em ${station.name}`, stationId);
             this.addPoints(10); // 10 points for update
+        }
+    }
+
+    @action verifyPrice = (stationId: number) => {
+        const station = this.stations.find(s => s.id === stationId);
+        if (station) {
+            station.lastVerified = new Date().toISOString();
+            station.verificationsCount = (station.verificationsCount || 0) + 1;
+
+            this.addActivity('verification', `confirmou o preço em ${station.name}`, stationId);
+            this.addPoints(5); // 5 points for verification
+        }
+    }
+
+    @action addActivity = (type: Activity['type'], text: string, stationId?: number) => {
+        this.recentActivities.unshift({
+            id: Date.now(),
+            type,
+            text,
+            author: 'Você',
+            timestamp: Date.now(),
+            stationId
+        });
+        if (this.recentActivities.length > 10) {
+            this.recentActivities.pop();
         }
     }
 

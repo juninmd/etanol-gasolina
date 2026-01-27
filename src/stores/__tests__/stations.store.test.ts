@@ -62,6 +62,17 @@ describe('StationsStore', () => {
         expect(station?.comments[0].text).toBe('Nice!');
     });
 
+    it('should verify price and log activity', () => {
+        const initialCount = stationsStore.stations[0].verificationsCount || 0;
+        stationsStore.verifyPrice(1);
+        const station = stationsStore.stations.find(s => s.id === 1);
+        expect(station?.verificationsCount).toBe(initialCount + 1);
+
+        expect(stationsStore.recentActivities.length).toBeGreaterThan(0);
+        expect(stationsStore.recentActivities[0].type).toBe('verification');
+        expect(stationsStore.recentActivities[0].stationId).toBe(1);
+    });
+
     describe('Gamification', () => {
         it('should calculate levels correctly', () => {
             stationsStore.points = 0;
