@@ -79,6 +79,13 @@ export default class StationDetails extends Component<Props, State> {
         }
     };
 
+    handleConfirmPrice = () => {
+        const { route, stationsStore } = this.props;
+        const { stationId } = route.params;
+        stationsStore.verifyPrice(stationId);
+        alert('✅ Obrigado pela confirmação!\n\n🏆 +5 PONTOS! A comunidade agradece.');
+    };
+
     handleRoute = (station) => {
         const url = `https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}`;
         Linking.openURL(url).catch(err => console.error('An error occurred', err));
@@ -136,6 +143,27 @@ export default class StationDetails extends Component<Props, State> {
 
         if (!station) return <Layout style={styles.container}><Text>Posto não encontrado</Text></Layout>;
 
+        // Reliability Logic
+        const lastVerifiedDate = station.lastVerified ? new Date(station.lastVerified) : new Date(0);
+        const hoursSince = (new Date().getTime() - lastVerifiedDate.getTime()) / (1000 * 60 * 60);
+        let trustStatus = 'basic';
+        let trustColor = '#8F9BB3';
+        let trustText = 'Sem verificação recente';
+
+        if (hoursSince < 24) {
+            trustStatus = 'success';
+            trustColor = '#00E096';
+            trustText = `Preço Confiável (Verificado há ${Math.floor(hoursSince)}h)`;
+        } else if (hoursSince < 72) {
+            trustStatus = 'warning';
+            trustColor = '#FFAAA5';
+            trustText = 'Preço pode estar desatualizado';
+        } else {
+            trustStatus = 'danger';
+            trustColor = '#FF3D71';
+            trustText = 'Preço antigo! Ajude a atualizar.';
+        }
+
         return (
             <Layout style={styles.container}>
                 <TopNavigation
@@ -149,6 +177,14 @@ export default class StationDetails extends Component<Props, State> {
                     <Card style={styles.card}>
                         <Text category='h5'>{station.name}</Text>
                         <Text category='s1' style={styles.address}>{station.address}</Text>
+
+                        {/* Reliability Badge */}
+                        <View style={[styles.trustBadge, { borderColor: trustColor }]}>
+                             <Icon name={hoursSince < 24 ? 'checkmark-circle-2' : 'alert-circle'} width={16} height={16} fill={trustColor} />
+                             <Text category='c1' style={{color: trustColor, marginLeft: 5, fontWeight: 'bold'}}>{trustText}</Text>
+                             <Text category='c2' appearance='hint' style={{marginLeft: 'auto'}}>{station.verificationsCount || 0} verificações</Text>
+                        </View>
+
                         <View style={styles.priceRow}>
                             <View style={styles.priceBox}>
                                 <Text category='label'>Gasolina</Text>
@@ -261,14 +297,25 @@ export default class StationDetails extends Component<Props, State> {
                         Registrar Abastecimento
                     </Button>
 
-                    <Button
-                        style={styles.button}
-                        status='primary'
-                        onPress={() => this.setState({ showUpdatePrice: !this.state.showUpdatePrice })}
-                        accessoryLeft={(props) => <Icon {...props} name='edit-outline'/>}
-                    >
-                        Estou aqui! Atualizar Preço
-                    </Button>
+                    <View style={styles.actionButtonsContainer}>
+                        <Button
+                            style={[styles.button, {flex: 1, marginRight: 5}]}
+                            status='success'
+                            appearance='outline'
+                            onPress={this.handleConfirmPrice}
+                            accessoryLeft={(props) => <Icon {...props} name='checkmark-circle-2-outline'/>}
+                        >
+                            Confirmar Preço
+                        </Button>
+                        <Button
+                            style={[styles.button, {flex: 1, marginLeft: 5}]}
+                            status='primary'
+                            onPress={() => this.setState({ showUpdatePrice: !this.state.showUpdatePrice })}
+                            accessoryLeft={(props) => <Icon {...props} name='edit-outline'/>}
+                        >
+                            Atualizar
+                        </Button>
+                    </View>
 
                     {this.state.showUpdatePrice && (
                         <Card style={styles.card}>
@@ -339,8 +386,22 @@ const styles = StyleSheet.create({
     priceBox: {
         alignItems: 'center',
     },
+    trustBadge: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 12,
+        padding: 5,
+        paddingHorizontal: 10,
+        marginBottom: 10,
+        backgroundColor: 'rgba(0,0,0,0.02)'
+    },
     promoBadge: {
         marginTop: 10,
+    },
+    actionButtonsContainer: {
+        flexDirection: 'row',
+        marginBottom: 10
     },
     button: {
         marginBottom: 15,
