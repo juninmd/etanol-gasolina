@@ -6,6 +6,7 @@ export interface Comment {
     text: string;
     author: string;
     date: string;
+    rating: number;
 }
 
 export interface Activity {
@@ -44,7 +45,7 @@ export default class StationsStore {
             longitude: -46.655981,
             isPromo: true,
             comments: [
-                { id: 1, text: 'Ótimo atendimento!', author: 'João', date: '10/05/2023' }
+                { id: 1, text: 'Ótimo atendimento!', author: 'João', date: '10/05/2023', rating: 5 }
             ],
             priceHistory: [
                 { date: '01/05', gas: 5.49, ethanol: 3.69 },
@@ -208,16 +209,17 @@ export default class StationsStore {
         return this.favorites.includes(id);
     }
 
-    @action addComment = (stationId: number, text: string) => {
+    @action addComment = (stationId: number, text: string, rating: number) => {
         const station = this.stations.find(s => s.id === stationId);
         if (station) {
             station.comments.push({
                 id: Date.now(),
                 text,
                 author: 'Você',
-                date: new Date().toLocaleDateString()
+                date: new Date().toLocaleDateString(),
+                rating
             });
-            this.addActivity('comment', `comentou em ${station.name}`, stationId);
+            this.addActivity('comment', `avaliou ${station.name}`, stationId);
             this.addPoints(5); // 5 points for comment
         }
     }

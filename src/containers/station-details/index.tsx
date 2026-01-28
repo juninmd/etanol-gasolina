@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, ScrollView, View, Linking } from 'react-native';
-import { Layout, Text, Button, Icon, Input, List, ListItem, Card, TopNavigation, TopNavigationAction, Divider } from '@ui-kitten/components';
+import { StyleSheet, ScrollView, View, Linking, Animated } from 'react-native';
+import { Layout, Text, Button, Icon, Input, Card, TopNavigation, TopNavigationAction, Divider } from '@ui-kitten/components';
 import { inject, observer } from 'mobx-react';
 import StationsStore from '../../stores/stations.store';
+import { StationComments } from '../../components/StationComments';
+import { PriceHistoryChart } from '../../components/PriceHistoryChart';
 
 interface Props {
     navigation: any;
@@ -11,7 +13,6 @@ interface Props {
 }
 
 interface State {
-    commentText: string;
     showUpdatePrice: boolean;
     newGasPrice: string;
     newEthanolPrice: string;
@@ -26,12 +27,34 @@ const BackIcon = (props) => (
 @observer
 export default class StationDetails extends Component<Props, State> {
     state: State = {
-        commentText: '',
         showUpdatePrice: false,
         newGasPrice: '',
         newEthanolPrice: '',
         simAmount: ''
     };
+
+    pulseAnim = new Animated.Value(1);
+
+    componentDidMount() {
+        this.startPulse();
+    }
+
+    startPulse = () => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(this.pulseAnim, {
+                    toValue: 0.6,
+                    duration: 800,
+                    useNativeDriver: true // Add this line
+                }),
+                Animated.timing(this.pulseAnim, {
+                    toValue: 1,
+                    duration: 800,
+                    useNativeDriver: true // Add this line
+                })
+            ])
+        ).start();
+    }
 
     navigateBack = () => {
         this.props.navigation.goBack();
@@ -55,16 +78,12 @@ export default class StationDetails extends Component<Props, State> {
         );
     };
 
-    handleAddComment = () => {
+    handleAddComment = (text: string, rating: number) => {
         const { route, stationsStore } = this.props;
         const { stationId } = route.params;
-        const { commentText } = this.state;
 
-        if (commentText.trim()) {
-            stationsStore.addComment(stationId, commentText);
-            this.setState({ commentText: '' });
-            alert('🎉 Avaliação enviada!\n\n⭐ +5 PONTOS! Continue ajudando a comunidade.');
-        }
+        stationsStore.addComment(stationId, text, rating);
+        alert('🎉 Avaliação enviada!\n\n⭐ +5 PONTOS! Continue ajudando a comunidade.');
     };
 
     handleUpdatePrice = () => {
@@ -90,51 +109,6 @@ export default class StationDetails extends Component<Props, State> {
         const url = `https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}`;
         Linking.openURL(url).catch(err => console.error('An error occurred', err));
     };
-
-    renderCommentItem = ({ item }) => (
-        <View key={item.id} style={styles.commentBubbleContainer}>
-            <View style={styles.avatar}>
-                <Text style={{color: '#fff', fontWeight: 'bold'}}>{item.author ? item.author.charAt(0).toUpperCase() : 'U'}</Text>
-            </View>
-            <View style={styles.commentBubble}>
-                <View style={styles.commentHeader}>
-                    <Text category='s2'>{item.author}</Text>
-                    <Text category='c2' appearance='hint'>{item.date}</Text>
-                </View>
-                <Text category='p1' style={{marginTop: 5}}>{item.text}</Text>
-            </View>
-        </View>
-    );
-
-    renderChart = (history) => {
-        if (!history || history.length === 0) return null;
-
-        const maxPrice = Math.max(
-            ...history.map(h => Math.max(h.gas, h.ethanol))
-        ) || 6.0;
-
-        return (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chartScroll}>
-                <View style={styles.chartContainer}>
-                    {history.map((item, index) => {
-                        const gasHeight = (item.gas / maxPrice) * 120;
-                        const ethHeight = (item.ethanol / maxPrice) * 120;
-
-                        return (
-                            <View key={index} style={styles.chartBarGroup}>
-                                <View style={styles.barsRow}>
-                                    <View style={[styles.bar, { height: gasHeight, backgroundColor: '#3366FF', marginRight: 4 }]} />
-                                    <View style={[styles.bar, { height: ethHeight, backgroundColor: '#00E096' }]} />
-                                </View>
-                                <Text category='c1' style={styles.chartDate}>{item.date}</Text>
-                                <Text category='c2' appearance='hint'>{item.gas.toFixed(2)}</Text>
-                            </View>
-                        );
-                    })}
-                </View>
-            </ScrollView>
-        );
-    }
 
     render() {
         const { route, stationsStore, navigation } = this.props;
@@ -175,8 +149,17 @@ export default class StationDetails extends Component<Props, State> {
                 <Divider />
                 <ScrollView contentContainerStyle={styles.content}>
                     <Card style={styles.card}>
-                        <Text category='h5'>{station.name}</Text>
-                        <Text category='s1' style={styles.address}>{station.address}</Text>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                            <View style={{flex: 1}}>
+                                <Text category='h5'>{station.name}</Text>
+                                <Text category='s1' style={styles.address}>{station.address}</Text>
+                            </View>
+                            {/* Live Badge */}
+                            <Animated.View style={[styles.liveBadge, { opacity: this.pulseAnim }]}>
+                                <View style={styles.liveDot} />
+                                <Text category='c2' style={{color: 'white', fontWeight: 'bold'}}>AO VIVO</Text>
+                            </Animated.View>
+                        </View>
 
                         {/* Reliability Badge */}
                         <View style={[styles.trustBadge, { borderColor: trustColor }]}>
@@ -236,16 +219,7 @@ export default class StationDetails extends Component<Props, State> {
                     {/* Price History Section */}
                     {station.priceHistory && station.priceHistory.length > 0 && (
                         <Card style={styles.card}>
-                            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                                <Text category='h6' style={styles.sectionTitle}>Evolução de Preços</Text>
-                                <View style={{flexDirection: 'row'}}>
-                                    <View style={{width: 10, height: 10, backgroundColor: '#3366FF', marginRight: 5}} />
-                                    <Text category='c2' appearance='hint' style={{marginRight: 10}}>Gas</Text>
-                                    <View style={{width: 10, height: 10, backgroundColor: '#00E096', marginRight: 5}} />
-                                    <Text category='c2' appearance='hint'>Eta</Text>
-                                </View>
-                            </View>
-                            {this.renderChart(station.priceHistory)}
+                            <PriceHistoryChart history={station.priceHistory} />
                         </Card>
                     )}
 
@@ -338,25 +312,10 @@ export default class StationDetails extends Component<Props, State> {
                         </Card>
                     )}
 
-                    <Text category='h6' style={styles.sectionTitle}>Comentários da Comunidade ({station.comments.length})</Text>
-                    <View style={styles.commentsList}>
-                        {station.comments.slice().map((item) => this.renderCommentItem({ item }))}
-                    </View>
-
-                    <Card style={styles.addCommentCard}>
-                        <Text category='s2' style={{marginBottom: 10}}>Avalie este posto</Text>
-                        <Input
-                            placeholder='Como está o atendimento e o preço?'
-                            value={this.state.commentText}
-                            onChangeText={text => this.setState({ commentText: text })}
-                            style={styles.commentInput}
-                            multiline={true}
-                            textStyle={{ minHeight: 64 }}
-                        />
-                        <Button size='small' onPress={this.handleAddComment} accessoryRight={(p)=><Icon {...p} name='paper-plane-outline'/>}>
-                            Publicar Avaliação
-                        </Button>
-                    </Card>
+                    <StationComments
+                        comments={station.comments}
+                        onAddComment={this.handleAddComment}
+                    />
                 </ScrollView>
             </Layout>
         );
@@ -413,73 +372,22 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
     },
-    commentsList: {
-        marginBottom: 20,
-    },
-    commentBubbleContainer: {
-        flexDirection: 'row',
-        marginBottom: 15,
-    },
-    avatar: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: '#3366FF',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 10,
-    },
-    commentBubble: {
-        flex: 1,
-        backgroundColor: '#F7F9FC',
-        borderRadius: 12,
-        padding: 12,
-        borderBottomLeftRadius: 0,
-    },
-    commentHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    addCommentCard: {
-        marginTop: 10,
-    },
-    commentInput: {
-        marginBottom: 10,
-    },
-    historyContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-    },
-    historyItem: {
-        alignItems: 'center',
-    },
-    chartScroll: {
-        marginTop: 10,
-    },
-    chartContainer: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        height: 150,
-        paddingBottom: 10,
-    },
-    chartBarGroup: {
-        marginRight: 20,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        height: '100%',
-    },
-    barsRow: {
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        marginBottom: 5,
-    },
-    bar: {
-        width: 12,
+    liveBadge: {
+        backgroundColor: '#FF3D71',
         borderRadius: 4,
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+        flexDirection: 'row',
+        alignItems: 'center',
+        position: 'absolute',
+        top: 0,
+        right: 0
     },
-    chartDate: {
-        marginTop: 2,
+    liveDot: {
+        width: 6,
+        height: 6,
+        borderRadius: 3,
+        backgroundColor: 'white',
+        marginRight: 4
     }
 });
