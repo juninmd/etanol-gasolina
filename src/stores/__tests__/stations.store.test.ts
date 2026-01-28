@@ -56,10 +56,11 @@ describe('StationsStore', () => {
     });
 
     it('should add comment', () => {
-        stationsStore.addComment(1, 'Nice!');
+        stationsStore.addComment(1, 'Nice!', 5);
         const station = stationsStore.stations.find(s => s.id === 1);
         expect(station?.comments.length).toBe(1);
         expect(station?.comments[0].text).toBe('Nice!');
+        expect(station?.comments[0].rating).toBe(5);
     });
 
     it('should verify price and log activity', () => {
