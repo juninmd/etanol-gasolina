@@ -18,6 +18,14 @@ export interface Activity {
     stationId?: number;
 }
 
+export interface Badge {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    unlocked: boolean;
+}
+
 export interface Station {
     id: number;
     name: string;
@@ -101,6 +109,18 @@ export default class StationsStore {
     @observable checkinStation: Station | null = null;
     @observable showLevelUp = false;
     @observable newLevelName = '';
+
+    @observable badges: Badge[] = [
+        { id: 'first_collab', name: 'Voz da Comunidade', description: 'Primeira contribuição feita', icon: 'message-circle-outline', unlocked: false },
+        { id: 'price_watcher', name: 'Fiscal de Preço', description: 'Atualizou um preço', icon: 'pricetags-outline', unlocked: false },
+        { id: 'saver', name: 'Poupador Nato', description: 'Economizou mais de R$ 50,00', icon: 'trending-up-outline', unlocked: false },
+        { id: 'influencer', name: 'Influenciador', description: 'Realizou 5 atividades na comunidade', icon: 'star-outline', unlocked: false }
+    ];
+    @observable badgeQueue: Badge[] = [];
+
+    @computed get currentBadge() {
+        return this.badgeQueue.length > 0 ? this.badgeQueue[0] : null;
+    }
 
     constructor() {
         this.startRealTimeUpdates();
@@ -221,6 +241,7 @@ export default class StationsStore {
             });
             this.addActivity('comment', `avaliou ${station.name}`, stationId);
             this.addPoints(5); // 5 points for comment
+            this.checkBadges('comment');
         }
     }
 
@@ -242,6 +263,7 @@ export default class StationsStore {
 
             this.addActivity('price_update', `atualizou preços em ${station.name}`, stationId);
             this.addPoints(10); // 10 points for update
+            this.checkBadges('update');
         }
     }
 
@@ -253,6 +275,7 @@ export default class StationsStore {
 
             this.addActivity('verification', `confirmou o preço em ${station.name}`, stationId);
             this.addPoints(5); // 5 points for verification
+            this.checkBadges('verify');
         }
     }
 
@@ -282,10 +305,57 @@ export default class StationsStore {
     @action addSavings = (amount: number) => {
         this.totalSavings += amount;
         this.addPoints(Math.floor(amount * 2));
+        this.checkBadges('savings');
+    }
+
+    @action checkBadges = (actionType: string) => {
+        // First Collaboration Badge
+        if (['comment', 'update', 'verify'].includes(actionType)) {
+            const badge = this.badges.find(b => b.id === 'first_collab');
+            if (badge && !badge.unlocked) {
+                badge.unlocked = true;
+                this.badgeQueue.push(badge);
+            }
+        }
+
+        // Price Watcher
+        if (actionType === 'update') {
+            const badge = this.badges.find(b => b.id === 'price_watcher');
+            if (badge && !badge.unlocked) {
+                badge.unlocked = true;
+                this.badgeQueue.push(badge);
+            }
+        }
+
+        // Saver
+        if (this.totalSavings >= 50) {
+            const badge = this.badges.find(b => b.id === 'saver');
+            if (badge && !badge.unlocked) {
+                badge.unlocked = true;
+                this.badgeQueue.push(badge);
+            }
+        }
+
+        // Influencer
+        // Count activities by 'Você'
+        const myActivities = this.recentActivities.filter(a => a.author === 'Você').length;
+        if (myActivities >= 5) {
+             const badge = this.badges.find(b => b.id === 'influencer');
+             if (badge && !badge.unlocked) {
+                 badge.unlocked = true;
+                 this.badgeQueue.push(badge);
+             }
+        }
     }
 
     @action resetLevelUp = () => {
         this.showLevelUp = false;
+    }
+
+    @action resetBadgePopup = () => {
+        if (this.badgeQueue.length > 0) {
+            this.badgeQueue.shift();
+        }
     }
 }
 
