@@ -215,6 +215,20 @@ export default class Home extends Component<Props, State> {
                 )}
 
                 <ScrollView contentContainerStyle={styles.scrollContent}>
+                    <Card
+                        style={styles.marketCard}
+                        onPress={() => this.props.navigation.navigate('MarketInsights')}
+                    >
+                        <View style={styles.marketCardContent}>
+                            <Icon name='pie-chart-outline' width={32} height={32} fill='#3366FF' />
+                            <View style={{marginLeft: 15, flex: 1}}>
+                                <Text category='h6' status='primary'>Tendências de Mercado</Text>
+                                <Text category='c1' appearance='hint'>Veja previsões e economize mais!</Text>
+                            </View>
+                            <Icon name='arrow-ios-forward-outline' width={24} height={24} fill='#8F9BB3' />
+                        </View>
+                    </Card>
+
                     {this.renderGamificationCard()}
 
                     {/* Community Feed */}
@@ -383,6 +397,16 @@ const styles = StyleSheet.create({
     pointsText: {
         marginLeft: 5,
         fontWeight: 'bold',
+    },
+    marketCard: {
+        marginBottom: 20,
+        borderWidth: 1,
+        borderColor: '#E4E9F2',
+        borderRadius: 8,
+    },
+    marketCardContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     scrollContent: {
         padding: 20,
