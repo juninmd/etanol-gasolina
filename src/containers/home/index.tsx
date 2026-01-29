@@ -142,7 +142,7 @@ export default class Home extends Component<Props, State> {
     }
 
     renderGamificationCard = () => {
-        const { level, nextLevelPoints, progress, points } = this.props.stationsStore;
+        const { level, nextLevelPoints, progress, points, badges } = this.props.stationsStore;
         return (
             <Card style={styles.gamificationCard}>
                 <View style={styles.levelHeader}>
@@ -156,6 +156,17 @@ export default class Home extends Component<Props, State> {
                     <View style={[styles.progressBarFill, { width: `${progress * 100}%` }]} />
                 </View>
                 <Text category='c1' style={{textAlign: 'right', marginTop: 5}}>{Math.floor(progress * 100)}%</Text>
+
+                <View style={{marginTop: 15, borderTopWidth: 1, borderTopColor: '#eee', paddingTop: 10}}>
+                    <Text category='c2' style={{marginBottom: 10, fontWeight: 'bold'}}>Minhas Conquistas</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                        {badges.map(badge => (
+                            <View key={badge.id} style={{alignItems: 'center', opacity: badge.unlocked ? 1 : 0.4}}>
+                                <Icon name={badge.icon} width={28} height={28} fill={badge.unlocked ? '#FFD700' : '#8F9BB3'} />
+                            </View>
+                        ))}
+                    </View>
+                </View>
             </Card>
         );
     }

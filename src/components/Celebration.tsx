@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Animated, Dimensions, Easing } from 'react-native';
-import { Text, Button, Card } from '@ui-kitten/components';
+import { Text, Button, Card, Icon } from '@ui-kitten/components';
 import { inject, observer } from 'mobx-react';
 import StationsStore from '../stores/stations.store';
 
@@ -12,16 +12,14 @@ const { width, height } = Dimensions.get('window');
 
 const PARTICLE_COUNT = 30;
 
-const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) => {
-    if (!stationsStore?.showLevelUp) return null;
-
+const CelebrationContent = observer(({ stationsStore }: Props) => {
     const [particles] = useState(() =>
         Array.from({ length: PARTICLE_COUNT }).map(() => ({
             x: new Animated.Value(0),
             y: new Animated.Value(0),
             opacity: new Animated.Value(1),
             angle: Math.random() * Math.PI * 2,
-            speed: Math.random() * 150 + 100, // Distance to travel
+            speed: Math.random() * 150 + 100,
             color: ['#FFD700', '#FF4500', '#00FA9A', '#1E90FF'][Math.floor(Math.random() * 4)]
         }))
     );
@@ -29,7 +27,7 @@ const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) 
     const scaleAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
-        // Reset values
+        // Animation Logic
         particles.forEach(p => {
             p.x.setValue(0);
             p.y.setValue(0);
@@ -37,14 +35,12 @@ const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) 
         });
         scaleAnim.setValue(0);
 
-        // Animate Card
         Animated.spring(scaleAnim, {
             toValue: 1,
             friction: 5,
-            useNativeDriver: false // Web compatibility
+            useNativeDriver: false
         }).start();
 
-        // Animate Particles
         const animations = particles.map(p => {
             return Animated.parallel([
                 Animated.timing(p.x, {
@@ -69,17 +65,21 @@ const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) 
         });
 
         Animated.stagger(20, animations).start();
-
-    }, [stationsStore.showLevelUp]);
+    }, []); // Run once on mount
 
     const handleDismiss = () => {
-        stationsStore.resetLevelUp();
+        if (stationsStore.currentBadge) {
+            stationsStore.resetBadgePopup();
+        } else if (stationsStore.showLevelUp) {
+            stationsStore.resetLevelUp();
+        }
     };
+
+    const isBadge = !!stationsStore.currentBadge;
 
     return (
         <View style={styles.overlay}>
-            {/* Particles */}
-            {particles.map((p, i) => (
+             {particles.map((p, i) => (
                 <Animated.View
                     key={i}
                     style={[
@@ -95,18 +95,35 @@ const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) 
                     ]}
                 />
             ))}
-
-            {/* Modal Card */}
             <Animated.View style={[styles.cardContainer, { transform: [{ scale: scaleAnim }] }]}>
                 <Card style={styles.card} status='success'>
-                    <Text category='h1' style={styles.emoji}>🎉</Text>
-                    <Text category='h3' style={styles.title}>LEVEL UP!</Text>
-                    <Text category='s1' style={styles.subtitle}>
-                        Você agora é um
-                    </Text>
-                    <Text category='h2' status='primary' style={styles.rank}>
-                        {stationsStore.newLevelName.toUpperCase()}
-                    </Text>
+                    {isBadge ? (
+                         <View style={{alignItems: 'center'}}>
+                            <Icon name={stationsStore.currentBadge!.icon} width={60} height={60} fill='#FFD700' style={{marginBottom: 10}} />
+                            <Text category='h3' style={styles.title}>NOVA CONQUISTA!</Text>
+                            <Text category='s1' style={styles.subtitle}>
+                                Você desbloqueou
+                            </Text>
+                            <Text category='h5' status='primary' style={styles.rank}>
+                                {stationsStore.currentBadge!.name}
+                            </Text>
+                            <Text category='p2' appearance='hint' style={{textAlign: 'center', marginBottom: 15}}>
+                                {stationsStore.currentBadge!.description}
+                            </Text>
+                        </View>
+                    ) : (
+                        <View style={{alignItems: 'center'}}>
+                            <Text category='h1' style={styles.emoji}>🎉</Text>
+                            <Text category='h3' style={styles.title}>LEVEL UP!</Text>
+                            <Text category='s1' style={styles.subtitle}>
+                                Você agora é um
+                            </Text>
+                            <Text category='h2' status='primary' style={styles.rank}>
+                                {stationsStore.newLevelName.toUpperCase()}
+                            </Text>
+                        </View>
+                    )}
+
                     <Button style={styles.button} onPress={handleDismiss}>
                         INCRÍVEL!
                     </Button>
@@ -114,6 +131,14 @@ const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) 
             </Animated.View>
         </View>
     );
+});
+
+const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) => {
+    const showCelebration = stationsStore?.showLevelUp || !!stationsStore?.currentBadge;
+
+    if (!showCelebration) return null;
+
+    return <CelebrationContent stationsStore={stationsStore} />;
 }));
 
 const styles = StyleSheet.create({
