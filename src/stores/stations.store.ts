@@ -26,6 +26,14 @@ export interface Badge {
     unlocked: boolean;
 }
 
+export interface MarketAnalysis {
+    avgGas: number;
+    avgEthanol: number;
+    ratio: number;
+    bestFuel: 'Ethanol' | 'Gasoline';
+    potentialSavingsPct: number;
+}
+
 export interface Station {
     id: number;
     name: string;
@@ -183,6 +191,44 @@ export default class StationsStore {
             return this.stations.filter(s => s.isPromo);
         }
         return this.stations;
+    }
+
+    @computed get marketAnalysis(): MarketAnalysis {
+        const count = this.stations.length;
+        if (count === 0) {
+            return { avgGas: 0, avgEthanol: 0, ratio: 0, bestFuel: 'Gasoline', potentialSavingsPct: 0 };
+        }
+
+        const totalGas = this.stations.reduce((sum, s) => sum + s.priceGas, 0);
+        const totalEthanol = this.stations.reduce((sum, s) => sum + s.priceEthanol, 0);
+
+        const avgGas = totalGas / count;
+        const avgEthanol = totalEthanol / count;
+
+        const ratio = avgGas > 0 ? avgEthanol / avgGas : 0;
+        const bestFuel = ratio < 0.7 ? 'Ethanol' : 'Gasoline';
+
+        // Calculate potential savings (simplified)
+        // If ratio is 0.65, saving is (0.7 - 0.65) / 0.7 = ~7% vs the break-even point
+        let potentialSavingsPct = 0;
+        if (bestFuel === 'Ethanol') {
+            potentialSavingsPct = ((0.7 - ratio) / 0.7) * 100;
+        } else {
+             // If Gas is better (ratio > 0.7). e.g. ratio 0.8.
+             // Cost efficiency of Ethanol is low. Gas is the baseline.
+             // This metric is usually "how much you save by switching to Ethanol".
+             // If Gas is better, you "save" by NOT using Ethanol, but let's stick to positive savings for the recommended fuel.
+             // If ratio is 0.8, Gas is better.
+             potentialSavingsPct = 0; // Baseline
+        }
+
+        return {
+            avgGas,
+            avgEthanol,
+            ratio,
+            bestFuel,
+            potentialSavingsPct: Math.max(0, parseFloat(potentialSavingsPct.toFixed(1)))
+        };
     }
 
     @computed get bestStation() {
