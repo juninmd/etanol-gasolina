@@ -7,6 +7,7 @@ import HomeStore from '../../stores/home.store';
 import StationsStore from '../../stores/stations.store';
 import GarageStore from '../../stores/garage.store';
 import ThemeStore from '../../stores/theme.store';
+import SmartFuelCard from '../../components/SmartFuelCard';
 import { Alert } from 'react-native';
 import { reaction } from 'mobx';
 
@@ -226,6 +227,8 @@ export default class Home extends Component<Props, State> {
                 )}
 
                 <ScrollView contentContainerStyle={styles.scrollContent}>
+                    <SmartFuelCard stationsStore={this.props.stationsStore} />
+
                     <Card
                         style={styles.marketCard}
                         onPress={() => this.props.navigation.navigate('MarketInsights')}

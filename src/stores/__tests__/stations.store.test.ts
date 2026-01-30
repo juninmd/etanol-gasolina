@@ -98,4 +98,34 @@ describe('StationsStore', () => {
             expect(stationsStore.progress).toBe(0);
         });
     });
+
+    describe('Market Analysis', () => {
+        it('should return default values if no stations', () => {
+            stationsStore.stations = [];
+            const analysis = stationsStore.marketAnalysis;
+            expect(analysis.ratio).toBe(0);
+            expect(analysis.bestFuel).toBe('Gasoline'); // Default safety
+        });
+
+        it('should recommend Ethanol when ratio < 0.7', () => {
+             stationsStore.stations = [
+                { ...stationsStore.stations[0], priceGas: 5.00, priceEthanol: 3.00 }, // Ratio 0.6
+             ];
+             const analysis = stationsStore.marketAnalysis;
+             expect(analysis.ratio).toBe(0.6);
+             expect(analysis.bestFuel).toBe('Ethanol');
+             // Savings: (0.7 - 0.6)/0.7 = 0.1/0.7 = ~14.2%
+             expect(analysis.potentialSavingsPct).toBeCloseTo(14.3, 1);
+        });
+
+        it('should recommend Gasoline when ratio > 0.7', () => {
+             stationsStore.stations = [
+                { ...stationsStore.stations[0], priceGas: 5.00, priceEthanol: 4.00 }, // Ratio 0.8
+             ];
+             const analysis = stationsStore.marketAnalysis;
+             expect(analysis.ratio).toBe(0.8);
+             expect(analysis.bestFuel).toBe('Gasoline');
+             expect(analysis.potentialSavingsPct).toBe(0);
+        });
+    });
 });
