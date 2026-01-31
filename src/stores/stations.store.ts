@@ -1,5 +1,6 @@
 import { action, observable, computed, runInAction } from 'mobx';
 import { homeStore } from './home.store';
+import { garageStore } from './garage.store';
 
 export interface Comment {
     id: number;
@@ -32,6 +33,18 @@ export interface MarketAnalysis {
     ratio: number;
     bestFuel: 'Ethanol' | 'Gasoline';
     potentialSavingsPct: number;
+}
+
+export interface SavingsRecord {
+    id: string;
+    date: string;
+    amount: number;
+    stationId?: number;
+}
+
+export interface SmartAlert {
+    message: string | null;
+    type: 'success' | 'info' | 'warning';
 }
 
 export interface Station {
@@ -113,10 +126,12 @@ export default class StationsStore {
     @observable favorites: number[] = [];
     @observable filterPromo = false;
     @observable totalSavings = 0;
+    @observable savingsHistory: SavingsRecord[] = [];
     @observable points = 150; // Initial gamification points
     @observable checkinStation: Station | null = null;
     @observable showLevelUp = false;
     @observable newLevelName = '';
+    @observable smartAlert: SmartAlert = { message: null, type: 'info' };
 
     @observable badges: Badge[] = [
         { id: 'first_collab', name: 'Voz da Comunidade', description: 'Primeira contribuição feita', icon: 'message-circle-outline', unlocked: false },
@@ -142,8 +157,14 @@ export default class StationsStore {
                 this.stations.forEach(station => {
                     if (Math.random() > 0.7) { // 30% chance to update
                         const change = (Math.random() - 0.5) * 0.10; // +/- 0.05
+                        const oldPrice = station.priceGas;
                         station.priceGas = Math.max(3.0, parseFloat((station.priceGas + change).toFixed(2)));
                         station.priceEthanol = Math.max(2.0, parseFloat((station.priceEthanol + change * 0.7).toFixed(2)));
+
+                        // Mock Smart Alert for Price Drop
+                        if (station.priceGas < oldPrice - 0.03 && Math.random() > 0.8) {
+                            this.triggerAlert(`Preço caiu! ${station.name} baixou a gasolina.`, 'success');
+                        }
                     }
                 });
             });
@@ -206,19 +227,31 @@ export default class StationsStore {
         const avgEthanol = totalEthanol / count;
 
         const ratio = avgGas > 0 ? avgEthanol / avgGas : 0;
-        const bestFuel = ratio < 0.7 ? 'Ethanol' : 'Gasoline';
 
-        // Calculate potential savings (simplified)
-        // If ratio is 0.65, saving is (0.7 - 0.65) / 0.7 = ~7% vs the break-even point
+        // Determine Break-Even Ratio based on Vehicle or Standard
+        let breakEvenRatio = 0.7;
+        let etanolCons = parseFloat(homeStore.etanolConsumption.replace(',', '.'));
+        let gasCons = parseFloat(homeStore.gasolinaConsumption.replace(',', '.'));
+
+        // Fallback to Garage Store
+        if ((isNaN(etanolCons) || etanolCons <= 0) && garageStore.selectedVehicle) {
+            etanolCons = garageStore.selectedVehicle.avgEthanolConsumption;
+        }
+        if ((isNaN(gasCons) || gasCons <= 0) && garageStore.selectedVehicle) {
+            gasCons = garageStore.selectedVehicle.avgGasConsumption;
+        }
+
+        if (!isNaN(etanolCons) && !isNaN(gasCons) && etanolCons > 0 && gasCons > 0) {
+            breakEvenRatio = etanolCons / gasCons;
+        }
+
+        const bestFuel = ratio < breakEvenRatio ? 'Ethanol' : 'Gasoline';
+
+        // Calculate potential savings
         let potentialSavingsPct = 0;
         if (bestFuel === 'Ethanol') {
-            potentialSavingsPct = ((0.7 - ratio) / 0.7) * 100;
+            potentialSavingsPct = ((breakEvenRatio - ratio) / breakEvenRatio) * 100;
         } else {
-             // If Gas is better (ratio > 0.7). e.g. ratio 0.8.
-             // Cost efficiency of Ethanol is low. Gas is the baseline.
-             // This metric is usually "how much you save by switching to Ethanol".
-             // If Gas is better, you "save" by NOT using Ethanol, but let's stick to positive savings for the recommended fuel.
-             // If ratio is 0.8, Gas is better.
              potentialSavingsPct = 0; // Baseline
         }
 
@@ -234,8 +267,17 @@ export default class StationsStore {
     @computed get bestStation() {
         if (this.stations.length === 0) return null;
 
-        const etanolCons = parseFloat(homeStore.etanolConsumption.replace(',', '.'));
-        const gasCons = parseFloat(homeStore.gasolinaConsumption.replace(',', '.'));
+        let etanolCons = parseFloat(homeStore.etanolConsumption.replace(',', '.'));
+        let gasCons = parseFloat(homeStore.gasolinaConsumption.replace(',', '.'));
+
+        // Fallback to Garage Store if inputs are empty/invalid
+        if ((isNaN(etanolCons) || etanolCons <= 0) && garageStore.selectedVehicle) {
+            etanolCons = garageStore.selectedVehicle.avgEthanolConsumption;
+        }
+        if ((isNaN(gasCons) || gasCons <= 0) && garageStore.selectedVehicle) {
+            gasCons = garageStore.selectedVehicle.avgGasConsumption;
+        }
+
         const useCustomCons = !isNaN(etanolCons) && !isNaN(gasCons) && etanolCons > 0 && gasCons > 0;
 
         return this.stations.slice().sort((a, b) => {
@@ -350,8 +392,21 @@ export default class StationsStore {
 
     @action addSavings = (amount: number) => {
         this.totalSavings += amount;
+        this.savingsHistory.push({
+            id: Date.now().toString(),
+            date: new Date().toLocaleDateString(),
+            amount,
+        });
         this.addPoints(Math.floor(amount * 2));
         this.checkBadges('savings');
+    }
+
+    @action triggerAlert = (message: string, type: 'success' | 'info' | 'warning' = 'info') => {
+        this.smartAlert = { message, type };
+    }
+
+    @action clearAlert = () => {
+        this.smartAlert = { message: null, type: 'info' };
     }
 
     @action checkBadges = (actionType: string) => {

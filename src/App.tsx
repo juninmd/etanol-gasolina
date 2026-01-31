@@ -9,6 +9,7 @@ import * as Stores from './stores';
 import Routes from './routes';
 import Celebration from './components/Celebration';
 import CheckinPrompt from './components/CheckinPrompt';
+import SmartAlert from './components/SmartAlert';
 
 const ThemedApp = observer(() => {
     const { themeStore } = Stores;
@@ -21,6 +22,7 @@ const ThemedApp = observer(() => {
                 <Routes />
                 <Celebration />
                 <CheckinPrompt />
+                <SmartAlert />
             </View>
         </ApplicationProvider>
     );
