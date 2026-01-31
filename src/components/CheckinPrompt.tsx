@@ -18,6 +18,7 @@ const CheckinPrompt = inject('stationsStore')(observer(({ stationsStore }: Props
 
     // Local State for Inline Update
     const [isUpdating, setIsUpdating] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
     const [gasPrice, setGasPrice] = useState('');
     const [ethPrice, setEthPrice] = useState('');
 
@@ -26,6 +27,7 @@ const CheckinPrompt = inject('stationsStore')(observer(({ stationsStore }: Props
             // Pre-fill prices
             setGasPrice(checkinStation.priceGas.toString());
             setEthPrice(checkinStation.priceEthanol.toString());
+            setIsSuccess(false);
 
             Animated.spring(slideAnim, {
                 toValue: 0,
@@ -34,6 +36,7 @@ const CheckinPrompt = inject('stationsStore')(observer(({ stationsStore }: Props
             }).start();
         } else {
             setIsUpdating(false); // Reset state
+            setIsSuccess(false);
             Animated.timing(slideAnim, {
                 toValue: 300,
                 duration: 200,
@@ -51,13 +54,14 @@ const CheckinPrompt = inject('stationsStore')(observer(({ stationsStore }: Props
             useNativeDriver: true
         }).start(() => {
             stationsStore!.dismissCheckin();
+            setIsSuccess(false); // Ensure reset
         });
     };
 
     const handleConfirm = () => {
         stationsStore!.verifyPrice(checkinStation.id);
-        alert('Obrigado! Sua confirmação ajuda a comunidade. +5 Pontos!');
-        handleDismiss();
+        setIsSuccess(true);
+        setTimeout(handleDismiss, 2000);
     };
 
     const handleUpdate = () => {
@@ -66,10 +70,24 @@ const CheckinPrompt = inject('stationsStore')(observer(({ stationsStore }: Props
 
         if (!isNaN(gas) && !isNaN(eth)) {
             stationsStore!.updatePrice(checkinStation.id, gas, eth);
-            alert('Preços atualizados! Você ganhou pontos.');
-            handleDismiss();
+            setIsSuccess(true);
+            setTimeout(handleDismiss, 2000);
         }
     };
+
+    if (isSuccess) {
+        return (
+            <Animated.View style={[styles.container, { transform: [{ translateY: slideAnim }] }]}>
+                <Card style={[styles.card, {backgroundColor: '#00E096', borderColor: '#00E096'}]}>
+                    <View style={{alignItems: 'center', padding: 20}}>
+                        <Icon name='checkmark-circle-2' width={60} height={60} fill='#fff' />
+                        <Text category='h5' style={{color: '#fff', marginTop: 10, fontWeight: 'bold'}}>Sucesso!</Text>
+                        <Text category='s1' style={{color: '#fff'}}>+ Pontos Adicionados</Text>
+                    </View>
+                </Card>
+            </Animated.View>
+        );
+    }
 
     return (
         <Animated.View style={[styles.container, { transform: [{ translateY: slideAnim }] }]}>

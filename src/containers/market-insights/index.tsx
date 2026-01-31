@@ -126,12 +126,12 @@ export default class MarketInsights extends Component<Props> {
         if (sentiment === 'buy') {
             color = '#00E096';
             icon = 'trending-down-outline';
-            text = 'BOM MOMENTO!';
+            text = 'COMPRE AGORA!';
             subtext = 'Tendência de queda confirmada.';
         } else if (sentiment === 'wait') {
             color = '#FF3D71';
             icon = 'trending-up-outline';
-            text = 'AGUARDE!';
+            text = 'AGUARDE SE PUDER';
             subtext = 'Preços em alta no momento.';
         }
 
@@ -145,15 +145,59 @@ export default class MarketInsights extends Component<Props> {
                     </View>
                 </View>
                 <View style={styles.predictionBox}>
-                    <Text category='label' appearance='hint'>PREVISÃO IA PARA AMANHÃ</Text>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text category='label' appearance='hint'>PREVISÃO IA (BETA)</Text>
+                        <Icon name='bulb-outline' width={16} height={16} fill='#FFAAA5' />
+                    </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-                        <Icon name='flash-outline' width={16} height={16} fill='#FFAAA5' />
                         <Text category='s2' style={{marginLeft: 5}}>
-                            {sentiment === 'buy' ? 'Manutenção ou leve queda (-0.2%)' : 'Provável aumento (+0.5%)'}
+                            {sentiment === 'buy' ? 'Probabilidade de aumento em 48h.' : 'Os preços devem estabilizar em breve.'}
                         </Text>
                     </View>
                 </View>
             </Card>
+        );
+    }
+
+    renderSavingsChart = () => {
+        const { savingsHistory } = this.props.stationsStore!;
+        if (!savingsHistory || savingsHistory.length === 0) {
+            return (
+                <View style={{padding: 20, alignItems: 'center'}}>
+                    <Text appearance='hint'>Nenhuma economia registrada ainda.</Text>
+                </View>
+            );
+        }
+
+        // Aggregate by date (last 5 entries/days)
+        const historyMap: Record<string, number> = {};
+        savingsHistory.forEach(record => {
+             const key = record.date.substring(0, 5); // dd/mm
+             historyMap[key] = (historyMap[key] || 0) + record.amount;
+        });
+
+        const data = Object.keys(historyMap).map(date => ({
+            date,
+            amount: historyMap[date]
+        })).slice(-5);
+
+        const maxVal = Math.max(...data.map(d => d.amount)) * 1.1 || 1;
+
+        return (
+            <View style={styles.chartContainer}>
+                {data.map((item, index) => {
+                    const heightPercent = (item.amount / maxVal) * 100;
+                    return (
+                         <View key={index} style={styles.chartBarContainer}>
+                            <View style={styles.barLabelContainer}>
+                                <Text category='c1' style={[styles.barValue, {color: '#00E096'}]}>R$ {item.amount.toFixed(2)}</Text>
+                            </View>
+                            <View style={[styles.bar, { height: `${Math.max(heightPercent, 5)}%`, backgroundColor: '#00E096' }]} />
+                            <Text category='c2' style={styles.barLabel}>{item.date}</Text>
+                        </View>
+                    );
+                })}
+            </View>
         );
     }
 
@@ -169,6 +213,11 @@ export default class MarketInsights extends Component<Props> {
                     <Animated.View style={{ opacity: this.fadeAnim, transform: [{ translateY: this.fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }] }}>
 
                         {this.renderPrediction()}
+
+                        <Card style={styles.chartCard}>
+                            <Text category='h6' style={{marginBottom: 15}}>Sua Economia Recente</Text>
+                            {this.renderSavingsChart()}
+                        </Card>
 
                         <Card style={styles.chartCard}>
                             <Text category='h6' style={{marginBottom: 15}}>Histórico Médio (Gasolina)</Text>
