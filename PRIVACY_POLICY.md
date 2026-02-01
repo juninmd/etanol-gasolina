@@ -137,10 +137,10 @@ Para dúvidas sobre esta política de privacidade:
 
 **Resumo Simples:**
 
-✅ Seus dados ficam no seu celular  
-✅ Não coletamos informações pessoais  
-✅ Não vendemos dados  
-✅ Não temos anúncios  
-✅ Você controla tudo  
+✅ Seus dados ficam no seu celular
+✅ Não coletamos informações pessoais
+✅ Não vendemos dados
+✅ Não temos anúncios
+✅ Você controla tudo
 
 O app é seguro e respeita sua privacidade! 🔒

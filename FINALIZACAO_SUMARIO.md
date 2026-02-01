@@ -129,7 +129,7 @@ cd android
 
 ## 🎓 Tempo Total Estimado
 - **Configuração**: 20-30 minutos
-- **Build**: 10-15 minutos  
+- **Build**: 10-15 minutos
 - **Assets/Screenshots**: 30-60 minutos
 - **Upload e configuração Play Store**: 20-30 minutos
 
