@@ -198,9 +198,49 @@ export default class Home extends Component<Props, State> {
         );
     }
 
+    renderFavoritesWatchlist = () => {
+        const { favorites, stations } = this.props.stationsStore;
+        if (favorites.length === 0) return null;
+
+        const favStations = stations.filter(s => favorites.includes(s.id));
+
+        return (
+            <View style={{marginBottom: 20}}>
+                <Text category='h6' style={{marginBottom: 10, marginLeft: 5}}>Favoritos em Tempo Real</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {favStations.map(s => (
+                        <Card
+                            key={s.id}
+                            style={{width: 200, marginRight: 10}}
+                            onPress={() => this.props.navigation.navigate('StationDetails', {stationId: s.id})}
+                        >
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5}}>
+                                <Text category='s1' numberOfLines={1} style={{maxWidth: 140}}>{s.name}</Text>
+                                <Icon
+                                    name={s.priceTrend === 'down' ? 'trending-down-outline' : (s.priceTrend === 'up' ? 'trending-up-outline' : 'minus-outline')}
+                                    width={20} height={20}
+                                    fill={s.priceTrend === 'down' ? '#00E096' : (s.priceTrend === 'up' ? '#FF3D71' : '#FFAAA5')}
+                                />
+                            </View>
+                            <Text category='c1' appearance='hint'>Gas: R$ {s.priceGas.toFixed(2)}</Text>
+                            <Text category='c1' appearance='hint'>Eta: R$ {s.priceEthanol.toFixed(2)}</Text>
+                        </Card>
+                    ))}
+                    <Card
+                        style={{width: 150, justifyContent: 'center', alignItems: 'center', opacity: 0.7}}
+                        onPress={() => this.props.navigation.navigate('Stations')}
+                    >
+                        <Icon name='plus-circle-outline' width={32} height={32} fill='#8F9BB3' />
+                        <Text category='c2' appearance='hint'>Ver Mapa</Text>
+                    </Card>
+                </ScrollView>
+            </View>
+        );
+    }
+
     render() {
         const { etanol, gasolina, etanolConsumption, gasolinaConsumption, handleForm } = this.props.homeStore;
-        const { totalSavings, bestStation, points, recentActivities } = this.props.stationsStore;
+        const { totalSavings, bestStation, points, recentActivities, globalMarketAdvice } = this.props.stationsStore;
         const { selectedVehicle } = this.props.garageStore;
         const { theme, toggleTheme } = this.props.themeStore;
         const { promoMessage } = this.state;
@@ -229,6 +269,8 @@ export default class Home extends Component<Props, State> {
                 <ScrollView contentContainerStyle={styles.scrollContent}>
                     <SmartFuelCard stationsStore={this.props.stationsStore} />
 
+                    {this.renderFavoritesWatchlist()}
+
                     <Card
                         style={styles.marketCard}
                         onPress={() => this.props.navigation.navigate('MarketInsights')}
@@ -237,7 +279,7 @@ export default class Home extends Component<Props, State> {
                             <Icon name='pie-chart-outline' width={32} height={32} fill='#3366FF' />
                             <View style={{marginLeft: 15, flex: 1}}>
                                 <Text category='h6' status='primary'>Tendências de Mercado</Text>
-                                <Text category='c1' appearance='hint'>Veja previsões e economize mais!</Text>
+                                <Text category='c1' appearance='hint' style={{color: '#3366FF', fontWeight: 'bold'}}>{globalMarketAdvice}</Text>
                             </View>
                             <Icon name='arrow-ios-forward-outline' width={24} height={24} fill='#8F9BB3' />
                         </View>
