@@ -60,6 +60,7 @@ export interface Station {
     priceHistory: { date: string, gas: number, ethanol: number }[];
     lastVerified?: string;
     verificationsCount?: number;
+    priceTrend?: 'up' | 'down' | 'stable';
 }
 
 export default class StationsStore {
@@ -82,7 +83,8 @@ export default class StationsStore {
                 { date: '10/05', gas: 5.59, ethanol: 3.79 },
             ],
             lastVerified: new Date().toISOString(),
-            verificationsCount: 12
+            verificationsCount: 12,
+            priceTrend: 'up'
         },
         {
             id: 2,
@@ -99,7 +101,8 @@ export default class StationsStore {
                 { date: '10/05', gas: 5.49, ethanol: 3.89 },
             ],
             lastVerified: new Date(Date.now() - 86400000 * 2).toISOString(), // 2 days ago
-            verificationsCount: 3
+            verificationsCount: 3,
+            priceTrend: 'down'
         },
         {
             id: 3,
@@ -113,7 +116,8 @@ export default class StationsStore {
             comments: [],
             priceHistory: [],
             lastVerified: new Date(Date.now() - 86400000 * 5).toISOString(), // 5 days ago
-            verificationsCount: 0
+            verificationsCount: 0,
+            priceTrend: 'stable'
         }
     ];
 
@@ -157,6 +161,11 @@ export default class StationsStore {
                 this.stations.forEach(station => {
                     if (Math.random() > 0.7) { // 30% chance to update
                         const change = (Math.random() - 0.5) * 0.10; // +/- 0.05
+
+                        if (change > 0.01) station.priceTrend = 'up';
+                        else if (change < -0.01) station.priceTrend = 'down';
+                        else station.priceTrend = 'stable';
+
                         const oldPrice = station.priceGas;
                         station.priceGas = Math.max(3.0, parseFloat((station.priceGas + change).toFixed(2)));
                         station.priceEthanol = Math.max(2.0, parseFloat((station.priceEthanol + change * 0.7).toFixed(2)));
@@ -205,6 +214,17 @@ export default class StationsStore {
             return (this.points - 200) / (300);
         }
         return Math.min(1, (this.points - 500) / 500);
+    }
+
+    @computed get globalMarketAdvice() {
+        const upCount = this.stations.filter(s => s.priceTrend === 'up').length;
+        const downCount = this.stations.filter(s => s.priceTrend === 'down').length;
+        const total = this.stations.length;
+
+        if (total === 0) return "Sem dados suficientes.";
+        if (downCount > upCount && downCount > 0) return "Preços em queda! Aproveite para encher o tanque.";
+        if (upCount > downCount && upCount > 0) return "Preços subindo! Melhor abastecer logo.";
+        return "Mercado estável hoje.";
     }
 
     @computed get filteredStations() {
