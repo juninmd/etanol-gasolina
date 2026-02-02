@@ -1,15 +1,24 @@
 import { Button, Card, Input, Text, Layout, Icon, Modal, Toggle } from '@ui-kitten/components';
 import React, { Component, } from 'react';
 import { inject, observer } from 'mobx-react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 
 import HomeStore from '../../stores/home.store';
 import StationsStore from '../../stores/stations.store';
 import GarageStore from '../../stores/garage.store';
 import ThemeStore from '../../stores/theme.store';
 import SmartFuelCard from '../../components/SmartFuelCard';
-import { Alert } from 'react-native';
 import { reaction } from 'mobx';
+
+// Web-compatible Alert
+const webAlert = (title: string, message?: string) => {
+  if (Platform.OS === 'web') {
+    alert(`${title}${message ? '\n\n' + message : ''}`);
+  } else {
+    const { Alert } = require('react-native');
+    Alert.alert(title, message);
+  }
+};
 
 interface Props {
     homeStore: HomeStore;
