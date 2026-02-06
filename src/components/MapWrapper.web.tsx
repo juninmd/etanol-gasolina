@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Card, List, Button, Icon } from '@ui-kitten/components';
+import {View, Text, StyleSheet} from 'react-native';
+import {Card, List, Button, Icon} from '@ui-kitten/components';
 
 const MapView = (props: any) => {
   // Mock station data for web demo
@@ -10,28 +10,32 @@ const MapView = (props: any) => {
       name: 'Posto Shell Centro',
       gasoline: 5.89,
       ethanol: 4.12,
-      distance: '0.5 km'
+      distance: '0.5 km',
     },
     {
       id: 2,
       name: 'Ipiranga Express',
       gasoline: 5.95,
       ethanol: 4.18,
-      distance: '1.2 km'
+      distance: '1.2 km',
     },
     {
       id: 3,
       name: 'BR Distribuidora',
       gasoline: 5.79,
       ethanol: 4.05,
-      distance: '1.8 km'
-    }
+      distance: '1.8 km',
+    },
   ];
 
-  const renderStation = ({ item }: any) => (
+  const renderStation = ({item}: any) => (
     <Card style={styles.stationCard}>
       <View style={styles.stationHeader}>
-        <Icon name="location-outline" style={styles.locationIcon} fill="#667eea" />
+        <Icon
+          name="location-outline"
+          style={styles.locationIcon}
+          fill="#667eea"
+        />
         <Text style={styles.stationName}>{item.name}</Text>
         <Text style={styles.distance}>{item.distance}</Text>
       </View>
