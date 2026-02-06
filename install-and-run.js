@@ -1,4 +1,4 @@
-const { execSync } = require('child_process');
+const {execSync} = require('child_process');
 const path = require('path');
 
 console.log('🚀 Instalando dependências com pnpm...\n');
@@ -7,7 +7,7 @@ try {
   execSync('pnpm install', {
     cwd: __dirname,
     stdio: 'inherit',
-    shell: true
+    shell: true,
   });
 
   console.log('\n✅ Dependências instaladas!\n');
@@ -16,7 +16,7 @@ try {
   execSync('pnpm run web', {
     cwd: __dirname,
     stdio: 'inherit',
-    shell: true
+    shell: true,
   });
 } catch (error) {
   console.error('❌ Erro:', error.message);

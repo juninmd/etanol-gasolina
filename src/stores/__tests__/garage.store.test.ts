@@ -15,7 +15,7 @@ describe('GarageStore', () => {
             name: 'Test Car',
             tankCapacity: 50,
             avgGasConsumption: 10,
-            avgEthanolConsumption: 7
+            avgEthanolConsumption: 7,
         });
 
         expect(garageStore.vehicles.length).toBe(1);
@@ -28,17 +28,17 @@ describe('GarageStore', () => {
             name: 'Car 1',
             tankCapacity: 50,
             avgGasConsumption: 10,
-            avgEthanolConsumption: 7
+            avgEthanolConsumption: 7,
         });
         garageStore.addVehicle({
             name: 'Car 2',
             tankCapacity: 50,
             avgGasConsumption: 12,
-            avgEthanolConsumption: 8
+            avgEthanolConsumption: 8,
         });
 
         const car2 = garageStore.vehicles.find(v => v.name === 'Car 2');
-        if (!car2) throw new Error('Car 2 not found');
+        if (!car2) {throw new Error('Car 2 not found');}
 
         garageStore.selectVehicle(car2.id);
         expect(garageStore.selectedVehicleId).toBe(car2.id);
@@ -50,7 +50,7 @@ describe('GarageStore', () => {
             name: 'Test Car',
             tankCapacity: 50,
             avgGasConsumption: 10,
-            avgEthanolConsumption: 7
+            avgEthanolConsumption: 7,
         });
         const vehicleId = garageStore.vehicles[0].id;
         garageStore.selectedVehicleId = vehicleId;
@@ -62,7 +62,7 @@ describe('GarageStore', () => {
             pricePerLiter: 5.0,
             liters: 20,
             odometer: 1000,
-            date: '2023-10-01'
+            date: '2023-10-01',
         });
 
         expect(garageStore.logs.length).toBe(1);
@@ -74,7 +74,7 @@ describe('GarageStore', () => {
             name: 'Test Car',
             tankCapacity: 50,
             avgGasConsumption: 10,
-            avgEthanolConsumption: 7
+            avgEthanolConsumption: 7,
         });
         const vehicleId = garageStore.vehicles[0].id;
         garageStore.selectedVehicleId = vehicleId;
@@ -86,7 +86,7 @@ describe('GarageStore', () => {
             pricePerLiter: 5.0,
             liters: 20,
             odometer: 1000,
-            date: '2023-10-01'
+            date: '2023-10-01',
         });
 
         garageStore.addLog({
@@ -96,7 +96,7 @@ describe('GarageStore', () => {
             pricePerLiter: 3.5,
             liters: 30,
             odometer: 1300,
-            date: '2023-10-05'
+            date: '2023-10-05',
         });
 
         // Add a log for another vehicle (should be ignored)
@@ -107,7 +107,7 @@ describe('GarageStore', () => {
             pricePerLiter: 6.0,
             liters: 10,
             odometer: 500,
-            date: '2023-10-06'
+            date: '2023-10-06',
         });
 
         const stats = garageStore.fuelStats;
@@ -124,7 +124,7 @@ describe('GarageStore', () => {
             name: 'Test Car',
             tankCapacity: 50,
             avgGasConsumption: 10,
-            avgEthanolConsumption: 7
+            avgEthanolConsumption: 7,
         });
         const id = garageStore.vehicles[0].id;
 

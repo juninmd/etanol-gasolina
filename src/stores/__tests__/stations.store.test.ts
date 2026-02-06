@@ -16,7 +16,7 @@ describe('StationsStore', () => {
                 latitude: 0,
                 longitude: 0,
                 isPromo: true,
-                comments: []
+                comments: [],
             },
             {
                 id: 2,
@@ -27,8 +27,8 @@ describe('StationsStore', () => {
                 latitude: 0,
                 longitude: 0,
                 isPromo: false,
-                comments: []
-            }
+                comments: [],
+            },
         ];
     });
 

@@ -158,15 +158,15 @@ const HTML = `<!DOCTYPE html>
 </html>`;
 
 const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    res.end(HTML);
+  res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+  res.end(HTML);
 });
 
 server.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-    console.log('Pressione Ctrl+C para parar');
+  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
+  console.log('Pressione Ctrl+C para parar');
 });
 
-server.on('error', (err) => {
-    console.error('Erro no servidor:', err);
+server.on('error', err => {
+  console.error('Erro no servidor:', err);
 });
