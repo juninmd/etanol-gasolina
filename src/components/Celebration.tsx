@@ -20,7 +20,7 @@ const CelebrationContent = observer(({ stationsStore }: Props) => {
             opacity: new Animated.Value(1),
             angle: Math.random() * Math.PI * 2,
             speed: Math.random() * 150 + 100,
-            color: ['#FFD700', '#FF4500', '#00FA9A', '#1E90FF'][Math.floor(Math.random() * 4)]
+            color: ['#FFD700', '#FF4500', '#00FA9A', '#1E90FF'][Math.floor(Math.random() * 4)],
         }))
     );
 
@@ -38,7 +38,7 @@ const CelebrationContent = observer(({ stationsStore }: Props) => {
         Animated.spring(scaleAnim, {
             toValue: 1,
             friction: 5,
-            useNativeDriver: false
+            useNativeDriver: false,
         }).start();
 
         const animations = particles.map(p => {
@@ -47,20 +47,20 @@ const CelebrationContent = observer(({ stationsStore }: Props) => {
                     toValue: Math.cos(p.angle) * p.speed,
                     duration: 1500,
                     easing: Easing.out(Easing.quad),
-                    useNativeDriver: false
+                    useNativeDriver: false,
                 }),
                 Animated.timing(p.y, {
                     toValue: Math.sin(p.angle) * p.speed,
                     duration: 1500,
                     easing: Easing.out(Easing.quad),
-                    useNativeDriver: false
+                    useNativeDriver: false,
                 }),
                 Animated.timing(p.opacity, {
                     toValue: 0,
                     duration: 1500,
                     delay: 500,
-                    useNativeDriver: false
-                })
+                    useNativeDriver: false,
+                }),
             ]);
         });
 
@@ -89,36 +89,36 @@ const CelebrationContent = observer(({ stationsStore }: Props) => {
                             opacity: p.opacity,
                             transform: [
                                 { translateX: p.x },
-                                { translateY: p.y }
-                            ]
-                        }
+                                { translateY: p.y },
+                            ],
+                        },
                     ]}
                 />
             ))}
             <Animated.View style={[styles.cardContainer, { transform: [{ scale: scaleAnim }] }]}>
-                <Card style={styles.card} status='success'>
+                <Card style={styles.card} status="success">
                     {isBadge ? (
                          <View style={{alignItems: 'center'}}>
-                            <Icon name={stationsStore.currentBadge!.icon} width={60} height={60} fill='#FFD700' style={{marginBottom: 10}} />
-                            <Text category='h3' style={styles.title}>NOVA CONQUISTA!</Text>
-                            <Text category='s1' style={styles.subtitle}>
+                            <Icon name={stationsStore.currentBadge!.icon} width={60} height={60} fill="#FFD700" style={{marginBottom: 10}} />
+                            <Text category="h3" style={styles.title}>NOVA CONQUISTA!</Text>
+                            <Text category="s1" style={styles.subtitle}>
                                 Você desbloqueou
                             </Text>
-                            <Text category='h5' status='primary' style={styles.rank}>
+                            <Text category="h5" status="primary" style={styles.rank}>
                                 {stationsStore.currentBadge!.name}
                             </Text>
-                            <Text category='p2' appearance='hint' style={{textAlign: 'center', marginBottom: 15}}>
+                            <Text category="p2" appearance="hint" style={{textAlign: 'center', marginBottom: 15}}>
                                 {stationsStore.currentBadge!.description}
                             </Text>
                         </View>
                     ) : (
                         <View style={{alignItems: 'center'}}>
-                            <Text category='h1' style={styles.emoji}>🎉</Text>
-                            <Text category='h3' style={styles.title}>LEVEL UP!</Text>
-                            <Text category='s1' style={styles.subtitle}>
+                            <Text category="h1" style={styles.emoji}>🎉</Text>
+                            <Text category="h3" style={styles.title}>LEVEL UP!</Text>
+                            <Text category="s1" style={styles.subtitle}>
                                 Você agora é um
                             </Text>
-                            <Text category='h2' status='primary' style={styles.rank}>
+                            <Text category="h2" status="primary" style={styles.rank}>
                                 {stationsStore.newLevelName.toUpperCase()}
                             </Text>
                         </View>
@@ -136,7 +136,7 @@ const CelebrationContent = observer(({ stationsStore }: Props) => {
 const Celebration = inject('stationsStore')(observer(({ stationsStore }: Props) => {
     const showCelebration = stationsStore?.showLevelUp || !!stationsStore?.currentBadge;
 
-    if (!showCelebration) return null;
+    if (!showCelebration) {return null;}
 
     return <CelebrationContent stationsStore={stationsStore} />;
 }));
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         marginBottom: 10,
-        color: '#00E096'
+        color: '#00E096',
     },
     subtitle: {
         textAlign: 'center',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 10,
-    }
+    },
 });
 
 export default Celebration;

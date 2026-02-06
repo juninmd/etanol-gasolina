@@ -21,7 +21,7 @@ interface State {
 }
 
 const BackIcon = (props) => (
-    <Icon {...props} name='arrow-back' />
+    <Icon {...props} name="arrow-back" />
 );
 
 @inject('garageStore', 'stationsStore')
@@ -39,7 +39,7 @@ export default class AddFill extends Component<Props, State> {
             price: station ? station.priceGas.toString() : '',
             liters: '',
             odometer: '',
-            fuelTypeIndex: 0 // 0 = Gas, 1 = Ethanol
+            fuelTypeIndex: 0, // 0 = Gas, 1 = Ethanol
         };
     }
 
@@ -67,7 +67,7 @@ export default class AddFill extends Component<Props, State> {
                 liters: litersVal,
                 odometer: parseFloat(odometer) || 0,
                 date: new Date().toLocaleDateString(),
-                fuelType
+                fuelType,
             });
 
             // Calculate Savings
@@ -123,9 +123,9 @@ export default class AddFill extends Component<Props, State> {
     render() {
         return (
             <Layout style={styles.container}>
-                <TopNavigation title='Registrar Abastecimento' alignment='center' leftControl={this.renderBackAction()} />
+                <TopNavigation title="Registrar Abastecimento" alignment="center" leftControl={this.renderBackAction()} />
                 <View style={styles.form}>
-                     <Text category='label' style={styles.label}>Combustível</Text>
+                     <Text category="label" style={styles.label}>Combustível</Text>
                     <RadioGroup
                         selectedIndex={this.state.fuelTypeIndex}
                         onChange={index => this.setState({ fuelTypeIndex: index })}
@@ -136,32 +136,32 @@ export default class AddFill extends Component<Props, State> {
                     </RadioGroup>
 
                     <Input
-                        label='Posto'
-                        placeholder='Nome do Posto'
+                        label="Posto"
+                        placeholder="Nome do Posto"
                         value={this.state.stationName}
                         onChangeText={stationName => this.setState({ stationName })}
                         style={styles.input}
                     />
                     <Input
-                        label='Preço por Litro'
-                        placeholder='R$ 0.00'
-                        keyboardType='numeric'
+                        label="Preço por Litro"
+                        placeholder="R$ 0.00"
+                        keyboardType="numeric"
                         value={this.state.price}
                         onChangeText={price => this.setState({ price })}
                         style={styles.input}
                     />
                     <Input
-                        label='Litros Abastecidos'
-                        placeholder='L'
-                        keyboardType='numeric'
+                        label="Litros Abastecidos"
+                        placeholder="L"
+                        keyboardType="numeric"
                         value={this.state.liters}
                         onChangeText={liters => this.setState({ liters })}
                         style={styles.input}
                     />
                     <Input
-                        label='Odômetro (Km)'
-                        placeholder='Km atual'
-                        keyboardType='numeric'
+                        label="Odômetro (Km)"
+                        placeholder="Km atual"
+                        keyboardType="numeric"
                         value={this.state.odometer}
                         onChangeText={odometer => this.setState({ odometer })}
                         style={styles.input}
@@ -194,6 +194,6 @@ const styles = StyleSheet.create({
     radioGroup: {
         flexDirection: 'row',
         marginBottom: 15,
-        justifyContent: 'space-around'
-    }
+        justifyContent: 'space-around',
+    },
 });

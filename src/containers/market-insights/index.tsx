@@ -30,7 +30,7 @@ export default class MarketInsights extends Component<Props> {
 
         // Staggered animation for bars will be handled in render if needed,
         // but for now let's just fade the whole view.
-    }
+    };
 
     get aggregatedHistory() {
         const { stations } = this.props.stationsStore!;
@@ -51,7 +51,7 @@ export default class MarketInsights extends Component<Props> {
 
         const history = Object.keys(historyMap).map(date => ({
             date,
-            avg: historyMap[date].total / historyMap[date].count
+            avg: historyMap[date].total / historyMap[date].count,
         })).sort((a, b) => {
              // Simple string compare for DD/MM dates works if within same year/month structure
              // but technically should be more robust. Given the mock data format, this is fine.
@@ -62,7 +62,7 @@ export default class MarketInsights extends Component<Props> {
         const todayAvg = stations.reduce((acc, s) => acc + s.priceGas, 0) / stations.length;
         history.push({
             date: 'Hoje',
-            avg: todayAvg
+            avg: todayAvg,
         });
 
         return history.slice(-5); // Last 5 data points
@@ -70,29 +70,29 @@ export default class MarketInsights extends Component<Props> {
 
     get cheapestGasStation() {
         const { stations } = this.props.stationsStore!;
-        if (stations.length === 0) return null;
+        if (stations.length === 0) {return null;}
         return stations.slice().sort((a, b) => a.priceGas - b.priceGas)[0];
     }
 
     get marketSentiment() {
         const history = this.aggregatedHistory;
-        if (history.length < 2) return 'neutral';
+        if (history.length < 2) {return 'neutral';}
 
         const current = history[history.length - 1].avg;
         const previous = history[history.length - 2].avg;
 
-        if (current < previous) return 'buy';
-        if (current > previous) return 'wait';
+        if (current < previous) {return 'buy';}
+        if (current > previous) {return 'wait';}
         return 'neutral';
     }
 
     renderBackAction = () => (
-        <TopNavigationAction icon={(props) => <Icon {...props} name='arrow-back'/>} onPress={() => this.props.navigation.goBack()}/>
+        <TopNavigationAction icon={(props) => <Icon {...props} name="arrow-back"/>} onPress={() => this.props.navigation.goBack()}/>
     );
 
     renderChart = () => {
         const data = this.aggregatedHistory;
-        if (data.length === 0) return <Text>Sem dados suficientes.</Text>;
+        if (data.length === 0) {return <Text>Sem dados suficientes.</Text>;}
 
         const maxVal = Math.max(...data.map(d => d.avg)) * 1.05;
         const minVal = Math.min(...data.map(d => d.avg)) * 0.95;
@@ -105,16 +105,16 @@ export default class MarketInsights extends Component<Props> {
                     return (
                         <View key={index} style={styles.chartBarContainer}>
                             <View style={styles.barLabelContainer}>
-                                <Text category='c1' style={styles.barValue}>R$ {item.avg.toFixed(2)}</Text>
+                                <Text category="c1" style={styles.barValue}>R$ {item.avg.toFixed(2)}</Text>
                             </View>
                             <View style={[styles.bar, { height: `${Math.max(heightPercent, 10)}%` }, index === data.length - 1 ? styles.activeBar : null]} />
-                            <Text category='c2' style={styles.barLabel}>{item.date}</Text>
+                            <Text category="c2" style={styles.barLabel}>{item.date}</Text>
                         </View>
                     );
                 })}
             </View>
         );
-    }
+    };
 
     renderPrediction = () => {
         const sentiment = this.marketSentiment;
@@ -140,31 +140,31 @@ export default class MarketInsights extends Component<Props> {
                 <View style={styles.sentimentHeader}>
                     <Icon name={icon} width={40} height={40} fill={color} />
                     <View style={{marginLeft: 15}}>
-                        <Text category='h5' style={{color: color, fontWeight: 'bold'}}>{text}</Text>
-                        <Text category='s1'>{subtext}</Text>
+                        <Text category="h5" style={{color: color, fontWeight: 'bold'}}>{text}</Text>
+                        <Text category="s1">{subtext}</Text>
                     </View>
                 </View>
                 <View style={styles.predictionBox}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text category='label' appearance='hint'>PREVISÃO IA (BETA)</Text>
-                        <Icon name='bulb-outline' width={16} height={16} fill='#FFAAA5' />
+                        <Text category="label" appearance="hint">PREVISÃO IA (BETA)</Text>
+                        <Icon name="bulb-outline" width={16} height={16} fill="#FFAAA5" />
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 5}}>
-                        <Text category='s2' style={{marginLeft: 5}}>
+                        <Text category="s2" style={{marginLeft: 5}}>
                             {sentiment === 'buy' ? 'Probabilidade de aumento em 48h.' : 'Os preços devem estabilizar em breve.'}
                         </Text>
                     </View>
                 </View>
             </Card>
         );
-    }
+    };
 
     renderSavingsChart = () => {
         const { savingsHistory } = this.props.stationsStore!;
         if (!savingsHistory || savingsHistory.length === 0) {
             return (
                 <View style={{padding: 20, alignItems: 'center'}}>
-                    <Text appearance='hint'>Nenhuma economia registrada ainda.</Text>
+                    <Text appearance="hint">Nenhuma economia registrada ainda.</Text>
                 </View>
             );
         }
@@ -178,7 +178,7 @@ export default class MarketInsights extends Component<Props> {
 
         const data = Object.keys(historyMap).map(date => ({
             date,
-            amount: historyMap[date]
+            amount: historyMap[date],
         })).slice(-5);
 
         const maxVal = Math.max(...data.map(d => d.amount)) * 1.1 || 1;
@@ -190,23 +190,23 @@ export default class MarketInsights extends Component<Props> {
                     return (
                          <View key={index} style={styles.chartBarContainer}>
                             <View style={styles.barLabelContainer}>
-                                <Text category='c1' style={[styles.barValue, {color: '#00E096'}]}>R$ {item.amount.toFixed(2)}</Text>
+                                <Text category="c1" style={[styles.barValue, {color: '#00E096'}]}>R$ {item.amount.toFixed(2)}</Text>
                             </View>
                             <View style={[styles.bar, { height: `${Math.max(heightPercent, 5)}%`, backgroundColor: '#00E096' }]} />
-                            <Text category='c2' style={styles.barLabel}>{item.date}</Text>
+                            <Text category="c2" style={styles.barLabel}>{item.date}</Text>
                         </View>
                     );
                 })}
             </View>
         );
-    }
+    };
 
     render() {
         return (
             <Layout style={styles.container}>
                 <TopNavigation
-                    title='Inteligência de Mercado'
-                    alignment='center'
+                    title="Inteligência de Mercado"
+                    alignment="center"
                     accessoryLeft={this.renderBackAction}
                 />
                 <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -215,40 +215,40 @@ export default class MarketInsights extends Component<Props> {
                         {this.renderPrediction()}
 
                         <Card style={styles.chartCard}>
-                            <Text category='h6' style={{marginBottom: 15}}>Sua Economia Recente</Text>
+                            <Text category="h6" style={{marginBottom: 15}}>Sua Economia Recente</Text>
                             {this.renderSavingsChart()}
                         </Card>
 
                         <Card style={styles.chartCard}>
-                            <Text category='h6' style={{marginBottom: 15}}>Histórico Médio (Gasolina)</Text>
+                            <Text category="h6" style={{marginBottom: 15}}>Histórico Médio (Gasolina)</Text>
                             {this.renderChart()}
                         </Card>
 
-                        <Text category='h6' style={styles.sectionTitle}>Análise Rápida</Text>
+                        <Text category="h6" style={styles.sectionTitle}>Análise Rápida</Text>
 
                         <View style={styles.statsRow}>
                             <Card style={styles.statCard}>
-                                <Text category='c2' appearance='hint'>MENOR GASOLINA</Text>
-                                <Text category='h4' status='success'>
+                                <Text category="c2" appearance="hint">MENOR GASOLINA</Text>
+                                <Text category="h4" status="success">
                                     R$ {this.cheapestGasStation?.priceGas.toFixed(2) || '--'}
                                 </Text>
-                                <Text category='c1'>{this.cheapestGasStation?.name || ''}</Text>
+                                <Text category="c1">{this.cheapestGasStation?.name || ''}</Text>
                             </Card>
                             <Card style={styles.statCard}>
-                                <Text category='c2' appearance='hint'>MÉDIA HOJE</Text>
-                                <Text category='h4' status='info'>
-                                    R$ {(this.aggregatedHistory[this.aggregatedHistory.length-1]?.avg || 0).toFixed(2)}
+                                <Text category="c2" appearance="hint">MÉDIA HOJE</Text>
+                                <Text category="h4" status="info">
+                                    R$ {(this.aggregatedHistory[this.aggregatedHistory.length - 1]?.avg || 0).toFixed(2)}
                                 </Text>
-                                <Text category='c1'>+R$ 0.10 vs Ontem</Text>
+                                <Text category="c1">+R$ 0.10 vs Ontem</Text>
                             </Card>
                         </View>
 
-                        <Card style={styles.tipCard} status='warning'>
+                        <Card style={styles.tipCard} status="warning">
                             <View style={{flexDirection: 'row'}}>
-                                <Icon name='bulb-outline' width={24} height={24} fill='#fff' />
+                                <Icon name="bulb-outline" width={24} height={24} fill="#fff" />
                                 <Text style={styles.tipText}>
                                     Dica: Abastecer no {this.props.stationsStore?.bestStation?.name} agora economizaria
-                                    aproximadamente R$ {((this.aggregatedHistory[this.aggregatedHistory.length-1]?.avg || 0) - (this.props.stationsStore?.bestStation?.priceGas || 0)).toFixed(2)} por litro em comparação à média.
+                                    aproximadamente R$ {((this.aggregatedHistory[this.aggregatedHistory.length - 1]?.avg || 0) - (this.props.stationsStore?.bestStation?.priceGas || 0)).toFixed(2)} por litro em comparação à média.
                                 </Text>
                             </View>
                         </Card>
@@ -337,5 +337,5 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         flex: 1,
         fontSize: 13,
-    }
+    },
 });
