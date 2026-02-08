@@ -134,6 +134,14 @@ export default class StationDetails extends Component<Props, State> {
     );
   };
 
+  handleCreateAlert = () => {
+    const {stationsStore} = this.props;
+    stationsStore.triggerAlert(
+      'Alerta Criado! Você será notificado se o preço baixar.',
+      'success',
+    );
+  };
+
   handleRoute = station => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${
       station.latitude
@@ -460,6 +468,15 @@ export default class StationDetails extends Component<Props, State> {
               Atualizar
             </Button>
           </View>
+
+          <Button
+            style={styles.button}
+            status="info"
+            appearance="outline"
+            onPress={this.handleCreateAlert}
+            accessoryLeft={props => <Icon {...props} name="bell-outline" />}>
+            Criar Alerta de Preço
+          </Button>
 
           {this.state.showUpdatePrice && (
             <Card style={styles.card}>
