@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, View, Animated, Dimensions} from 'react-native';
 import {Card, Text, Button, Input, Icon, Layout} from '@ui-kitten/components';
 import {inject, observer} from 'mobx-react';
-import StationsStore from '../stores/stations.store';
+import StationsStore, {Station} from '../stores/stations.store';
 
 interface Props {
   stationsStore?: StationsStore;
@@ -14,21 +14,23 @@ const CheckinPrompt = inject('stationsStore')(
   observer(({stationsStore}: Props) => {
     const {checkinStation} = stationsStore!;
 
-    // Animation
-    const slideAnim = useRef(new Animated.Value(300)).current;
-
-    // Local State for Inline Update
+    // Local State to manage visibility and animations
+    const [visibleStation, setVisibleStation] = useState<Station | null>(null);
     const [isUpdating, setIsUpdating] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [gasPrice, setGasPrice] = useState('');
     const [ethPrice, setEthPrice] = useState('');
 
+    const slideAnim = useRef(new Animated.Value(300)).current;
+
     useEffect(() => {
       if (checkinStation) {
-        // Pre-fill prices
+        // New station prompt
+        setVisibleStation(checkinStation);
+        setIsSuccess(false);
+        setIsUpdating(false);
         setGasPrice(checkinStation.priceGas.toString());
         setEthPrice(checkinStation.priceEthanol.toString());
-        setIsSuccess(false);
 
         Animated.spring(slideAnim, {
           toValue: 0,
@@ -36,43 +38,41 @@ const CheckinPrompt = inject('stationsStore')(
           useNativeDriver: true,
         }).start();
       } else {
-        setIsUpdating(false); // Reset state
-        setIsSuccess(false);
+        // Dismiss
         Animated.timing(slideAnim, {
           toValue: 300,
-          duration: 200,
+          duration: 300,
           useNativeDriver: true,
-        }).start();
+        }).start(() => {
+          setVisibleStation(null);
+        });
       }
     }, [checkinStation]);
 
-    if (!checkinStation) {
+    if (!visibleStation) {
       return null;
     }
 
     const handleDismiss = () => {
-      Animated.timing(slideAnim, {
-        toValue: 300,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(() => {
-        stationsStore!.dismissCheckin();
-        setIsSuccess(false); // Ensure reset
-      });
+      // Just clear the store, useEffect will handle the animation out
+      stationsStore!.dismissCheckin();
     };
 
     const handleConfirm = () => {
-      stationsStore!.verifyPrice(checkinStation.id);
-      setIsSuccess(true);
-      setTimeout(handleDismiss, 2000);
+      if (visibleStation) {
+        stationsStore!.verifyPrice(visibleStation.id);
+        setIsSuccess(true);
+        setTimeout(handleDismiss, 2000);
+      }
     };
 
     const handleUpdate = () => {
+      if (!visibleStation) return;
       const gas = parseFloat(gasPrice);
       const eth = parseFloat(ethPrice);
 
       if (!isNaN(gas) && !isNaN(eth)) {
-        stationsStore!.updatePrice(checkinStation.id, gas, eth);
+        stationsStore!.updatePrice(visibleStation.id, gas, eth);
         setIsSuccess(true);
         setTimeout(handleDismiss, 2000);
       }
@@ -120,7 +120,7 @@ const CheckinPrompt = inject('stationsStore')(
           </View>
 
           <Text category="s1" style={{marginVertical: 10, textAlign: 'center'}}>
-            {checkinStation.name}
+            {visibleStation.name}
           </Text>
 
           {!isUpdating ? (
@@ -129,13 +129,13 @@ const CheckinPrompt = inject('stationsStore')(
                 <Text category="s2">
                   Gas:{' '}
                   <Text category="s1" status="info">
-                    R$ {checkinStation.priceGas.toFixed(2)}
+                    R$ {visibleStation.priceGas.toFixed(2)}
                   </Text>
                 </Text>
                 <Text category="s2">
                   Eta:{' '}
                   <Text category="s1" status="success">
-                    R$ {checkinStation.priceEthanol.toFixed(2)}
+                    R$ {visibleStation.priceEthanol.toFixed(2)}
                   </Text>
                 </Text>
               </View>
