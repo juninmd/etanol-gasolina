@@ -201,8 +201,8 @@ export default class StationsStore {
 
   constructor() {
     // Desabilitado para versão de produção - requer backend
-    // this.startRealTimeUpdates();
-    // this.startGeofenceSimulation();
+    this.startRealTimeUpdates();
+    this.startGeofenceSimulation();
   }
 
   startRealTimeUpdates() {
@@ -247,14 +247,19 @@ export default class StationsStore {
 
   startGeofenceSimulation() {
     // Simulates detecting that the user is near a station (Geofencing)
-    setTimeout(() => {
-      runInAction(() => {
-        // Randomly pick a station to "be at"
-        this.checkinStation = this.stations[
-          Math.floor(Math.random() * this.stations.length)
-        ];
-      });
-    }, 8000);
+    const trigger = () => {
+      if (!this.checkinStation) {
+        runInAction(() => {
+          // Randomly pick a station to "be at"
+          this.checkinStation = this.stations[
+            Math.floor(Math.random() * this.stations.length)
+          ];
+        });
+      }
+    };
+
+    setTimeout(trigger, 8000); // Initial check
+    setInterval(trigger, 60000); // Recurring check
   }
 
   @action dismissCheckin = () => {

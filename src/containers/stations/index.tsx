@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Animated} from 'react-native';
 import {
   Layout,
   Text,
@@ -7,7 +7,6 @@ import {
   ListItem,
   Icon,
   Button,
-  Card,
   Toggle,
 } from '@ui-kitten/components';
 import {inject, observer} from 'mobx-react';
@@ -22,6 +21,36 @@ interface Props {
 interface State {
   showMap: boolean;
 }
+
+const LiveBadge = () => {
+  const pulseAnim = React.useRef(new Animated.Value(1)).current;
+
+  React.useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 0.5,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ]),
+    ).start();
+  }, [pulseAnim]);
+
+  return (
+    <Animated.View style={[styles.liveBadge, {opacity: pulseAnim}]}>
+      <View style={styles.liveDot} />
+      <Text category="c2" style={{color: 'white', fontWeight: 'bold'}}>
+        AO VIVO
+      </Text>
+    </Animated.View>
+  );
+};
 
 @inject('stationsStore')
 @observer
@@ -130,46 +159,49 @@ export default class Stations extends Component<Props, State> {
         </View>
 
         {showMap ? (
-          <MapView
-            ref={ref => (this.mapRef = ref)}
-            style={styles.map}
-            initialRegion={{
-              latitude: -23.561684,
-              longitude: -46.655981,
-              latitudeDelta: 0.05,
-              longitudeDelta: 0.05,
-            }}>
-            {filteredStations.map(station => {
-              let pinColor = 'orange'; // Average
-              if (station.isPromo) {
-                pinColor = 'gold';
-              } else if (avgGas > 0) {
-                if (station.priceGas < avgGas * 0.95) {
-                  pinColor = 'green';
+          <View style={{flex: 1}}>
+            <MapView
+              ref={ref => (this.mapRef = ref)}
+              style={styles.map}
+              initialRegion={{
+                latitude: -23.561684,
+                longitude: -46.655981,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
+              }}>
+              {filteredStations.map(station => {
+                let pinColor = 'orange'; // Average
+                if (station.isPromo) {
+                  pinColor = 'gold';
+                } else if (avgGas > 0) {
+                  if (station.priceGas < avgGas * 0.95) {
+                    pinColor = 'green';
+                  }
+                  // Cheap
+                  else if (station.priceGas > avgGas * 1.05) {
+                    pinColor = 'red';
+                  } // Expensive
                 }
-                // Cheap
-                else if (station.priceGas > avgGas * 1.05) {
-                  pinColor = 'red';
-                } // Expensive
-              }
 
-              return (
-                <Marker
-                  key={station.id}
-                  coordinate={{
-                    latitude: station.latitude,
-                    longitude: station.longitude,
-                  }}
-                  title={station.name}
-                  description={`Gas: ${station.priceGas} | Etanol: ${
-                    station.priceEthanol
-                  }`}
-                  onCalloutPress={() => this.onItemPress(station.id)}
-                  pinColor={pinColor}
-                />
-              );
-            })}
-          </MapView>
+                return (
+                  <Marker
+                    key={station.id}
+                    coordinate={{
+                      latitude: station.latitude,
+                      longitude: station.longitude,
+                    }}
+                    title={station.name}
+                    description={`Gas: ${station.priceGas} | Etanol: ${
+                      station.priceEthanol
+                    }`}
+                    onCalloutPress={() => this.onItemPress(station.id)}
+                    pinColor={pinColor}
+                  />
+                );
+              })}
+            </MapView>
+            <LiveBadge />
+          </View>
         ) : (
           <List data={filteredStations} renderItem={this.renderItem} />
         )}
@@ -214,5 +246,28 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  liveBadge: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    backgroundColor: '#FF3D71',
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  liveDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'white',
+    marginRight: 6,
   },
 });
