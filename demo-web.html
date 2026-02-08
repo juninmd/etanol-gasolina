@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etanol ou Gasolina - Demo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .result.empty {
+            background: #f5f5f5;
+            color: #999;
+        }
+        .result.ethanol {
+            background: #4caf50;
+            color: white;
+        }
+        .result.gasoline {
+            background: #ff9800;
+            color: white;
+        }
+        .result.equal {
+            background: #2196f3;
+            color: white;
+        }
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+        .icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⛽ Etanol ou Gasolina?</h1>
+        <p class="subtitle">Calculadora de Combustível</p>
+
+        <div class="input-group">
+            <label for="ethanol">💚 Preço do Etanol (R$)</label>
+            <input type="number" id="ethanol" placeholder="Ex: 3.79" step="0.01" oninput="calculate()">
+        </div>
+
+        <div class="input-group">
+            <label for="gasoline">🧡 Preço da Gasolina (R$)</label>
+            <input type="number" id="gasoline" placeholder="Ex: 5.59" step="0.01" oninput="calculate()">
+        </div>
+
+        <div id="result" class="result empty">
+            Preencha os preços acima
+        </div>
+
+        <div class="info">
+            <strong>📊 Como funciona?</strong><br>
+            Se o preço do etanol for <strong>até 70%</strong> do preço da gasolina, o etanol compensa mais!
+            <br><br>
+            <strong>🧮 Fórmula:</strong> Etanol ÷ Gasolina ≤ 0,70
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const ethanol = parseFloat(document.getElementById('ethanol').value);
+            const gasoline = parseFloat(document.getElementById('gasoline').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(ethanol) || isNaN(gasoline) || ethanol <= 0 || gasoline <= 0) {
+                resultDiv.className = 'result empty';
+                resultDiv.innerHTML = 'Preencha os preços acima';
+                return;
+            }
+
+            const ratio = ethanol / gasoline;
+
+            if (ratio < 0.70) {
+                resultDiv.className = 'result ethanol';
+                resultDiv.innerHTML = `
+                    <div>
+                        <div class="icon">💚</div>
+                        Abasteça com ETANOL<br>
+                        <small style="font-size: 14px; font-weight: normal;">
+                            Ratio: ${ratio.toFixed(2)} (${(ratio * 100).toFixed(0)}%)
+                        </small>
+                    </div>
+                `;
+            } else if (ratio === 0.70) {
+                resultDiv.className = 'result equal';
+                resultDiv.innerHTML = `
+                    <div>
+                        <div class="icon">🤷</div>
+                        TANTO FAZ<br>
+                        <small style="font-size: 14px; font-weight: normal;">
+                            Ratio: ${ratio.toFixed(2)} (70%)
+                        </small>
+                    </div>
+                `;
+            } else {
+                resultDiv.className = 'result gasoline';
+                resultDiv.innerHTML = `
+                    <div>
+                        <div class="icon">🧡</div>
+                        Abasteça com GASOLINA<br>
+                        <small style="font-size: 14px; font-weight: normal;">
+                            Ratio: ${ratio.toFixed(2)} (${(ratio * 100).toFixed(0)}%)
+                        </small>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
