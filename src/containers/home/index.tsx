@@ -37,6 +37,7 @@ import {themeStore} from '../../stores/theme.store';
 
 // Components
 import SmartFuelCard from '../../components/SmartFuelCard';
+import MapView, {Marker} from '../../components/MapWrapper';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -44,7 +45,123 @@ const STROKE_WIDTH = 15;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
+// Daily Challenge Card
+const DailyChallengeCard = observer(({stationsStore}) => {
+  const {dailyChallenge} = stationsStore;
+  const progress = Math.min(
+    1,
+    dailyChallenge.progress / dailyChallenge.target,
+  );
+
+  return (
+    <Card style={[styles.card, {marginTop: 20, borderColor: '#FFAAA5'}]}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Icon name="award-outline" width={24} height={24} fill="#FFAAA5" />
+          <Text category="h6" style={{marginLeft: 10}}>
+            Desafio Diário
+          </Text>
+        </View>
+        <View style={{backgroundColor: '#FFF5F5', padding: 5, borderRadius: 5}}>
+          <Text category="c2" status="warning" style={{fontWeight: 'bold'}}>
+            +{dailyChallenge.reward} PTS
+          </Text>
+        </View>
+      </View>
+      <Text category="s1" style={{marginTop: 10}}>
+        {dailyChallenge.task}
+      </Text>
+      <View style={{marginTop: 15}}>
+        <View
+          style={{height: 10, backgroundColor: '#EDF1F7', borderRadius: 5}}>
+          <View
+            style={{
+              width: `${progress * 100}%`,
+              height: '100%',
+              backgroundColor: '#FFAAA5',
+              borderRadius: 5,
+            }}
+          />
+        </View>
+        <Text
+          category="c1"
+          appearance="hint"
+          style={{marginTop: 5, textAlign: 'right'}}>
+          {dailyChallenge.progress} / {dailyChallenge.target}
+        </Text>
+      </View>
+      {dailyChallenge.completed && (
+        <Button
+          size="small"
+          status="success"
+          style={{marginTop: 10}}
+          disabled={true}
+          accessoryLeft={props => <Icon {...props} name="checkmark-outline" />}>
+          COMPLETADO
+        </Button>
+      )}
+    </Card>
+  );
+});
+
 // Circular Progress Component
+const NearbyMapWidget = observer(({stationsStore, navigation}) => {
+  const {stations} = stationsStore;
+  // Pick the closest station (mock: first one)
+  const bestStation = stations[0];
+
+  if (!bestStation) {
+    return null;
+  }
+
+  return (
+    <Card
+      style={[styles.card, {marginTop: 10}]}
+      onPress={() =>
+        navigation.navigate('StationDetails', {stationId: bestStation.id})
+      }>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 10,
+        }}>
+        <Text category="h6">Perto de Você</Text>
+        <Icon name="arrow-forward-outline" width={20} height={20} fill="#8F9BB3" />
+      </View>
+      <View style={{height: 150, borderRadius: 12, overflow: 'hidden'}}>
+        <MapView
+          style={{flex: 1}}
+          initialRegion={{
+            latitude: bestStation.latitude,
+            longitude: bestStation.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+          scrollEnabled={false}
+          zoomEnabled={false}>
+          <Marker
+            coordinate={{
+              latitude: bestStation.latitude,
+              longitude: bestStation.longitude,
+            }}
+            title={bestStation.name}
+          />
+        </MapView>
+        <View style={styles.mapOverlay}>
+          <Text category="c2" style={{color: 'white', fontWeight: 'bold'}}>
+            {bestStation.name}
+          </Text>
+          <Text category="c2" style={{color: '#00E096', fontWeight: 'bold'}}>
+            R$ {bestStation.priceGas.toFixed(2)}
+          </Text>
+        </View>
+      </View>
+    </Card>
+  );
+});
+
 const SavingsProgress = ({total, target = 2000}) => {
   const progress = Math.min(total / target, 1);
   const strokeDashoffset = CIRCUMFERENCE - progress * CIRCUMFERENCE;
@@ -100,6 +217,9 @@ const SavingsProgress = ({total, target = 2000}) => {
 const Home = observer(() => {
   const navigation = useNavigation();
   const [showTripCalculator, setShowTripCalculator] = useState(false);
+  const [showVoiceModal, setShowVoiceModal] = useState(false);
+  const [voiceState, setVoiceState] = useState<'listening' | 'processing' | 'result'>('listening');
+  const [voiceResult, setVoiceResult] = useState('');
   const [tripDistance, setTripDistance] = useState('');
   const [tripCost, setTripCost] = useState('');
   const [promoMessage, setPromoMessage] = useState<string | null>(null);
@@ -135,6 +255,24 @@ const Home = observer(() => {
         setPromoMessage(null);
       }
     }
+  };
+
+  const handleVoicePress = () => {
+    setShowVoiceModal(true);
+    setVoiceState('listening');
+    setVoiceResult('');
+
+    // Mock interaction
+    setTimeout(() => {
+      setVoiceState('processing');
+      setTimeout(() => {
+        const {bestStation} = stationsStore;
+        setVoiceResult(
+          `Encontrei! O ${bestStation?.name} é a melhor opção.`,
+        );
+        setVoiceState('result');
+      }, 1500);
+    }, 2000);
   };
 
   const calculateTripCost = () => {
@@ -243,6 +381,8 @@ const Home = observer(() => {
         {/* Hero Section */}
         <SavingsProgress total={stationsStore.totalSavings} />
 
+        <DailyChallengeCard stationsStore={stationsStore} />
+
         {promoMessage && (
           <View style={styles.promoBanner}>
             <Icon
@@ -260,6 +400,9 @@ const Home = observer(() => {
           Smart Fuel Choice
         </Text>
         <SmartFuelCard stationsStore={stationsStore} />
+
+        {/* Nearby Map Widget */}
+        <NearbyMapWidget stationsStore={stationsStore} navigation={navigation} />
 
         {/* Market Trends & Actions Row */}
         <View style={styles.row}>
@@ -434,6 +577,76 @@ const Home = observer(() => {
           </Button>
         </Card>
       </Modal>
+
+      {/* Voice Assistant Modal */}
+      <Modal
+        visible={showVoiceModal}
+        backdropStyle={styles.backdrop}
+        onBackdropPress={() => setShowVoiceModal(false)}>
+        <Card disabled={true} style={styles.modalCard}>
+          <View style={{alignItems: 'center', padding: 20}}>
+            {voiceState === 'listening' && (
+              <>
+                <Icon
+                  name="mic"
+                  width={60}
+                  height={60}
+                  fill="#3366FF"
+                  style={{marginBottom: 20}}
+                />
+                <Text category="h6">Ouvindo...</Text>
+              </>
+            )}
+            {voiceState === 'processing' && (
+              <>
+                <Icon
+                  name="more-horizontal-outline"
+                  width={60}
+                  height={60}
+                  fill="#3366FF"
+                  style={{marginBottom: 20}}
+                />
+                <Text category="h6">Analisando preços...</Text>
+              </>
+            )}
+            {voiceState === 'result' && (
+              <>
+                <Icon
+                  name="checkmark-circle-2-outline"
+                  width={60}
+                  height={60}
+                  fill="#00E096"
+                  style={{marginBottom: 20}}
+                />
+                <Text category="s1" style={{marginBottom: 20, textAlign: 'center'}}>
+                  {voiceResult}
+                </Text>
+                <Button
+                  style={{marginBottom: 10, width: '100%'}}
+                  onPress={() => {
+                    setShowVoiceModal(false);
+                    const {bestStation} = stationsStore;
+                    if (bestStation) {
+                      navigation.navigate('StationDetails', {
+                        stationId: bestStation.id,
+                      });
+                    }
+                  }}>
+                  Ir para o Posto
+                </Button>
+                <Button appearance="ghost" onPress={() => setShowVoiceModal(false)}>
+                  Fechar
+                </Button>
+              </>
+            )}
+          </View>
+        </Card>
+      </Modal>
+
+      {/* Floating Action Button */}
+      <TouchableOpacity style={styles.voiceFab} onPress={handleVoicePress}>
+        <Icon name="mic-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
     </Layout>
   );
 });
@@ -565,6 +778,30 @@ const styles = StyleSheet.create({
   },
   input: {
     marginVertical: 10,
+  },
+  mapOverlay: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    padding: 8,
+    borderRadius: 8,
+  },
+  voiceFab: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#3366FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
   },
 });
 
