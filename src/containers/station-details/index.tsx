@@ -378,6 +378,61 @@ export default class StationDetails extends Component<Props, State> {
             </Card>
           )}
 
+          {/* Price Comparison Widget */}
+          <Card style={styles.card}>
+            <Text category="h6" style={{marginBottom: 10}}>
+              Comparativo (vs Média)
+            </Text>
+
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              <View style={{alignItems: 'center'}}>
+                <Text category="s2">Gasolina</Text>
+                <Text
+                  category="h6"
+                  status={
+                    station.priceGas <= stationsStore.marketAnalysis.avgGas
+                      ? 'success'
+                      : 'danger'
+                  }>
+                  {station.priceGas <= stationsStore.marketAnalysis.avgGas
+                    ? '▼'
+                    : '▲'}{' '}
+                  {Math.abs(
+                    station.priceGas - stationsStore.marketAnalysis.avgGas,
+                  ).toFixed(2)}
+                </Text>
+                <Text category="c2" appearance="hint">
+                  Média: {stationsStore.marketAnalysis.avgGas.toFixed(2)}
+                </Text>
+              </View>
+              <View style={{width: 1, backgroundColor: '#EEE'}} />
+              <View style={{alignItems: 'center'}}>
+                <Text category="s2">Etanol</Text>
+                <Text
+                  category="h6"
+                  status={
+                    station.priceEthanol <=
+                    stationsStore.marketAnalysis.avgEthanol
+                      ? 'success'
+                      : 'danger'
+                  }>
+                  {station.priceEthanol <=
+                  stationsStore.marketAnalysis.avgEthanol
+                    ? '▼'
+                    : '▲'}{' '}
+                  {Math.abs(
+                    station.priceEthanol -
+                      stationsStore.marketAnalysis.avgEthanol,
+                  ).toFixed(2)}
+                </Text>
+                <Text category="c2" appearance="hint">
+                  Média: {stationsStore.marketAnalysis.avgEthanol.toFixed(2)}
+                </Text>
+              </View>
+            </View>
+          </Card>
+
           {/* Fuel Simulator */}
           <Card style={styles.card}>
             <Text category="h6">Simulador de Abastecimento</Text>
