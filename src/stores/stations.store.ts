@@ -195,6 +195,14 @@ export default class StationsStore {
   ];
   @observable badgeQueue: Badge[] = [];
 
+  @observable dailyChallenge = {
+    task: 'Verifique 1 preço hoje',
+    progress: 0,
+    target: 1,
+    completed: false,
+    reward: 50,
+  };
+
   @computed get currentBadge() {
     return this.badgeQueue.length > 0 ? this.badgeQueue[0] : null;
   }
@@ -203,7 +211,55 @@ export default class StationsStore {
     // Desabilitado para versão de produção - requer backend
     this.startRealTimeUpdates();
     this.startGeofenceSimulation();
+    this.initDailyChallenge();
   }
+
+  initDailyChallenge() {
+    const challenges = [
+      {task: 'Verifique 1 preço hoje', target: 1, reward: 50},
+      {task: 'Avalie 1 posto hoje', target: 1, reward: 30},
+      {task: 'Economize dinheiro', target: 1, reward: 100},
+    ];
+    const challenge = challenges[Math.floor(Math.random() * challenges.length)];
+    this.dailyChallenge = {...challenge, progress: 0, completed: false};
+  }
+
+  @action checkDailyChallenge = (actionType: string) => {
+    if (this.dailyChallenge.completed) {
+      return;
+    }
+
+    let progressMade = false;
+
+    if (
+      this.dailyChallenge.task.includes('Verifique') &&
+      ['verify', 'update'].includes(actionType)
+    ) {
+      this.dailyChallenge.progress += 1;
+      progressMade = true;
+    } else if (
+      this.dailyChallenge.task.includes('Avalie') &&
+      actionType === 'comment'
+    ) {
+      this.dailyChallenge.progress += 1;
+      progressMade = true;
+    } else if (
+      this.dailyChallenge.task.includes('Economize') &&
+      actionType === 'savings'
+    ) {
+      this.dailyChallenge.progress += 1;
+      progressMade = true;
+    }
+
+    if (progressMade && this.dailyChallenge.progress >= this.dailyChallenge.target) {
+      this.dailyChallenge.completed = true;
+      this.addPoints(this.dailyChallenge.reward);
+      this.triggerAlert(
+        `Desafio Completo! +${this.dailyChallenge.reward} pontos`,
+        'success',
+      );
+    }
+  };
 
   startRealTimeUpdates() {
     // Simulates real-time price updates from an API
@@ -456,6 +512,7 @@ export default class StationsStore {
       this.addActivity('comment', `avaliou ${station.name}`, stationId);
       this.addPoints(5); // 5 points for comment
       this.checkBadges('comment');
+      this.checkDailyChallenge('comment');
     }
   };
 
@@ -487,6 +544,7 @@ export default class StationsStore {
       );
       this.addPoints(10); // 10 points for update
       this.checkBadges('update');
+      this.checkDailyChallenge('update');
     }
   };
 
@@ -503,6 +561,7 @@ export default class StationsStore {
       );
       this.addPoints(5); // 5 points for verification
       this.checkBadges('verify');
+      this.checkDailyChallenge('verify');
     }
   };
 
@@ -542,6 +601,7 @@ export default class StationsStore {
     });
     this.addPoints(Math.floor(amount * 2));
     this.checkBadges('savings');
+    this.checkDailyChallenge('savings');
   };
 
   @action triggerAlert = (
