@@ -18,6 +18,22 @@ interface Props {
 @inject('homeStore', 'stationsStore', 'garageStore', 'themeStore')
 @observer
 class HomeWeb extends React.Component<Props> {
+
+  handleSurpriseMe = () => {
+    const {stationsStore, navigation} = this.props;
+    if (!stationsStore) return;
+    const {stations} = stationsStore;
+    const promoStations = stations.filter(s => s.isPromo);
+    const target = promoStations.length > 0
+        ? promoStations[Math.floor(Math.random() * promoStations.length)]
+        : stations[Math.floor(Math.random() * stations.length)];
+
+    if (target) {
+        alert(`🎁 SURPRESA! Encontramos uma oferta especial para você no ${target.name}.`);
+        navigation.navigate('StationDetails', {stationId: target.id});
+    }
+  }
+
   render() {
     const {homeStore, garageStore} = this.props;
 
@@ -69,6 +85,20 @@ class HomeWeb extends React.Component<Props> {
             disabled={isCalculating}
             style={styles.calculateButton}>
             {isCalculating ? 'Calculando...' : 'Calcular'}
+          </Button>
+
+          <Button
+            onPress={() => this.props.navigation.navigate('TripPlanner')}
+            style={[styles.calculateButton, {backgroundColor: '#3366FF', marginTop: 15}]}
+            status="info">
+            Trip Planner
+          </Button>
+
+          <Button
+            onPress={this.handleSurpriseMe}
+            style={[styles.calculateButton, {backgroundColor: '#FF3D71', marginTop: 15}]}
+            status="success">
+            Me Surpreenda 🎁
           </Button>
         </View>
 

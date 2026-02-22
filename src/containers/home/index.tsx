@@ -19,15 +19,21 @@ import {
 } from '@ui-kitten/components';
 import {observer} from 'mobx-react';
 import {useNavigation} from '@react-navigation/native';
-import Svg, {
-  Circle,
-  G,
-  Defs,
-  LinearGradient,
-  Stop,
-  Polyline,
-} from 'react-native-svg';
 import {reaction} from 'mobx';
+
+let Svg: any, Circle: any, Defs: any, LinearGradient: any, Stop: any;
+if (Platform.OS !== 'web') {
+  try {
+    const RNSvg = require('react-native-svg');
+    Svg = RNSvg.default;
+    Circle = RNSvg.Circle;
+    Defs = RNSvg.Defs;
+    LinearGradient = RNSvg.LinearGradient;
+    Stop = RNSvg.Stop;
+  } catch (e) {
+    console.error('Failed to load react-native-svg', e);
+  }
+}
 
 // Import Stores
 import {homeStore} from '../../stores/home.store';
@@ -166,6 +172,26 @@ const SavingsProgress = ({total, target = 2000}) => {
   const progress = Math.min(total / target, 1);
   const strokeDashoffset = CIRCUMFERENCE - progress * CIRCUMFERENCE;
 
+  if (Platform.OS === 'web' || !Svg) {
+     return (
+        <View style={styles.heroContainer}>
+             <View style={{width: CIRCLE_SIZE, height: CIRCLE_SIZE, borderRadius: CIRCLE_SIZE/2, borderWidth: STROKE_WIDTH, borderColor: '#3366FF', alignItems: 'center', justifyContent: 'center'}}>
+                 <View style={styles.heroTextContainer}>
+                    <Text category="s2" appearance="hint">
+                      Economia Total
+                    </Text>
+                    <Text category="h4" style={styles.heroValue}>
+                      R$ {total.toFixed(2)}
+                    </Text>
+                    <Text category="c1" status="success">
+                      Top 5% Savers
+                    </Text>
+                  </View>
+             </View>
+        </View>
+     );
+  }
+
   return (
     <View style={styles.heroContainer}>
       <Svg width={CIRCLE_SIZE} height={CIRCLE_SIZE}>
@@ -216,12 +242,9 @@ const SavingsProgress = ({total, target = 2000}) => {
 
 const Home = observer(() => {
   const navigation = useNavigation();
-  const [showTripCalculator, setShowTripCalculator] = useState(false);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
   const [voiceState, setVoiceState] = useState<'listening' | 'processing' | 'result'>('listening');
   const [voiceResult, setVoiceResult] = useState('');
-  const [tripDistance, setTripDistance] = useState('');
-  const [tripCost, setTripCost] = useState('');
   const [promoMessage, setPromoMessage] = useState<string | null>(null);
 
   // Reactions & Effects
@@ -275,29 +298,19 @@ const Home = observer(() => {
     }, 2000);
   };
 
-  const calculateTripCost = () => {
-    const {bestStation} = stationsStore;
-    const {etanolConsumption, gasolinaConsumption} = homeStore;
+  const handleSurpriseMe = () => {
+    // Surprise logic
+    const {stations} = stationsStore;
+    // Find a promo station or just a random one
+    const promoStations = stations.filter(s => s.isPromo);
+    const target = promoStations.length > 0
+        ? promoStations[Math.floor(Math.random() * promoStations.length)]
+        : stations[Math.floor(Math.random() * stations.length)];
 
-    if (!tripDistance || !bestStation) {
-      return;
+    if (target) {
+        alert(`🎁 SURPRESA! Encontramos uma oferta especial para você no ${target.name}.`);
+        navigation.navigate('StationDetails', {stationId: target.id});
     }
-
-    const distance = parseFloat(tripDistance.replace(',', '.'));
-    const gasCons = parseFloat(gasolinaConsumption.replace(',', '.')) || 10;
-    const ethCons = parseFloat(etanolConsumption.replace(',', '.')) || 7;
-
-    if (isNaN(distance)) {
-      return;
-    }
-
-    const costGas = (distance / gasCons) * bestStation.priceGas;
-    const costEth = (distance / ethCons) * bestStation.priceEthanol;
-
-    const bestOption = costEth < costGas ? 'Etanol' : 'Gasolina';
-    const bestPrice = Math.min(costGas, costEth);
-
-    setTripCost(`R$ ${bestPrice.toFixed(2)} com ${bestOption}`);
   };
 
   const renderActivityItem = item => {
@@ -437,7 +450,7 @@ const Home = observer(() => {
 
           <Card
             style={[styles.card, styles.halfCard]}
-            onPress={() => setShowTripCalculator(true)}>
+            onPress={() => navigation.navigate('TripPlanner')}>
             <View
               style={{
                 alignItems: 'center',
@@ -446,7 +459,7 @@ const Home = observer(() => {
               }}>
               <Icon name="map-outline" width={32} height={32} fill="#3366FF" />
               <Text category="s2" style={{marginTop: 10}}>
-                Trip Calculator
+                Trip Planner
               </Text>
             </View>
           </Card>
@@ -542,42 +555,6 @@ const Home = observer(() => {
         </Card>
       </ScrollView>
 
-      {/* Modal */}
-      <Modal
-        visible={showTripCalculator}
-        backdropStyle={styles.backdrop}
-        onBackdropPress={() => setShowTripCalculator(false)}>
-        <Card disabled={true} style={styles.modalCard}>
-          <Text category="h5" style={{marginBottom: 10}}>
-            Trip Calculator
-          </Text>
-          <Input
-            label="Distance (km)"
-            placeholder="Ex: 150"
-            value={tripDistance}
-            onChangeText={setTripDistance}
-            keyboardType="numeric"
-            style={styles.input}
-          />
-          {tripCost ? (
-            <Text
-              status="success"
-              category="h6"
-              style={{marginVertical: 10, textAlign: 'center'}}>
-              {tripCost}
-            </Text>
-          ) : null}
-          <Button onPress={calculateTripCost} style={{marginBottom: 10}}>
-            Calculate
-          </Button>
-          <Button
-            appearance="ghost"
-            onPress={() => setShowTripCalculator(false)}>
-            Close
-          </Button>
-        </Card>
-      </Modal>
-
       {/* Voice Assistant Modal */}
       <Modal
         visible={showVoiceModal}
@@ -644,6 +621,10 @@ const Home = observer(() => {
       </Modal>
 
       {/* Floating Action Button */}
+      <TouchableOpacity style={styles.surpriseFab} onPress={handleSurpriseMe}>
+        <Icon name="gift-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.voiceFab} onPress={handleVoicePress}>
         <Icon name="mic-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
@@ -795,6 +776,22 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     backgroundColor: '#3366FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  surpriseFab: {
+    position: 'absolute',
+    bottom: 90,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#FF3D71',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
