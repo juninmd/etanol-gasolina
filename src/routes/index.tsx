@@ -15,6 +15,7 @@ import Garage from '../containers/garage';
 import AddVehicle from '../containers/garage/add-vehicle';
 import AddFill from '../containers/garage/add-fill';
 import MarketInsights from '../containers/market-insights';
+import TripPlanner from '../containers/trip-planner';
 
 const {Navigator, Screen} = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -54,6 +55,7 @@ const RootNavigator = () => (
     <Stack.Screen name="AddVehicle" component={AddVehicle} />
     <Stack.Screen name="AddFill" component={AddFill} />
     <Stack.Screen name="MarketInsights" component={MarketInsights} />
+    <Stack.Screen name="TripPlanner" component={TripPlanner} />
   </Stack.Navigator>
 );
 
