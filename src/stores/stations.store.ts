@@ -156,7 +156,13 @@ export default class StationsStore {
   @observable favorites: number[] = [];
   @observable filterPromo = false;
   @observable totalSavings = 0;
+  @observable totalCO2Saved = 0; // in kg
   @observable savingsHistory: SavingsRecord[] = [];
+
+  @computed get treesPlanted() {
+    // Approx 20kg of CO2 per tree
+    return Math.floor(this.totalCO2Saved / 20);
+  }
   @observable points = 150; // Initial gamification points
   @observable checkinStation: Station | null = null;
   @observable showLevelUp = false;
@@ -594,6 +600,9 @@ export default class StationsStore {
 
   @action addSavings = (amount: number) => {
     this.totalSavings += amount;
+    // Mock: for every R$ 1 saved, we saved ~0.5kg of CO2 by using Ethanol
+    this.totalCO2Saved += amount * 0.5;
+
     this.savingsHistory.push({
       id: Date.now().toString(),
       date: new Date().toLocaleDateString(),
