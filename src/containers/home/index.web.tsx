@@ -35,9 +35,9 @@ class HomeWeb extends React.Component<Props> {
   }
 
   render() {
-    const {homeStore, garageStore} = this.props;
+    const {homeStore, garageStore, stationsStore} = this.props;
 
-    if (!homeStore || !garageStore) {
+    if (!homeStore || !garageStore || !stationsStore) {
       return (
         <View style={styles.container}>
           <Text style={styles.loading}>Carregando stores...</Text>
@@ -46,6 +46,7 @@ class HomeWeb extends React.Component<Props> {
     }
 
     const {precoGasolina, precoEtanol, resultado, isCalculating} = homeStore;
+    const {totalCO2Saved, treesPlanted} = stationsStore;
 
     return (
       <ScrollView style={styles.container}>
@@ -55,6 +56,25 @@ class HomeWeb extends React.Component<Props> {
             Descubra qual combustível é mais vantajoso
           </Text>
         </View>
+
+        {totalCO2Saved > 0 && (
+          <View style={styles.ecoSection}>
+            <Card style={styles.ecoCard}>
+              <Text style={styles.ecoTitle}>🌍 Impacto Ambiental</Text>
+              <Text style={styles.ecoSubtitle}>Ao escolher Etanol, você reduz a emissão de gases poluentes e ajuda o planeta!</Text>
+              <View style={styles.ecoStatsRow}>
+                <View style={styles.ecoStat}>
+                  <Text style={styles.ecoValue}>{totalCO2Saved.toFixed(1)}kg</Text>
+                  <Text style={styles.ecoLabel}>CO2 Evitado</Text>
+                </View>
+                <View style={styles.ecoStat}>
+                  <Text style={styles.ecoValue}>{treesPlanted} 🌳</Text>
+                  <Text style={styles.ecoLabel}>Árvores Salvas</Text>
+                </View>
+              </View>
+            </Card>
+          </View>
+        )}
 
         <View style={styles.inputSection}>
           <View style={styles.inputRow}>
@@ -239,6 +259,49 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 8,
     lineHeight: 20,
+  },
+  ecoSection: {
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  ecoCard: {
+    backgroundColor: '#E5F9F1',
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: '#00E096',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    borderColor: '#00E096',
+    borderWidth: 1,
+  },
+  ecoTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#00E096',
+    marginBottom: 5,
+  },
+  ecoSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 15,
+  },
+  ecoStatsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  ecoStat: {
+    alignItems: 'center',
+  },
+  ecoValue: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#00E096',
+  },
+  ecoLabel: {
+    fontSize: 12,
+    color: '#666',
   },
 });
 
