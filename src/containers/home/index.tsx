@@ -51,6 +51,43 @@ const STROKE_WIDTH = 15;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
+// Eco Impact Card
+const EcoImpactCard = observer(({stationsStore}) => {
+  const {totalCO2Saved, treesPlanted} = stationsStore;
+
+  if (totalCO2Saved <= 0) {
+    return null;
+  }
+
+  return (
+    <Card style={[styles.card, {marginTop: 20, borderColor: '#00E096'}]}>
+      <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
+        <View style={{backgroundColor: '#E5F9F1', padding: 8, borderRadius: 20}}>
+          <Icon name="globe-2-outline" width={24} height={24} fill="#00E096" />
+        </View>
+        <Text category="h6" style={{marginLeft: 10, color: '#00E096', fontWeight: 'bold'}}>
+          Impacto Ambiental
+        </Text>
+      </View>
+      <Text category="s2" appearance="hint" style={{marginBottom: 15}}>
+        Ao escolher Etanol, você reduz a emissão de gases poluentes e ajuda o planeta!
+      </Text>
+
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{alignItems: 'center', flex: 1}}>
+          <Text category="h4" status="success">{totalCO2Saved.toFixed(1)}kg</Text>
+          <Text category="c1" appearance="hint">CO2 Evitado</Text>
+        </View>
+        <View style={{width: 1, backgroundColor: '#EDF1F7', marginHorizontal: 10}} />
+        <View style={{alignItems: 'center', flex: 1}}>
+          <Text category="h4" status="success">{treesPlanted} 🌳</Text>
+          <Text category="c1" appearance="hint">Árvores Salvas</Text>
+        </View>
+      </View>
+    </Card>
+  );
+});
+
 // Daily Challenge Card
 const DailyChallengeCard = observer(({stationsStore}) => {
   const {dailyChallenge} = stationsStore;
@@ -393,6 +430,8 @@ const Home = observer(() => {
         showsVerticalScrollIndicator={false}>
         {/* Hero Section */}
         <SavingsProgress total={stationsStore.totalSavings} />
+
+        <EcoImpactCard stationsStore={stationsStore} />
 
         <DailyChallengeCard stationsStore={stationsStore} />
 
