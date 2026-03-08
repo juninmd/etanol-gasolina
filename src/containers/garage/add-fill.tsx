@@ -51,7 +51,7 @@ export default class AddFill extends Component<Props, State> {
         this.setState({ showScannerModal: true, isScanning: true });
 
         // Mocking the scanning process with a delay
-        setTimeout(() => {
+        this.scanTimeout = setTimeout(() => {
             this.setState({
                 isScanning: false,
                 stationName: 'Posto Auto Mock (IA)',
@@ -59,9 +59,9 @@ export default class AddFill extends Component<Props, State> {
                 liters: '40.5',
                 fuelTypeIndex: 0,
             });
-            setTimeout(() => {
+            this.successTimeout = setTimeout(() => {
                 this.setState({ showScannerModal: false });
-                alert('✨ Nota Fiscal lida com sucesso via IA!');
+                this.props.stationsStore.triggerAlert('✨ Nota Fiscal lida com sucesso via IA!', 'success');
             }, 1000);
         }, 2500); // 2.5 seconds scanning delay
     };
