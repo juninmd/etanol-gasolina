@@ -28,7 +28,8 @@ const CheckinPrompt = inject('stationsStore')(
         // New station prompt
         setVisibleStation(checkinStation);
         setIsSuccess(false);
-        setIsUpdating(false);
+        // Set isUpdating to true by default to force the user to input/confirm the price directly
+        setIsUpdating(true);
         setGasPrice(checkinStation.priceGas.toString());
         setEthPrice(checkinStation.priceEthanol.toString());
 
@@ -119,98 +120,44 @@ const CheckinPrompt = inject('stationsStore')(
             </Text>
           </View>
 
-          <Text category="s1" style={{marginVertical: 10, textAlign: 'center'}}>
+          <Text category="s1" style={{marginVertical: 5, textAlign: 'center'}}>
             {visibleStation.name}
           </Text>
+          <Text category="p2" style={{marginBottom: 15, textAlign: 'center', color: '#8F9BB3'}}>
+            Qual o preço atual? Confirme ou altere para ganhar pontos!
+          </Text>
 
-          {!isUpdating ? (
-            <>
-              <View style={styles.pricePreview}>
-                <Text category="s2">
-                  Gas:{' '}
-                  <Text category="s1" status="info">
-                    R$ {visibleStation.priceGas.toFixed(2)}
-                  </Text>
-                </Text>
-                <Text category="s2">
-                  Eta:{' '}
-                  <Text category="s1" status="success">
-                    R$ {visibleStation.priceEthanol.toFixed(2)}
-                  </Text>
-                </Text>
-              </View>
-
-              <Text
-                category="p2"
-                style={{
-                  marginBottom: 15,
-                  textAlign: 'center',
-                  color: '#8F9BB3',
-                }}>
-                O preço acima está correto?
-              </Text>
-              <View style={styles.buttonRow}>
-                <Button
-                  status="success"
-                  onPress={handleConfirm}
-                  style={{flex: 2, marginRight: 10}}
-                  accessoryLeft={props => (
-                    <Icon {...props} name="checkmark-circle-2-outline" />
-                  )}>
-                  Sim, Confirmar
-                </Button>
-                <Button
-                  status="warning"
-                  onPress={() => setIsUpdating(true)}
-                  style={{flex: 1}}
-                  appearance="outline">
-                  Não
-                </Button>
-              </View>
-              <Button
-                status="basic"
-                appearance="ghost"
-                size="small"
-                onPress={handleDismiss}
-                style={{marginTop: 10}}>
-                Não estou aqui / Cancelar
-              </Button>
-            </>
-          ) : (
-            <>
-              <View style={styles.inputsRow}>
-                <Input
-                  style={styles.input}
-                  label="Gasolina"
-                  value={gasPrice}
-                  onChangeText={setGasPrice}
-                  keyboardType="numeric"
-                />
-                <Input
-                  style={styles.input}
-                  label="Etanol"
-                  value={ethPrice}
-                  onChangeText={setEthPrice}
-                  keyboardType="numeric"
-                />
-              </View>
-              <View style={styles.buttonRow}>
-                <Button
-                  status="basic"
-                  appearance="ghost"
-                  onPress={() => setIsUpdating(false)}
-                  style={{flex: 1, marginRight: 10}}>
-                  Cancelar
-                </Button>
-                <Button
-                  status="success"
-                  onPress={handleUpdate}
-                  style={{flex: 1}}>
-                  Salvar
-                </Button>
-              </View>
-            </>
-          )}
+          <View style={styles.inputsRow}>
+            <Input
+              style={styles.input}
+              label="Gasolina"
+              value={gasPrice}
+              onChangeText={setGasPrice}
+              keyboardType="numeric"
+            />
+            <Input
+              style={styles.input}
+              label="Etanol"
+              value={ethPrice}
+              onChangeText={setEthPrice}
+              keyboardType="numeric"
+            />
+          </View>
+          <View style={styles.buttonRow}>
+            <Button
+              status="basic"
+              appearance="ghost"
+              onPress={handleDismiss}
+              style={{flex: 1, marginRight: 10}}>
+              Ignorar
+            </Button>
+            <Button
+              status="success"
+              onPress={handleUpdate}
+              style={{flex: 1}}>
+              Confirmar
+            </Button>
+          </View>
         </Card>
       </Animated.View>
     );

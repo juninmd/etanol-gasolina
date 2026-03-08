@@ -1,6 +1,7 @@
 import {action, observable, computed, runInAction} from 'mobx';
 import {homeStore} from './home.store';
 import {garageStore} from './garage.store';
+import {fetchLivePrices} from '../services/api.service';
 
 export interface Comment {
   id: number;
@@ -268,43 +269,48 @@ export default class StationsStore {
   };
 
   startRealTimeUpdates() {
-    // Simulates real-time price updates from an API
-    setInterval(() => {
-      runInAction(() => {
-        this.stations.forEach(station => {
-          if (Math.random() > 0.7) {
-            // 30% chance to update
-            const change = (Math.random() - 0.5) * 0.1; // +/- 0.05
+    // Fetches real-time price updates from an API
+    setInterval(async () => {
+      try {
+        const stationIds = this.stations.map(s => s.id);
+        const updates = await fetchLivePrices(stationIds);
 
-            if (change > 0.01) {
-              station.priceTrend = 'up';
-            } else if (change < -0.01) {
-              station.priceTrend = 'down';
-            } else {
-              station.priceTrend = 'stable';
-            }
+        runInAction(() => {
+          updates.forEach(update => {
+            const station = this.stations.find(s => s.id === update.stationId);
+            if (station && (update.priceGas !== 0 || update.priceEthanol !== 0)) {
+              station.priceTrend = update.trend;
 
-            const oldPrice = station.priceGas;
-            station.priceGas = Math.max(
-              3.0,
-              parseFloat((station.priceGas + change).toFixed(2)),
-            );
-            station.priceEthanol = Math.max(
-              2.0,
-              parseFloat((station.priceEthanol + change * 0.7).toFixed(2)),
-            );
-
-            // Mock Smart Alert for Price Drop
-            if (station.priceGas < oldPrice - 0.03 && Math.random() > 0.8) {
-              this.triggerAlert(
-                `Preço caiu! ${station.name} baixou a gasolina.`,
-                'success',
+              const oldPrice = station.priceGas;
+              station.priceGas = Math.max(
+                3.0,
+                parseFloat((station.priceGas + update.priceGas).toFixed(2)),
               );
+              station.priceEthanol = Math.max(
+                2.0,
+                parseFloat((station.priceEthanol + update.priceEthanol).toFixed(2)),
+              );
+
+              if (update.isPromo && !station.isPromo) {
+                station.isPromo = true;
+              } else if (station.priceGas > oldPrice + 0.05) {
+                station.isPromo = false;
+              }
+
+              // Smart Alert for Promo / Price Drop
+              if (update.isPromo && station.priceGas < oldPrice) {
+                this.triggerAlert(
+                  `📢 Nova Promoção! ${station.name} abaixou a gasolina para R$ ${station.priceGas.toFixed(2)}`,
+                  'success',
+                );
+              }
             }
-          }
+          });
         });
-      });
-    }, 5000);
+      } catch (e) {
+        console.error("Failed to fetch live prices", e);
+      }
+    }, 10000); // Check every 10 seconds
   }
 
   startGeofenceSimulation() {
