@@ -19,7 +19,7 @@ const SmartAlert = inject('stationsStore')(
       if (smartAlert.message) {
         // Slide In
         Animated.spring(slideAnim, {
-          toValue: 20, // 20px from top
+          toValue: 40, // 40px from top for a better push notification look
           friction: 6,
           useNativeDriver: true,
         }).start();
@@ -32,7 +32,7 @@ const SmartAlert = inject('stationsStore')(
         return () => clearTimeout(timer);
       } else {
         // Slide Out (ensure it's hidden)
-        slideAnim.setValue(-100);
+        slideAnim.setValue(-150);
       }
     }, [smartAlert.message]);
 
@@ -81,18 +81,18 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     top: 0,
-    left: 20,
-    right: 20,
+    width: '90%',
+    left: '5%',
     zIndex: 200, // Topmost
   },
   card: {
-    borderRadius: 8,
+    borderRadius: 16,
     borderLeftWidth: 5,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOffset: {width: 0, height: 10},
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 15,
   },
   content: {
     flexDirection: 'row',
