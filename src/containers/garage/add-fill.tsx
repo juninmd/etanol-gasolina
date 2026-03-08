@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Layout, Text, Button, Input, Icon, TopNavigation, TopNavigationAction, RadioGroup, Radio } from '@ui-kitten/components';
+import { StyleSheet, View, Animated, Easing } from 'react-native';
+import { Layout, Text, Button, Input, Icon, TopNavigation, TopNavigationAction, RadioGroup, Radio, Modal, Card, Spinner } from '@ui-kitten/components';
 import { inject, observer } from 'mobx-react';
 import GarageStore from '../../stores/garage.store';
 import StationsStore from '../../stores/stations.store';
@@ -18,6 +18,8 @@ interface State {
     liters: string;
     odometer: string;
     fuelTypeIndex: number;
+    showScannerModal: boolean;
+    isScanning: boolean;
 }
 
 const BackIcon = (props) => (
@@ -40,8 +42,29 @@ export default class AddFill extends Component<Props, State> {
             liters: '',
             odometer: '',
             fuelTypeIndex: 0, // 0 = Gas, 1 = Ethanol
+            showScannerModal: false,
+            isScanning: false,
         };
     }
+
+    handleScanReceipt = () => {
+        this.setState({ showScannerModal: true, isScanning: true });
+
+        // Mocking the scanning process with a delay
+        setTimeout(() => {
+            this.setState({
+                isScanning: false,
+                stationName: 'Posto Auto Mock (IA)',
+                price: '5.49',
+                liters: '40.5',
+                fuelTypeIndex: 0,
+            });
+            setTimeout(() => {
+                this.setState({ showScannerModal: false });
+                alert('✨ Nota Fiscal lida com sucesso via IA!');
+            }, 1000);
+        }, 2500); // 2.5 seconds scanning delay
+    };
 
     navigateBack = () => {
         this.props.navigation.goBack();
@@ -166,10 +189,53 @@ export default class AddFill extends Component<Props, State> {
                         onChangeText={odometer => this.setState({ odometer })}
                         style={styles.input}
                     />
+                    <Button
+                        status="info"
+                        appearance="outline"
+                        accessoryLeft={(props) => <Icon {...props} name="camera-outline" />}
+                        onPress={this.handleScanReceipt}
+                        style={styles.scanButton}>
+                        Escanear Nota Fiscal (IA)
+                    </Button>
                     <Button onPress={this.handleSave} style={styles.button}>
                         Salvar Registro
                     </Button>
                 </View>
+
+                {/* Receipt Scanner Modal */}
+                <Modal
+                    visible={this.state.showScannerModal}
+                    backdropStyle={styles.backdrop}
+                    onBackdropPress={() => !this.state.isScanning && this.setState({ showScannerModal: false })}>
+                    <Card disabled={true} style={styles.modalCard}>
+                        <View style={{ alignItems: 'center', padding: 20 }}>
+                            {this.state.isScanning ? (
+                                <>
+                                    <Spinner size='giant' status='info' />
+                                    <Text category="h6" style={{ marginTop: 20 }}>
+                                        Lendo nota fiscal...
+                                    </Text>
+                                    <Text category="c1" appearance="hint" style={{ marginTop: 5, textAlign: 'center' }}>
+                                        A IA está extraindo o nome do posto, preço e litros.
+                                    </Text>
+                                </>
+                            ) : (
+                                <>
+                                    <Icon
+                                        name="checkmark-circle-2-outline"
+                                        width={60}
+                                        height={60}
+                                        fill="#00E096"
+                                        style={{ marginBottom: 20 }}
+                                    />
+                                    <Text category="h6" style={{ marginBottom: 10, textAlign: 'center' }}>
+                                        Concluído!
+                                    </Text>
+                                </>
+                            )}
+                        </View>
+                    </Card>
+                </Modal>
             </Layout>
         );
     }
@@ -195,5 +261,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 15,
         justifyContent: 'space-around',
+    },
+    scanButton: {
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    backdrop: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalCard: {
+        padding: 20,
+        width: 300,
+        borderRadius: 16,
     },
 });
