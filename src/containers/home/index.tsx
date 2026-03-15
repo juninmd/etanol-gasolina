@@ -44,6 +44,7 @@ import {themeStore} from '../../stores/theme.store';
 // Components
 import SmartFuelCard from '../../components/SmartFuelCard';
 import MapView, {Marker} from '../../components/MapWrapper';
+import FuelMatchModal from '../../components/FuelMatchModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -283,6 +284,7 @@ const Home = observer(() => {
   const [voiceState, setVoiceState] = useState<'listening' | 'processing' | 'result'>('listening');
   const [voiceResult, setVoiceResult] = useState('');
   const [promoMessage, setPromoMessage] = useState<string | null>(null);
+  const [showFuelMatch, setShowFuelMatch] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -336,18 +338,13 @@ const Home = observer(() => {
   };
 
   const handleSurpriseMe = () => {
-    // Surprise logic
-    const {stations} = stationsStore;
-    // Find a promo station or just a random one
-    const promoStations = stations.filter(s => s.isPromo);
-    const target = promoStations.length > 0
-        ? promoStations[Math.floor(Math.random() * promoStations.length)]
-        : stations[Math.floor(Math.random() * stations.length)];
+    setShowFuelMatch(true);
+  };
 
-    if (target) {
-        alert(`🎁 SURPRESA! Encontramos uma oferta especial para você no ${target.name}.`);
-        navigation.navigate('StationDetails', {stationId: target.id});
-    }
+  const handleFuelMatch = (stationId: number) => {
+    // Add some gamification points for finding a match
+    stationsStore.addPoints(10);
+    navigation.navigate('StationDetails', {stationId});
   };
 
   const renderActivityItem = item => {
@@ -593,6 +590,14 @@ const Home = observer(() => {
           </View>
         </Card>
       </ScrollView>
+
+      {/* Fuel Match Modal */}
+      <FuelMatchModal
+        visible={showFuelMatch}
+        onClose={() => setShowFuelMatch(false)}
+        stations={stationsStore.stations.slice()} // Pass a shallow copy
+        onMatch={handleFuelMatch}
+      />
 
       {/* Voice Assistant Modal */}
       <Modal
