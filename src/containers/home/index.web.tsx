@@ -6,6 +6,7 @@ import HomeStore from '../../stores/home.store';
 import StationsStore from '../../stores/stations.store';
 import GarageStore from '../../stores/garage.store';
 import ThemeStore from '../../stores/theme.store';
+import FuelMatchModal from '../../components/FuelMatchModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -18,21 +19,21 @@ interface Props {
 @inject('homeStore', 'stationsStore', 'garageStore', 'themeStore')
 @observer
 class HomeWeb extends React.Component<Props> {
+  state = {
+    showFuelMatch: false,
+  };
 
   handleSurpriseMe = () => {
-    const {stationsStore, navigation} = this.props;
-    if (!stationsStore) return;
-    const {stations} = stationsStore;
-    const promoStations = stations.filter(s => s.isPromo);
-    const target = promoStations.length > 0
-        ? promoStations[Math.floor(Math.random() * promoStations.length)]
-        : stations[Math.floor(Math.random() * stations.length)];
+    this.setState({showFuelMatch: true});
+  };
 
-    if (target) {
-        alert(`🎁 SURPRESA! Encontramos uma oferta especial para você no ${target.name}.`);
-        navigation.navigate('StationDetails', {stationId: target.id});
+  handleFuelMatch = (stationId: number) => {
+    const {stationsStore, navigation} = this.props;
+    if (stationsStore) {
+      stationsStore.addPoints(10);
     }
-  }
+    navigation.navigate('StationDetails', {stationId});
+  };
 
   render() {
     const {homeStore, garageStore, stationsStore} = this.props;
@@ -147,6 +148,13 @@ class HomeWeb extends React.Component<Props> {
             • Consideramos também o consumo do seu veículo
           </Text>
         </View>
+
+        <FuelMatchModal
+          visible={this.state.showFuelMatch}
+          onClose={() => this.setState({showFuelMatch: false})}
+          stations={stationsStore.stations.slice()}
+          onMatch={this.handleFuelMatch}
+        />
       </ScrollView>
     );
   }
