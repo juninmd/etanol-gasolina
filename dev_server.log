@@ -1,10 +1,12 @@
 
 > etanol@1.0.0 web
-> expo start --web --port 8081
+> expo start --web
 
 Starting project at /app
 env: load .env
 env: export DISABLE_ESLINT_PLUGIN
+(node:2286) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
 Starting Metro Bundler
 The following packages should be updated for best compatibility with the installed expo version:
   react-native-gesture-handler@2.30.0 - expected version: ~2.14.0
@@ -17,5 +19,11 @@ The following packages should be updated for best compatibility with the install
 Your project may not work correctly until you install the correct versions of the packages.
 Waiting on http://localhost:8081
 Logs for your project will appear below.
-Web Bundled 21050ms (index.tsx)
-Web Bundled 84ms (index.tsx)
+Web Bundled 28003ms (index.tsx)
+Web Bundled 81ms (index.tsx)
+Web Bundled 79ms (index.tsx)
+Web Bundled 75ms (index.tsx)
+Web Bundled 76ms (index.tsx)
+Web Bundled 76ms (index.tsx)
+Web Bundled 74ms (index.tsx)
+Web Bundled 398ms (index.tsx)
