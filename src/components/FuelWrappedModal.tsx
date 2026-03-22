@@ -8,7 +8,7 @@ const {width} = Dimensions.get('window');
 interface Props {
   visible: boolean;
   onClose: () => void;
-  stationsStore: StationsStore;
+  stationsStore: any;
 }
 
 const FuelWrappedModal = observer(
