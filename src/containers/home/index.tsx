@@ -63,27 +63,42 @@ const EcoImpactCard = observer(({stationsStore}) => {
 
   return (
     <Card style={[styles.card, {marginTop: 20, borderColor: '#00E096'}]}>
-      <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
-        <View style={{backgroundColor: '#E5F9F1', padding: 8, borderRadius: 20}}>
+      <View
+        style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
+        <View
+          style={{backgroundColor: '#E5F9F1', padding: 8, borderRadius: 20}}>
           <Icon name="globe-2-outline" width={24} height={24} fill="#00E096" />
         </View>
-        <Text category="h6" style={{marginLeft: 10, color: '#00E096', fontWeight: 'bold'}}>
+        <Text
+          category="h6"
+          style={{marginLeft: 10, color: '#00E096', fontWeight: 'bold'}}>
           Impacto Ambiental
         </Text>
       </View>
       <Text category="s2" appearance="hint" style={{marginBottom: 15}}>
-        Ao escolher Etanol, você reduz a emissão de gases poluentes e ajuda o planeta!
+        Ao escolher Etanol, você reduz a emissão de gases poluentes e ajuda o
+        planeta!
       </Text>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <View style={{alignItems: 'center', flex: 1}}>
-          <Text category="h4" status="success">{totalCO2Saved.toFixed(1)}kg</Text>
-          <Text category="c1" appearance="hint">CO2 Evitado</Text>
+          <Text category="h4" status="success">
+            {totalCO2Saved.toFixed(1)}kg
+          </Text>
+          <Text category="c1" appearance="hint">
+            CO2 Evitado
+          </Text>
         </View>
-        <View style={{width: 1, backgroundColor: '#EDF1F7', marginHorizontal: 10}} />
+        <View
+          style={{width: 1, backgroundColor: '#EDF1F7', marginHorizontal: 10}}
+        />
         <View style={{alignItems: 'center', flex: 1}}>
-          <Text category="h4" status="success">{treesPlanted} 🌳</Text>
-          <Text category="c1" appearance="hint">Árvores Salvas</Text>
+          <Text category="h4" status="success">
+            {treesPlanted} 🌳
+          </Text>
+          <Text category="c1" appearance="hint">
+            Árvores Salvas
+          </Text>
         </View>
       </View>
     </Card>
@@ -93,10 +108,7 @@ const EcoImpactCard = observer(({stationsStore}) => {
 // Daily Challenge Card
 const DailyChallengeCard = observer(({stationsStore}) => {
   const {dailyChallenge} = stationsStore;
-  const progress = Math.min(
-    1,
-    dailyChallenge.progress / dailyChallenge.target,
-  );
+  const progress = Math.min(1, dailyChallenge.progress / dailyChallenge.target);
 
   return (
     <Card style={[styles.card, {marginTop: 20, borderColor: '#FFAAA5'}]}>
@@ -117,8 +129,7 @@ const DailyChallengeCard = observer(({stationsStore}) => {
         {dailyChallenge.task}
       </Text>
       <View style={{marginTop: 15}}>
-        <View
-          style={{height: 10, backgroundColor: '#EDF1F7', borderRadius: 5}}>
+        <View style={{height: 10, backgroundColor: '#EDF1F7', borderRadius: 5}}>
           <View
             style={{
               width: `${progress * 100}%`,
@@ -173,7 +184,12 @@ const NearbyMapWidget = observer(({stationsStore, navigation}) => {
           marginBottom: 10,
         }}>
         <Text category="h6">Perto de Você</Text>
-        <Icon name="arrow-forward-outline" width={20} height={20} fill="#8F9BB3" />
+        <Icon
+          name="arrow-forward-outline"
+          width={20}
+          height={20}
+          fill="#8F9BB3"
+        />
       </View>
       <View style={{height: 150, borderRadius: 12, overflow: 'hidden'}}>
         <MapView
@@ -212,23 +228,32 @@ const SavingsProgress = ({total, target = 2000}) => {
   const strokeDashoffset = CIRCUMFERENCE - progress * CIRCUMFERENCE;
 
   if (Platform.OS === 'web' || !Svg) {
-     return (
-        <View style={styles.heroContainer}>
-             <View style={{width: CIRCLE_SIZE, height: CIRCLE_SIZE, borderRadius: CIRCLE_SIZE / 2, borderWidth: STROKE_WIDTH, borderColor: '#3366FF', alignItems: 'center', justifyContent: 'center'}}>
-                 <View style={styles.heroTextContainer}>
-                    <Text category="s2" appearance="hint">
-                      Economia Total
-                    </Text>
-                    <Text category="h4" style={styles.heroValue}>
-                      R$ {total.toFixed(2)}
-                    </Text>
-                    <Text category="c1" status="success">
-                      Top 5% Savers
-                    </Text>
-                  </View>
-             </View>
+    return (
+      <View style={styles.heroContainer}>
+        <View
+          style={{
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            borderRadius: CIRCLE_SIZE / 2,
+            borderWidth: STROKE_WIDTH,
+            borderColor: '#3366FF',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <View style={styles.heroTextContainer}>
+            <Text category="s2" appearance="hint">
+              Economia Total
+            </Text>
+            <Text category="h4" style={styles.heroValue}>
+              R$ {total.toFixed(2)}
+            </Text>
+            <Text category="c1" status="success">
+              Top 5% Savers
+            </Text>
+          </View>
         </View>
-     );
+      </View>
+    );
   }
 
   return (
@@ -282,7 +307,9 @@ const SavingsProgress = ({total, target = 2000}) => {
 const Home = observer(() => {
   const navigation = useNavigation();
   const [showVoiceModal, setShowVoiceModal] = useState(false);
-  const [voiceState, setVoiceState] = useState<'listening' | 'processing' | 'result'>('listening');
+  const [voiceState, setVoiceState] = useState<
+    'listening' | 'processing' | 'result'
+  >('listening');
   const [voiceResult, setVoiceResult] = useState('');
   const [promoMessage, setPromoMessage] = useState<string | null>(null);
   const [showFuelMatch, setShowFuelMatch] = useState(false);
@@ -298,7 +325,7 @@ const Home = observer(() => {
           .map(s => s.id)
           .join(',');
       },
-      promoIds => {
+      _promoIds => {
         checkPromos();
       },
     );
@@ -332,7 +359,7 @@ const Home = observer(() => {
       setTimeout(() => {
         const {bestStation} = stationsStore;
         setVoiceResult(
-          `Encontrei! O ${bestStation?.name} é a melhor opção.`,
+          `Encontrei! O ${bestStation && bestStation.name} é a melhor opção.`,
         );
         setVoiceState('result');
       }, 1500);
@@ -453,7 +480,10 @@ const Home = observer(() => {
         <SmartFuelCard stationsStore={stationsStore} />
 
         {/* Nearby Map Widget */}
-        <NearbyMapWidget stationsStore={stationsStore} navigation={navigation} />
+        <NearbyMapWidget
+          stationsStore={stationsStore}
+          navigation={navigation}
+        />
 
         {/* Market Trends & Actions Row */}
         <View style={styles.row}>
@@ -578,10 +608,20 @@ const Home = observer(() => {
           <View style={{marginTop: 10}}>
             {homeStore.recommendation === 'bicycle' ? (
               <View style={{alignItems: 'center'}}>
-                <Icon name="bicycle-outline" width={48} height={48} fill="#00E096" style={{marginBottom: 5}} />
+                <Icon
+                  name="bicycle-outline"
+                  width={48}
+                  height={48}
+                  fill="#00E096"
+                  style={{marginBottom: 5}}
+                />
                 <Text
                   status="success"
-                  style={{textAlign: 'center', fontWeight: 'bold', fontSize: 16}}>
+                  style={{
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: 16,
+                  }}>
                   {homeStore.resultado}
                 </Text>
               </View>
@@ -650,7 +690,9 @@ const Home = observer(() => {
                   fill="#00E096"
                   style={{marginBottom: 20}}
                 />
-                <Text category="s1" style={{marginBottom: 20, textAlign: 'center'}}>
+                <Text
+                  category="s1"
+                  style={{marginBottom: 20, textAlign: 'center'}}>
                   {voiceResult}
                 </Text>
                 <Button
@@ -666,7 +708,9 @@ const Home = observer(() => {
                   }}>
                   Ir para o Posto
                 </Button>
-                <Button appearance="ghost" onPress={() => setShowVoiceModal(false)}>
+                <Button
+                  appearance="ghost"
+                  onPress={() => setShowVoiceModal(false)}>
                   Fechar
                 </Button>
               </>
@@ -684,7 +728,9 @@ const Home = observer(() => {
         <Icon name="mic-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.wrappedFab} onPress={() => setShowFuelWrapped(true)}>
+      <TouchableOpacity
+        style={styles.wrappedFab}
+        onPress={() => setShowFuelWrapped(true)}>
         <Icon name="star-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
 

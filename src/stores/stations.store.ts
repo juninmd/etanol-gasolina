@@ -297,13 +297,12 @@ export default class StationsStore {
               const oldPrice = station.priceGas;
               station.priceGas = Math.max(
                 3.0,
-                parseFloat((station.priceGas + update.priceGas).toFixed(2)),
+                Math.round((station.priceGas + update.priceGas) * 100) / 100,
               );
               station.priceEthanol = Math.max(
                 2.0,
-                parseFloat(
-                  (station.priceEthanol + update.priceEthanol).toFixed(2),
-                ),
+                Math.round((station.priceEthanol + update.priceEthanol) * 100) /
+                  100,
               );
 
               if (update.isPromo && !station.isPromo) {

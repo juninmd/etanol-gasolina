@@ -1,0 +1,25 @@
+--- src/components/FuelMatchModal.tsx
++++ src/components/FuelMatchModal.tsx
+@@ -171,15 +171,15 @@
+                   style={[
+                     styles.actionButton,
+                     {backgroundColor: '#FF3D71', borderColor: '#FF3D71'},
+                   ]}
+-                  accessoryLeft={props => (
+-                    <Icon {...props} name="close-outline" />
+-                  )}
++                  accessoryLeft={(props: any) => (
++                    <Icon {...props} name="close-outline" />
++                  )}
+                   onPress={() => forceSwipe('left')}
+                 />
+                 <Button
+                   style={[
+                     styles.actionButton,
+                     {backgroundColor: '#00E096', borderColor: '#00E096'},
+                   ]}
+-                  accessoryLeft={props => <Icon {...props} name="heart" />}
++                  accessoryLeft={(props: any) => <Icon {...props} name="heart" />}
+                   onPress={() => forceSwipe('right')}
+                 />
+               </View>
