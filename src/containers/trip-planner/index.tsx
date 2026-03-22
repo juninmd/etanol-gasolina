@@ -1,12 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Dimensions,
-  Keyboard,
-  Platform,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, ScrollView, Keyboard, Platform} from 'react-native';
 import {
   Layout,
   Text,
@@ -142,7 +135,9 @@ export default class TripPlanner extends React.Component<Props> {
               value={destination}
               onChangeText={t => this.setState({destination: t})}
               style={styles.input}
-              accessoryLeft={props => <Icon {...props} name="pin-outline" />}
+              accessoryLeft={(props: any) => (
+                <Icon {...props} name="pin-outline" />
+              )}
             />
             <Input
               label="Distância Estimada (km)"
@@ -151,14 +146,14 @@ export default class TripPlanner extends React.Component<Props> {
               onChangeText={t => this.setState({distance: t})}
               keyboardType="numeric"
               style={styles.input}
-              accessoryLeft={props => (
+              accessoryLeft={(props: any) => (
                 <Icon {...props} name="navigation-2-outline" />
               )}
             />
             <Button
               onPress={this.handleCalculate}
               disabled={isCalculating}
-              accessoryLeft={props =>
+              accessoryLeft={(props: any) =>
                 isCalculating ? (
                   <Icon {...props} name="loader-outline" />
                 ) : (
@@ -271,10 +266,10 @@ export default class TripPlanner extends React.Component<Props> {
                   <Button
                     status="success"
                     style={{marginTop: 15}}
-                    accessoryLeft={props => (
+                    accessoryLeft={(props: any) => (
                       <Icon {...props} name="navigation-outline" />
                     )}
-                    onPress={() => alert('Abrindo Google Maps...')}>
+                    onPress={() => console.log('Abrindo Google Maps...')}>
                     Iniciar Navegação
                   </Button>
                 </Card>

@@ -91,7 +91,7 @@ class HomeWeb extends React.Component<Props> {
               <Input
                 placeholder="Ex: 5.89"
                 value={gasolina}
-                onChangeText={(t) => homeStore.handleForm({gasolina: t})}
+                onChangeText={t => homeStore.handleForm({gasolina: t})}
                 keyboardType="numeric"
                 style={styles.input}
               />
@@ -101,7 +101,7 @@ class HomeWeb extends React.Component<Props> {
               <Input
                 placeholder="Ex: 4.12"
                 value={etanol}
-                onChangeText={(t) => homeStore.handleForm({etanol: t})}
+                onChangeText={t => homeStore.handleForm({etanol: t})}
                 keyboardType="numeric"
                 style={styles.input}
               />

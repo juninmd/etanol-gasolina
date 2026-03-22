@@ -169,7 +169,7 @@ const FuelMatchModal = ({visible, onClose, stations, onMatch}: Props) => {
                     styles.actionButton,
                     {backgroundColor: '#FF3D71', borderColor: '#FF3D71'},
                   ]}
-                  accessoryLeft={(props: any) => (
+                  accessoryLeft={props => (
                     <Icon {...props} name="close-outline" />
                   )}
                   onPress={() => forceSwipe('left')}
@@ -179,9 +179,7 @@ const FuelMatchModal = ({visible, onClose, stations, onMatch}: Props) => {
                     styles.actionButton,
                     {backgroundColor: '#00E096', borderColor: '#00E096'},
                   ]}
-                  accessoryLeft={(props: any) => (
-                    <Icon {...props} name="heart" />
-                  )}
+                  accessoryLeft={props => <Icon {...props} name="heart" />}
                   onPress={() => forceSwipe('right')}
                 />
               </View>
