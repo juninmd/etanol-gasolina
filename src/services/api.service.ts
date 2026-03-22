@@ -9,10 +9,12 @@ export interface FuelPriceResponse {
 /**
  * Mock API Service simulating fetching real-time fuel prices from a backend.
  */
-export const fetchLivePrices = async (stationIds: number[]): Promise<FuelPriceResponse[]> => {
-  return new Promise((resolve) => {
+export const fetchLivePrices = async (
+  stationIds: number[],
+): Promise<FuelPriceResponse[]> => {
+  return new Promise(resolve => {
     setTimeout(() => {
-      const updates: FuelPriceResponse[] = stationIds.map((id) => {
+      const updates: FuelPriceResponse[] = stationIds.map(id => {
         // Simulating 30% chance of price update per station
         const willUpdate = Math.random() > 0.7;
         let change = 0;
@@ -20,8 +22,11 @@ export const fetchLivePrices = async (stationIds: number[]): Promise<FuelPriceRe
 
         if (willUpdate) {
           change = (Math.random() - 0.5) * 0.15; // +/- 0.075 change
-          if (change > 0.02) trend = 'up';
-          else if (change < -0.02) trend = 'down';
+          if (change > 0.02) {
+            trend = 'up';
+          } else if (change < -0.02) {
+            trend = 'down';
+          }
         }
 
         return {
