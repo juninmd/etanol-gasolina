@@ -211,7 +211,7 @@ export default class AddFill extends Component<Props, State> {
                         <View style={{ alignItems: 'center', padding: 20 }}>
                             {this.state.isScanning ? (
                                 <>
-                                    <Spinner size='giant' status='info' />
+                                    <Spinner size="giant" status="info" />
                                     <Text category="h6" style={{ marginTop: 20 }}>
                                         Lendo nota fiscal...
                                     </Text>

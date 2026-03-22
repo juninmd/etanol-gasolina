@@ -45,6 +45,7 @@ import {themeStore} from '../../stores/theme.store';
 import SmartFuelCard from '../../components/SmartFuelCard';
 import MapView, {Marker} from '../../components/MapWrapper';
 import FuelMatchModal from '../../components/FuelMatchModal';
+import FuelWrappedModal from '../../components/FuelWrappedModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -213,7 +214,7 @@ const SavingsProgress = ({total, target = 2000}) => {
   if (Platform.OS === 'web' || !Svg) {
      return (
         <View style={styles.heroContainer}>
-             <View style={{width: CIRCLE_SIZE, height: CIRCLE_SIZE, borderRadius: CIRCLE_SIZE/2, borderWidth: STROKE_WIDTH, borderColor: '#3366FF', alignItems: 'center', justifyContent: 'center'}}>
+             <View style={{width: CIRCLE_SIZE, height: CIRCLE_SIZE, borderRadius: CIRCLE_SIZE / 2, borderWidth: STROKE_WIDTH, borderColor: '#3366FF', alignItems: 'center', justifyContent: 'center'}}>
                  <View style={styles.heroTextContainer}>
                     <Text category="s2" appearance="hint">
                       Economia Total
@@ -285,6 +286,7 @@ const Home = observer(() => {
   const [voiceResult, setVoiceResult] = useState('');
   const [promoMessage, setPromoMessage] = useState<string | null>(null);
   const [showFuelMatch, setShowFuelMatch] = useState(false);
+  const [showFuelWrapped, setShowFuelWrapped] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -574,7 +576,16 @@ const Home = observer(() => {
             />
           </View>
           <View style={{marginTop: 10}}>
-            {homeStore.resultado ? (
+            {homeStore.recommendation === 'bicycle' ? (
+              <View style={{alignItems: 'center'}}>
+                <Icon name="bicycle-outline" width={48} height={48} fill="#00E096" style={{marginBottom: 5}} />
+                <Text
+                  status="success"
+                  style={{textAlign: 'center', fontWeight: 'bold', fontSize: 16}}>
+                  {homeStore.resultado}
+                </Text>
+              </View>
+            ) : homeStore.resultado ? (
               <Text
                 status={
                   homeStore.recommendation === 'ethanol' ? 'success' : 'info'
@@ -672,6 +683,16 @@ const Home = observer(() => {
       <TouchableOpacity style={styles.voiceFab} onPress={handleVoicePress}>
         <Icon name="mic-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.wrappedFab} onPress={() => setShowFuelWrapped(true)}>
+        <Icon name="star-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
+      <FuelWrappedModal
+        visible={showFuelWrapped}
+        onClose={() => setShowFuelWrapped(false)}
+        stationsStore={stationsStore}
+      />
     </Layout>
   );
 });
@@ -836,6 +857,22 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     backgroundColor: '#FF3D71',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  wrappedFab: {
+    position: 'absolute',
+    bottom: 160,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#FFD700',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',

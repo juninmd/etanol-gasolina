@@ -68,7 +68,9 @@ const CheckinPrompt = inject('stationsStore')(
     };
 
     const handleUpdate = () => {
-      if (!visibleStation) return;
+      if (!visibleStation) {
+        return;
+      }
       const gas = parseFloat(gasPrice);
       const eth = parseFloat(ethPrice);
 
@@ -123,7 +125,9 @@ const CheckinPrompt = inject('stationsStore')(
           <Text category="s1" style={{marginVertical: 5, textAlign: 'center'}}>
             {visibleStation.name}
           </Text>
-          <Text category="p2" style={{marginBottom: 15, textAlign: 'center', color: '#8F9BB3'}}>
+          <Text
+            category="p2"
+            style={{marginBottom: 15, textAlign: 'center', color: '#8F9BB3'}}>
             Qual o preço atual? Confirme ou altere para ganhar pontos!
           </Text>
 
@@ -151,10 +155,7 @@ const CheckinPrompt = inject('stationsStore')(
               style={{flex: 1, marginRight: 10}}>
               Ignorar
             </Button>
-            <Button
-              status="success"
-              onPress={handleUpdate}
-              style={{flex: 1}}>
+            <Button status="success" onPress={handleUpdate} style={{flex: 1}}>
               Confirmar
             </Button>
           </View>
