@@ -1,5 +1,6 @@
-import {action, observable, computed} from 'mobx';
+import {action, observable} from 'mobx';
 import {garageStore} from './garage.store';
+import {stationsStore} from './stations.store';
 
 export default class HomeStore {
   @observable etanol = '';
@@ -14,6 +15,13 @@ export default class HomeStore {
     const gasolinaValue = parseFloat(this.gasolina.replace(',', '.'));
     const etanolCons = parseFloat(this.etanolConsumption.replace(',', '.'));
     const gasolinaCons = parseFloat(this.gasolinaConsumption.replace(',', '.'));
+
+    if (etanolValue === 0 && gasolinaValue === 0) {
+      this.resultado = 'Vá de Bicicleta! 🚲 Economia de 100%!';
+      this.recommendation = 'bicycle';
+      stationsStore.checkBadges('bicycle');
+      return;
+    }
 
     if (!isNaN(etanolValue) && !isNaN(gasolinaValue) && gasolinaValue > 0) {
       let isEthanolBetter = false;

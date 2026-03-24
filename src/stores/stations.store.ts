@@ -199,6 +199,13 @@ export default class StationsStore {
       icon: 'star-outline',
       unlocked: false,
     },
+    {
+      id: 'bicycle_secret',
+      name: 'Atleta Sustentável',
+      description: 'Descobriu a economia máxima: andar de bicicleta!',
+      icon: 'bicycle-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -258,7 +265,10 @@ export default class StationsStore {
       progressMade = true;
     }
 
-    if (progressMade && this.dailyChallenge.progress >= this.dailyChallenge.target) {
+    if (
+      progressMade &&
+      this.dailyChallenge.progress >= this.dailyChallenge.target
+    ) {
       this.dailyChallenge.completed = true;
       this.addPoints(this.dailyChallenge.reward);
       this.triggerAlert(
@@ -278,17 +288,21 @@ export default class StationsStore {
         runInAction(() => {
           updates.forEach(update => {
             const station = this.stations.find(s => s.id === update.stationId);
-            if (station && (update.priceGas !== 0 || update.priceEthanol !== 0)) {
+            if (
+              station &&
+              (update.priceGas !== 0 || update.priceEthanol !== 0)
+            ) {
               station.priceTrend = update.trend;
 
               const oldPrice = station.priceGas;
               station.priceGas = Math.max(
                 3.0,
-                parseFloat((station.priceGas + update.priceGas).toFixed(2)),
+                Math.round((station.priceGas + update.priceGas) * 100) / 100,
               );
               station.priceEthanol = Math.max(
                 2.0,
-                parseFloat((station.priceEthanol + update.priceEthanol).toFixed(2)),
+                Math.round((station.priceEthanol + update.priceEthanol) * 100) /
+                  100,
               );
 
               if (update.isPromo && !station.isPromo) {
@@ -300,7 +314,9 @@ export default class StationsStore {
               // Smart Alert for Promo / Price Drop
               if (update.isPromo && station.priceGas < oldPrice) {
                 this.triggerAlert(
-                  `📢 Nova Promoção! ${station.name} abaixou a gasolina para R$ ${station.priceGas.toFixed(2)}`,
+                  `📢 Nova Promoção! ${
+                    station.name
+                  } abaixou a gasolina para R$ ${station.priceGas.toFixed(2)}`,
                   'success',
                 );
               }
@@ -308,7 +324,7 @@ export default class StationsStore {
           });
         });
       } catch (e) {
-        console.error("Failed to fetch live prices", e);
+        console.error('Failed to fetch live prices', e);
       }
     }, 10000); // Check every 10 seconds
   }
@@ -664,6 +680,15 @@ export default class StationsStore {
       .length;
     if (myActivities >= 5) {
       const badge = this.badges.find(b => b.id === 'influencer');
+      if (badge && !badge.unlocked) {
+        badge.unlocked = true;
+        this.badgeQueue.push(badge);
+      }
+    }
+
+    // Bicycle Secret
+    if (actionType === 'bicycle') {
+      const badge = this.badges.find(b => b.id === 'bicycle_secret');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
