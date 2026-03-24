@@ -7,6 +7,7 @@ import StationsStore from '../../stores/stations.store';
 import GarageStore from '../../stores/garage.store';
 import ThemeStore from '../../stores/theme.store';
 import FuelMatchModal from '../../components/FuelMatchModal';
+import FuelWrappedModal from '../../components/FuelWrappedModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -21,6 +22,7 @@ interface Props {
 class HomeWeb extends React.Component<Props> {
   state = {
     showFuelMatch: false,
+    showFuelWrapped: false,
   };
 
   handleSurpriseMe = () => {
@@ -46,7 +48,7 @@ class HomeWeb extends React.Component<Props> {
       );
     }
 
-    const {precoGasolina, precoEtanol, resultado, isCalculating} = homeStore;
+    const {gasolina, etanol, resultado, isCalculating} = homeStore;
     const {totalCO2Saved, treesPlanted} = stationsStore;
 
     return (
@@ -62,10 +64,15 @@ class HomeWeb extends React.Component<Props> {
           <View style={styles.ecoSection}>
             <Card style={styles.ecoCard}>
               <Text style={styles.ecoTitle}>🌍 Impacto Ambiental</Text>
-              <Text style={styles.ecoSubtitle}>Ao escolher Etanol, você reduz a emissão de gases poluentes e ajuda o planeta!</Text>
+              <Text style={styles.ecoSubtitle}>
+                Ao escolher Etanol, você reduz a emissão de gases poluentes e
+                ajuda o planeta!
+              </Text>
               <View style={styles.ecoStatsRow}>
                 <View style={styles.ecoStat}>
-                  <Text style={styles.ecoValue}>{totalCO2Saved.toFixed(1)}kg</Text>
+                  <Text style={styles.ecoValue}>
+                    {totalCO2Saved.toFixed(1)}kg
+                  </Text>
                   <Text style={styles.ecoLabel}>CO2 Evitado</Text>
                 </View>
                 <View style={styles.ecoStat}>
@@ -83,8 +90,8 @@ class HomeWeb extends React.Component<Props> {
               <Text style={styles.label}>Preço Gasolina (R$)</Text>
               <Input
                 placeholder="Ex: 5.89"
-                value={precoGasolina}
-                onChangeText={homeStore.handlePrecoGasolina}
+                value={gasolina}
+                onChangeText={t => homeStore.handleForm({gasolina: t})}
                 keyboardType="numeric"
                 style={styles.input}
               />
@@ -93,8 +100,8 @@ class HomeWeb extends React.Component<Props> {
               <Text style={styles.label}>Preço Etanol (R$)</Text>
               <Input
                 placeholder="Ex: 4.12"
-                value={precoEtanol}
-                onChangeText={homeStore.handlePrecoEtanol}
+                value={etanol}
+                onChangeText={t => homeStore.handleForm({etanol: t})}
                 keyboardType="numeric"
                 style={styles.input}
               />
@@ -110,16 +117,32 @@ class HomeWeb extends React.Component<Props> {
 
           <Button
             onPress={() => this.props.navigation.navigate('TripPlanner')}
-            style={[styles.calculateButton, {backgroundColor: '#3366FF', marginTop: 15}]}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#3366FF', marginTop: 15},
+            ]}
             status="info">
             Trip Planner
           </Button>
 
           <Button
             onPress={this.handleSurpriseMe}
-            style={[styles.calculateButton, {backgroundColor: '#FF3D71', marginTop: 15}]}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#FF3D71', marginTop: 15},
+            ]}
             status="success">
             Me Surpreenda 🎁
+          </Button>
+
+          <Button
+            onPress={() => this.setState({showFuelWrapped: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#FFD700', marginTop: 15},
+            ]}
+            status="warning">
+            Sua Retrospectiva 🎉
           </Button>
         </View>
 
@@ -127,7 +150,14 @@ class HomeWeb extends React.Component<Props> {
           <View style={styles.resultSection}>
             <Card style={styles.resultCard}>
               <Text style={styles.resultTitle}>Resultado</Text>
-              <Text style={styles.resultText}>{resultado}</Text>
+              {homeStore.recommendation === 'bicycle' ? (
+                <Text
+                  style={[styles.resultText, {color: '#00E096', fontSize: 24}]}>
+                  🚲 {resultado}
+                </Text>
+              ) : (
+                <Text style={styles.resultText}>{resultado}</Text>
+              )}
               <Text style={styles.resultInfo}>
                 Baseado na regra dos 70%: se o etanol custar até 70% do preço da
                 gasolina, é mais vantajoso.
@@ -154,6 +184,12 @@ class HomeWeb extends React.Component<Props> {
           onClose={() => this.setState({showFuelMatch: false})}
           stations={stationsStore.stations.slice()}
           onMatch={this.handleFuelMatch}
+        />
+
+        <FuelWrappedModal
+          visible={this.state.showFuelWrapped}
+          onClose={() => this.setState({showFuelWrapped: false})}
+          stationsStore={stationsStore}
         />
       </ScrollView>
     );

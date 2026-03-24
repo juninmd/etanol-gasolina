@@ -1,5 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {StyleSheet, View, ScrollView, Dimensions, Keyboard, Platform} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, ScrollView, Keyboard, Platform} from 'react-native';
 import {
   Layout,
   Text,
@@ -58,7 +58,10 @@ export default class TripPlanner extends React.Component<Props> {
       const {stationsStore} = this.props;
       // Pick a random station as the "best stop"
       const stations = stationsStore.stations;
-      const bestStop = stations.length > 0 ? stations[Math.floor(Math.random() * stations.length)] : null;
+      const bestStop =
+        stations.length > 0
+          ? stations[Math.floor(Math.random() * stations.length)]
+          : null;
 
       const distVal = parseFloat(distance.replace(',', '.'));
       const savings = bestStop ? (distVal / 10) * 0.5 : 0; // Mock savings calculation
@@ -72,28 +75,44 @@ export default class TripPlanner extends React.Component<Props> {
 
       // Zoom map to show route (mock)
       if (this.mapRef && bestStop) {
-        this.mapRef.animateToRegion({
+        this.mapRef.animateToRegion(
+          {
             latitude: bestStop.latitude,
             longitude: bestStop.longitude,
             latitudeDelta: 0.1,
             longitudeDelta: 0.1,
-        }, 1000);
+          },
+          1000,
+        );
       }
-
     }, 2000);
   };
 
   render() {
-    const {destination, distance, isCalculating, routeFound, bestStop, savings} = this.state;
+    const {
+      destination,
+      distance,
+      isCalculating,
+      routeFound,
+      bestStop,
+      savings,
+    } = this.state;
 
     // Mock Route Coordinates (passing through the best station or generic)
     const startCoords = {latitude: -23.561684, longitude: -46.655981}; // Paulista
-    const endCoords = bestStop ? {latitude: bestStop.latitude + 0.05, longitude: bestStop.longitude + 0.05} : {latitude: -23.6, longitude: -46.7};
+    const endCoords = bestStop
+      ? {
+          latitude: bestStop.latitude + 0.05,
+          longitude: bestStop.longitude + 0.05,
+        }
+      : {latitude: -23.6, longitude: -46.7};
 
     const routeCoordinates = [
-        startCoords,
-        bestStop ? {latitude: bestStop.latitude, longitude: bestStop.longitude} : {latitude: -23.58, longitude: -46.68},
-        endCoords
+      startCoords,
+      bestStop
+        ? {latitude: bestStop.latitude, longitude: bestStop.longitude}
+        : {latitude: -23.58, longitude: -46.68},
+      endCoords,
     ];
 
     return (
@@ -106,97 +125,157 @@ export default class TripPlanner extends React.Component<Props> {
         <Divider />
 
         <ScrollView contentContainerStyle={styles.content}>
-            <Card style={styles.inputCard}>
-                <Text category="h6" style={{marginBottom: 10}}>Para onde vamos?</Text>
-                <Input
-                    label="Destino"
-                    placeholder="Ex: Praia Grande, SP"
-                    value={destination}
-                    onChangeText={t => this.setState({destination: t})}
-                    style={styles.input}
-                    accessoryLeft={(props) => <Icon {...props} name="pin-outline"/>}
-                />
-                <Input
-                    label="Distância Estimada (km)"
-                    placeholder="Ex: 80"
-                    value={distance}
-                    onChangeText={t => this.setState({distance: t})}
-                    keyboardType="numeric"
-                    style={styles.input}
-                    accessoryLeft={(props) => <Icon {...props} name="navigation-2-outline"/>}
-                />
-                <Button
-                    onPress={this.handleCalculate}
-                    disabled={isCalculating}
-                    accessoryLeft={(props) => isCalculating ? <Icon {...props} name="loader-outline"/> : <Icon {...props} name="search-outline"/>}
-                >
-                    {isCalculating ? 'Calculando Rota...' : 'Encontrar Melhor Posto'}
-                </Button>
-            </Card>
+          <Card style={styles.inputCard}>
+            <Text category="h6" style={{marginBottom: 10}}>
+              Para onde vamos?
+            </Text>
+            <Input
+              label="Destino"
+              placeholder="Ex: Praia Grande, SP"
+              value={destination}
+              onChangeText={t => this.setState({destination: t})}
+              style={styles.input}
+              accessoryLeft={(props: any) => (
+                <Icon {...props} name="pin-outline" />
+              )}
+            />
+            <Input
+              label="Distância Estimada (km)"
+              placeholder="Ex: 80"
+              value={distance}
+              onChangeText={t => this.setState({distance: t})}
+              keyboardType="numeric"
+              style={styles.input}
+              accessoryLeft={(props: any) => (
+                <Icon {...props} name="navigation-2-outline" />
+              )}
+            />
+            <Button
+              onPress={this.handleCalculate}
+              disabled={isCalculating}
+              accessoryLeft={(props: any) =>
+                isCalculating ? (
+                  <Icon {...props} name="loader-outline" />
+                ) : (
+                  <Icon {...props} name="search-outline" />
+                )
+              }>
+              {isCalculating ? 'Calculando Rota...' : 'Encontrar Melhor Posto'}
+            </Button>
+          </Card>
 
-            {routeFound && (
-                <>
-                    <View style={styles.mapContainer}>
-                        {MapView ? (
-                        <MapView
-                            ref={ref => { if (Platform.OS !== 'web') this.mapRef = ref; }}
-                            style={styles.map}
-                            initialRegion={{
-                                latitude: startCoords.latitude,
-                                longitude: startCoords.longitude,
-                                latitudeDelta: 0.05,
-                                longitudeDelta: 0.05,
-                            }}
-                        >
-                            {Marker && <Marker coordinate={startCoords} title="Início" pinColor="blue" />}
-                            {Marker && <Marker coordinate={endCoords} title="Destino" pinColor="green" />}
-                            {bestStop && Marker && (
-                                <Marker
-                                    coordinate={{latitude: bestStop.latitude, longitude: bestStop.longitude}}
-                                    title={`Parada: ${bestStop.name}`}
-                                    pinColor="gold"
-                                    description={`Gas: ${bestStop.priceGas} | Etanol: ${bestStop.priceEthanol}`}
-                                />
-                            )}
-                            {Polyline && <Polyline
-                                coordinates={routeCoordinates}
-                                strokeColor="#3366FF"
-                                strokeWidth={4}
-                            />}
-                        </MapView>
-                        ) : <Text>Mapa indisponível</Text>}
-                         <View style={styles.mapOverlay}>
-                             <Text category="c2" style={{color:'white', fontWeight:'bold'}}>Rota Otimizada</Text>
-                         </View>
-                    </View>
-
-                    {bestStop && (
-                        <Card style={[styles.resultCard, {borderColor: '#00E096', borderWidth: 2}]}>
-                            <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
-                                <Icon name="gift-outline" width={24} height={24} fill="#00E096"/>
-                                <Text category="h6" style={{marginLeft: 10}}>Economia Encontrada!</Text>
-                            </View>
-                            <Text category="s1">Pare no {bestStop.name}</Text>
-                            <Text category="p2" appearance="hint">{bestStop.address}</Text>
-
-                            <View style={styles.savingsBadge}>
-                                <Text category="h5" style={{color: 'white', fontWeight: 'bold'}}>
-                                    Economize R$ {savings.toFixed(2)}
-                                </Text>
-                            </View>
-
-                            <Button
-                                status="success"
-                                style={{marginTop: 15}}
-                                accessoryLeft={(props) => <Icon {...props} name="navigation-outline"/>}
-                                onPress={() => alert('Abrindo Google Maps...')}
-                            >
-                                Iniciar Navegação
-                            </Button>
-                        </Card>
+          {routeFound && (
+            <>
+              <View style={styles.mapContainer}>
+                {MapView ? (
+                  <MapView
+                    ref={ref => {
+                      if (Platform.OS !== 'web') {
+                        this.mapRef = ref;
+                      }
+                    }}
+                    style={styles.map}
+                    initialRegion={{
+                      latitude: startCoords.latitude,
+                      longitude: startCoords.longitude,
+                      latitudeDelta: 0.05,
+                      longitudeDelta: 0.05,
+                    }}>
+                    {Marker && (
+                      <Marker
+                        coordinate={startCoords}
+                        title="Início"
+                        pinColor="blue"
+                      />
                     )}
-                </>
-            )}
+                    {Marker && (
+                      <Marker
+                        coordinate={endCoords}
+                        title="Destino"
+                        pinColor="green"
+                      />
+                    )}
+                    {bestStop && Marker && (
+                      <Marker
+                        coordinate={{
+                          latitude: bestStop.latitude,
+                          longitude: bestStop.longitude,
+                        }}
+                        title={`Parada: ${bestStop.name}`}
+                        pinColor="gold"
+                        description={`Gas: ${bestStop.priceGas} | Etanol: ${
+                          bestStop.priceEthanol
+                        }`}
+                      />
+                    )}
+                    {Polyline && (
+                      <Polyline
+                        coordinates={routeCoordinates}
+                        strokeColor="#3366FF"
+                        strokeWidth={4}
+                      />
+                    )}
+                  </MapView>
+                ) : (
+                  <Text>Mapa indisponível</Text>
+                )}
+                <View style={styles.mapOverlay}>
+                  <Text
+                    category="c2"
+                    style={{color: 'white', fontWeight: 'bold'}}>
+                    Rota Otimizada
+                  </Text>
+                </View>
+              </View>
+
+              {bestStop && (
+                <Card
+                  style={[
+                    styles.resultCard,
+                    {borderColor: '#00E096', borderWidth: 2},
+                  ]}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginBottom: 10,
+                    }}>
+                    <Icon
+                      name="gift-outline"
+                      width={24}
+                      height={24}
+                      fill="#00E096"
+                    />
+                    <Text category="h6" style={{marginLeft: 10}}>
+                      Economia Encontrada!
+                    </Text>
+                  </View>
+                  <Text category="s1">Pare no {bestStop.name}</Text>
+                  <Text category="p2" appearance="hint">
+                    {bestStop.address}
+                  </Text>
+
+                  <View style={styles.savingsBadge}>
+                    <Text
+                      category="h5"
+                      style={{color: 'white', fontWeight: 'bold'}}>
+                      Economize R$ {savings.toFixed(2)}
+                    </Text>
+                  </View>
+
+                  <Button
+                    status="success"
+                    style={{marginTop: 15}}
+                    accessoryLeft={(props: any) => (
+                      <Icon {...props} name="navigation-outline" />
+                    )}
+                    onPress={() => console.log('Abrindo Google Maps...')}>
+                    Iniciar Navegação
+                  </Button>
+                </Card>
+              )}
+            </>
+          )}
         </ScrollView>
       </Layout>
     );
@@ -242,12 +321,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   mapOverlay: {
-      position: 'absolute',
-      top: 10,
-      left: 10,
-      backgroundColor: 'rgba(51, 102, 255, 0.9)',
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-      borderRadius: 20,
-  }
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    backgroundColor: 'rgba(51, 102, 255, 0.9)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+  },
 });
