@@ -56,7 +56,7 @@ const LiveBadge = () => {
 @observer
 export default class Stations extends Component<Props, State> {
   state: State = {
-    showMap: false,
+    showMap: true,
   };
 
   mapRef: MapView | null = null;

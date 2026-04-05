@@ -53,6 +53,81 @@ const STROKE_WIDTH = 15;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
+// Magic Prediction Widget
+const PricePredictionWidget = observer(({stationsStore}) => {
+  const [isScanning, setIsScanning] = useState(false);
+  const [prediction, setPrediction] = useState<{message: string; icon: string; color: string} | null>(null);
+
+  const generatePrediction = () => {
+    setIsScanning(true);
+    setPrediction(null);
+
+    // Simulate AI scanning
+    setTimeout(() => {
+      const upCount = stationsStore.stations.filter(s => s.priceTrend === 'up').length;
+      const downCount = stationsStore.stations.filter(s => s.priceTrend === 'down').length;
+
+      let result;
+      if (downCount > upCount && downCount > 0) {
+         result = {message: 'Tendência de Queda! Segure o abastecimento para economizar mais amanhã.', icon: 'trending-down-outline', color: '#00E096'};
+      } else if (upCount > downCount && upCount > 0) {
+         result = {message: 'Alerta de Alta! Abasteça hoje antes que os preços subam.', icon: 'trending-up-outline', color: '#FF3D71'};
+      } else {
+         result = {message: 'Mercado estável. Bom momento para pesquisar promoções locais.', icon: 'activity-outline', color: '#3366FF'};
+      }
+
+      setPrediction(result);
+      setIsScanning(false);
+    }, 1500);
+  };
+
+  return (
+    <Card style={[styles.card, {marginTop: 20, borderColor: '#9C27B0', overflow: 'hidden'}]}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <Icon name="radio-outline" width={24} height={24} fill="#9C27B0" />
+          <Text category="h6" style={{marginLeft: 10, color: '#9C27B0'}}>
+            Radar IA de Preços
+          </Text>
+        </View>
+        <Button
+          size="tiny"
+          appearance="ghost"
+          status="primary"
+          onPress={generatePrediction}
+          disabled={isScanning}
+        >
+          {isScanning ? 'Analisando...' : 'Prever'}
+        </Button>
+      </View>
+
+      {isScanning && (
+        <View style={{marginTop: 15, alignItems: 'center'}}>
+           <Icon name="loader-outline" width={32} height={32} fill="#9C27B0" animation="spin" />
+           <Text category="c1" appearance="hint" style={{marginTop: 5}}>Processando tendências do mercado...</Text>
+        </View>
+      )}
+
+      {prediction && !isScanning && (
+        <View style={{marginTop: 15, backgroundColor: `${prediction.color}15`, padding: 15, borderRadius: 10, flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{backgroundColor: prediction.color, padding: 8, borderRadius: 20, marginRight: 15}}>
+             <Icon name={prediction.icon} width={24} height={24} fill="white" />
+          </View>
+          <Text category="s2" style={{flex: 1, color: prediction.color, fontWeight: 'bold'}}>
+            {prediction.message}
+          </Text>
+        </View>
+      )}
+
+      {!prediction && !isScanning && (
+        <Text category="c1" appearance="hint" style={{marginTop: 10}}>
+          Toque em "Prever" para analisar o mercado e descobrir a melhor hora para abastecer.
+        </Text>
+      )}
+    </Card>
+  );
+});
+
 // Eco Impact Card
 const EcoImpactCard = observer(({stationsStore}) => {
   const {totalCO2Saved, treesPlanted} = stationsStore;
@@ -456,6 +531,8 @@ const Home = observer(() => {
         showsVerticalScrollIndicator={false}>
         {/* Hero Section */}
         <SavingsProgress total={stationsStore.totalSavings} />
+
+        <PricePredictionWidget stationsStore={stationsStore} />
 
         <EcoImpactCard stationsStore={stationsStore} />
 
