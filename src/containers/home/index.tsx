@@ -46,6 +46,8 @@ import SmartFuelCard from '../../components/SmartFuelCard';
 import MapView, {Marker} from '../../components/MapWrapper';
 import FuelMatchModal from '../../components/FuelMatchModal';
 import FuelWrappedModal from '../../components/FuelWrappedModal';
+import AICopilotModal from '../../components/AICopilotModal';
+import TimeMachineModal from '../../components/TimeMachineModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -56,7 +58,11 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 // Magic Prediction Widget
 const PricePredictionWidget = observer(({stationsStore}) => {
   const [isScanning, setIsScanning] = useState(false);
-  const [prediction, setPrediction] = useState<{message: string; icon: string; color: string} | null>(null);
+  const [prediction, setPrediction] = useState<{
+    message: string;
+    icon: string;
+    color: string;
+  } | null>(null);
 
   const generatePrediction = () => {
     setIsScanning(true);
@@ -64,16 +70,33 @@ const PricePredictionWidget = observer(({stationsStore}) => {
 
     // Simulate AI scanning
     setTimeout(() => {
-      const upCount = stationsStore.stations.filter(s => s.priceTrend === 'up').length;
-      const downCount = stationsStore.stations.filter(s => s.priceTrend === 'down').length;
+      const upCount = stationsStore.stations.filter(s => s.priceTrend === 'up')
+        .length;
+      const downCount = stationsStore.stations.filter(
+        s => s.priceTrend === 'down',
+      ).length;
 
       let result;
       if (downCount > upCount && downCount > 0) {
-         result = {message: 'Tendência de Queda! Segure o abastecimento para economizar mais amanhã.', icon: 'trending-down-outline', color: '#00E096'};
+        result = {
+          message:
+            'Tendência de Queda! Segure o abastecimento para economizar mais amanhã.',
+          icon: 'trending-down-outline',
+          color: '#00E096',
+        };
       } else if (upCount > downCount && upCount > 0) {
-         result = {message: 'Alerta de Alta! Abasteça hoje antes que os preços subam.', icon: 'trending-up-outline', color: '#FF3D71'};
+        result = {
+          message: 'Alerta de Alta! Abasteça hoje antes que os preços subam.',
+          icon: 'trending-up-outline',
+          color: '#FF3D71',
+        };
       } else {
-         result = {message: 'Mercado estável. Bom momento para pesquisar promoções locais.', icon: 'activity-outline', color: '#3366FF'};
+        result = {
+          message:
+            'Mercado estável. Bom momento para pesquisar promoções locais.',
+          icon: 'activity-outline',
+          color: '#3366FF',
+        };
       }
 
       setPrediction(result);
@@ -82,8 +105,17 @@ const PricePredictionWidget = observer(({stationsStore}) => {
   };
 
   return (
-    <Card style={[styles.card, {marginTop: 20, borderColor: '#9C27B0', overflow: 'hidden'}]}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+    <Card
+      style={[
+        styles.card,
+        {marginTop: 20, borderColor: '#9C27B0', overflow: 'hidden'},
+      ]}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <Icon name="radio-outline" width={24} height={24} fill="#9C27B0" />
           <Text category="h6" style={{marginLeft: 10, color: '#9C27B0'}}>
@@ -95,25 +127,48 @@ const PricePredictionWidget = observer(({stationsStore}) => {
           appearance="ghost"
           status="primary"
           onPress={generatePrediction}
-          disabled={isScanning}
-        >
+          disabled={isScanning}>
           {isScanning ? 'Analisando...' : 'Prever'}
         </Button>
       </View>
 
       {isScanning && (
         <View style={{marginTop: 15, alignItems: 'center'}}>
-           <Icon name="loader-outline" width={32} height={32} fill="#9C27B0" animation="spin" />
-           <Text category="c1" appearance="hint" style={{marginTop: 5}}>Processando tendências do mercado...</Text>
+          <Icon
+            name="loader-outline"
+            width={32}
+            height={32}
+            fill="#9C27B0"
+            animation="spin"
+          />
+          <Text category="c1" appearance="hint" style={{marginTop: 5}}>
+            Processando tendências do mercado...
+          </Text>
         </View>
       )}
 
       {prediction && !isScanning && (
-        <View style={{marginTop: 15, backgroundColor: `${prediction.color}15`, padding: 15, borderRadius: 10, flexDirection: 'row', alignItems: 'center'}}>
-          <View style={{backgroundColor: prediction.color, padding: 8, borderRadius: 20, marginRight: 15}}>
-             <Icon name={prediction.icon} width={24} height={24} fill="white" />
+        <View
+          style={{
+            marginTop: 15,
+            backgroundColor: `${prediction.color}15`,
+            padding: 15,
+            borderRadius: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              backgroundColor: prediction.color,
+              padding: 8,
+              borderRadius: 20,
+              marginRight: 15,
+            }}>
+            <Icon name={prediction.icon} width={24} height={24} fill="white" />
           </View>
-          <Text category="s2" style={{flex: 1, color: prediction.color, fontWeight: 'bold'}}>
+          <Text
+            category="s2"
+            style={{flex: 1, color: prediction.color, fontWeight: 'bold'}}>
             {prediction.message}
           </Text>
         </View>
@@ -121,9 +176,91 @@ const PricePredictionWidget = observer(({stationsStore}) => {
 
       {!prediction && !isScanning && (
         <Text category="c1" appearance="hint" style={{marginTop: 10}}>
-          Toque em "Prever" para analisar o mercado e descobrir a melhor hora para abastecer.
+          Toque em "Prever" para analisar o mercado e descobrir a melhor hora
+          para abastecer.
         </Text>
       )}
+    </Card>
+  );
+});
+
+// Dream Goals Card
+const DreamGoals = observer(({stationsStore}) => {
+  const {totalSavings} = stationsStore;
+
+  // Define some goals
+  const goals = [
+    {name: 'Tanque Cheio', cost: 250, icon: 'car-outline', color: '#3366FF'},
+    {
+      name: 'Troca de Óleo',
+      cost: 150,
+      icon: 'droplet-outline',
+      color: '#00E096',
+    },
+    {
+      name: 'Pneu Novo',
+      cost: 400,
+      icon: 'radio-button-off-outline',
+      color: '#FF3D71',
+    },
+  ];
+
+  // Find the next achievable goal
+  const nextGoal =
+    goals.find(g => totalSavings < g.cost) || goals[goals.length - 1];
+  const progress = Math.min(1, totalSavings / nextGoal.cost);
+
+  return (
+    <Card style={[styles.card, {marginTop: 20, borderColor: nextGoal.color}]}>
+      <View
+        style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10}}>
+        <View
+          style={{
+            backgroundColor: `${nextGoal.color}15`,
+            padding: 8,
+            borderRadius: 20,
+          }}>
+          <Icon
+            name={nextGoal.icon}
+            width={24}
+            height={24}
+            fill={nextGoal.color}
+          />
+        </View>
+        <Text
+          category="h6"
+          style={{marginLeft: 10, color: nextGoal.color, fontWeight: 'bold'}}>
+          Meta dos Sonhos
+        </Text>
+      </View>
+      <Text category="s2" appearance="hint" style={{marginBottom: 10}}>
+        Sua economia está rendendo! Faltam apenas R${' '}
+        {Math.max(0, nextGoal.cost - totalSavings).toFixed(2)} para:
+      </Text>
+      <Text category="h5" style={{textAlign: 'center', marginBottom: 10}}>
+        {nextGoal.name} (R$ {nextGoal.cost})
+      </Text>
+      <View
+        style={{
+          height: 12,
+          backgroundColor: '#EDF1F7',
+          borderRadius: 6,
+          overflow: 'hidden',
+        }}>
+        <View
+          style={{
+            width: `${progress * 100}%`,
+            height: '100%',
+            backgroundColor: nextGoal.color,
+          }}
+        />
+      </View>
+      <Text
+        category="c1"
+        appearance="hint"
+        style={{textAlign: 'right', marginTop: 5}}>
+        {(progress * 100).toFixed(1)}% concluído
+      </Text>
     </Card>
   );
 });
@@ -389,6 +526,8 @@ const Home = observer(() => {
   const [promoMessage, setPromoMessage] = useState<string | null>(null);
   const [showFuelMatch, setShowFuelMatch] = useState(false);
   const [showFuelWrapped, setShowFuelWrapped] = useState(false);
+  const [showCopilot, setShowCopilot] = useState(false);
+  const [showTimeMachine, setShowTimeMachine] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -533,6 +672,8 @@ const Home = observer(() => {
         <SavingsProgress total={stationsStore.totalSavings} />
 
         <PricePredictionWidget stationsStore={stationsStore} />
+
+        <DreamGoals stationsStore={stationsStore} />
 
         <EcoImpactCard stationsStore={stationsStore} />
 
@@ -816,6 +957,35 @@ const Home = observer(() => {
         onClose={() => setShowFuelWrapped(false)}
         stationsStore={stationsStore}
       />
+
+      <AICopilotModal
+        visible={showCopilot}
+        onClose={() => setShowCopilot(false)}
+        stationsStore={stationsStore}
+      />
+
+      <TimeMachineModal
+        visible={showTimeMachine}
+        onClose={() => setShowTimeMachine(false)}
+      />
+
+      {/* New FABs */}
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 230, backgroundColor: '#00E096'}]}
+        onPress={() => setShowCopilot(true)}>
+        <Icon
+          name="message-circle-outline"
+          width={32}
+          height={32}
+          fill="white"
+        />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 300, backgroundColor: '#9C27B0'}]}
+        onPress={() => setShowTimeMachine(true)}>
+        <Icon name="clock-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
     </Layout>
   );
 });
