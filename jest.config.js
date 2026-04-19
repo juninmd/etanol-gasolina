@@ -8,7 +8,7 @@ module.exports = {
   ],
   setupFiles: ['./setupJest.js'],
   transform: {
-    '^.+\.(js|ts|tsx)$': 'babel-jest',
+    '^.+.(js|ts|tsx)$': 'babel-jest',
   },
   moduleDirectories: ['node_modules', path.join(__dirname, 'node_modules')],
   moduleNameMapper: {

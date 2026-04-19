@@ -8,6 +8,8 @@ import GarageStore from '../../stores/garage.store';
 import ThemeStore from '../../stores/theme.store';
 import FuelMatchModal from '../../components/FuelMatchModal';
 import FuelWrappedModal from '../../components/FuelWrappedModal';
+import AICopilotModal from '../../components/AICopilotModal';
+import TimeMachineModal from '../../components/TimeMachineModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -23,6 +25,8 @@ class HomeWeb extends React.Component<Props> {
   state = {
     showFuelMatch: false,
     showFuelWrapped: false,
+    showCopilot: false,
+    showTimeMachine: false,
   };
 
   handleSurpriseMe = () => {
@@ -144,6 +148,26 @@ class HomeWeb extends React.Component<Props> {
             status="warning">
             Sua Retrospectiva 🎉
           </Button>
+
+          <Button
+            onPress={() => this.setState({showCopilot: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#00E096', marginTop: 15},
+            ]}
+            status="success">
+            AI Copilot 🤖
+          </Button>
+
+          <Button
+            onPress={() => this.setState({showTimeMachine: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#9C27B0', marginTop: 15},
+            ]}
+            status="primary">
+            Máquina do Tempo ⏰
+          </Button>
         </View>
 
         {resultado && (
@@ -190,6 +214,17 @@ class HomeWeb extends React.Component<Props> {
           visible={this.state.showFuelWrapped}
           onClose={() => this.setState({showFuelWrapped: false})}
           stationsStore={stationsStore}
+        />
+
+        <AICopilotModal
+          visible={this.state.showCopilot}
+          onClose={() => this.setState({showCopilot: false})}
+          stationsStore={stationsStore}
+        />
+
+        <TimeMachineModal
+          visible={this.state.showTimeMachine}
+          onClose={() => this.setState({showTimeMachine: false})}
         />
       </ScrollView>
     );
