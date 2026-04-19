@@ -1,14 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, View, Animated, Dimensions} from 'react-native';
-import {
-  Modal,
-  Card,
-  Text,
-  Button,
-  Icon,
-  Layout,
-  Spinner,
-} from '@ui-kitten/components';
+import {Modal, Card, Text, Button, Icon} from '@ui-kitten/components';
 import {observer} from 'mobx-react';
 
 const {width, height} = Dimensions.get('window');
