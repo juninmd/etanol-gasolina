@@ -15,6 +15,7 @@ describe('StationsStore', () => {
         longitude: 0,
         isPromo: true,
         comments: [],
+        priceTrend: 'down'
       },
       {
         id: 2,
@@ -26,6 +27,7 @@ describe('StationsStore', () => {
         longitude: 0,
         isPromo: false,
         comments: [],
+        priceTrend: 'up'
       },
     ];
   });
@@ -131,5 +133,133 @@ describe('StationsStore', () => {
       expect(analysis.bestFuel).toBe('Gasoline');
       expect(analysis.potentialSavingsPct).toBe(0);
     });
+
+    it('should calculate global market advice', () => {
+      stationsStore.stations = [
+        {...stationsStore.stations[0], priceTrend: 'down'},
+        {...stationsStore.stations[1], priceTrend: 'down'}
+      ];
+      expect(stationsStore.globalMarketAdvice).toBe('Preços em queda! Aproveite para encher o tanque.');
+
+      stationsStore.stations = [
+        {...stationsStore.stations[0], priceTrend: 'up'},
+        {...stationsStore.stations[1], priceTrend: 'up'}
+      ];
+      expect(stationsStore.globalMarketAdvice).toBe('Preços subindo! Melhor abastecer logo.');
+
+      stationsStore.stations = [
+        {...stationsStore.stations[0], priceTrend: 'stable'}
+      ];
+      expect(stationsStore.globalMarketAdvice).toBe('Mercado estável hoje.');
+
+      stationsStore.stations = [];
+      expect(stationsStore.globalMarketAdvice).toBe('Sem dados suficientes.');
+    });
+  });
+
+  describe('Savings and Badges', () => {
+     it('should add savings and trigger badges', () => {
+        stationsStore.totalSavings = 0;
+        stationsStore.addSavings(60);
+        expect(stationsStore.totalSavings).toBe(60);
+        expect(stationsStore.badges.find(b => b.id === 'saver')?.unlocked).toBe(true);
+     });
+
+     it('should dismiss checkin', () => {
+        stationsStore.checkinStation = stationsStore.stations[0];
+        stationsStore.dismissCheckin();
+        expect(stationsStore.checkinStation).toBeNull();
+     });
+
+     it('should handle daily challenge', () => {
+         stationsStore.dailyChallenge = {
+             task: 'Verifique 1 preço hoje',
+             progress: 0,
+             target: 1,
+             completed: false,
+             reward: 50
+         };
+         stationsStore.checkDailyChallenge('verify');
+         expect(stationsStore.dailyChallenge.completed).toBe(true);
+         expect(stationsStore.dailyChallenge.progress).toBe(1);
+
+         stationsStore.dailyChallenge = {
+             task: 'Avalie 1 posto hoje',
+             progress: 0,
+             target: 1,
+             completed: false,
+             reward: 30
+         };
+         stationsStore.checkDailyChallenge('comment');
+         expect(stationsStore.dailyChallenge.completed).toBe(true);
+         expect(stationsStore.dailyChallenge.progress).toBe(1);
+
+         stationsStore.dailyChallenge = {
+             task: 'Economize dinheiro',
+             progress: 0,
+             target: 1,
+             completed: false,
+             reward: 100
+         };
+         stationsStore.checkDailyChallenge('savings');
+         expect(stationsStore.dailyChallenge.completed).toBe(true);
+         expect(stationsStore.dailyChallenge.progress).toBe(1);
+
+         // Already completed
+         stationsStore.dailyChallenge.progress = 0;
+         stationsStore.checkDailyChallenge('savings');
+         expect(stationsStore.dailyChallenge.progress).toBe(0);
+     });
+
+     it('should trigger and clear alerts', () => {
+         stationsStore.triggerAlert('Test', 'success');
+         expect(stationsStore.smartAlert.message).toBe('Test');
+         expect(stationsStore.smartAlert.type).toBe('success');
+
+         stationsStore.clearAlert();
+         expect(stationsStore.smartAlert.message).toBeNull();
+         expect(stationsStore.smartAlert.type).toBe('info');
+     });
+
+     it('should handle level up reset', () => {
+         stationsStore.showLevelUp = true;
+         stationsStore.resetLevelUp();
+         expect(stationsStore.showLevelUp).toBe(false);
+     });
+
+     it('should handle badge popup reset', () => {
+         stationsStore.badgeQueue = [{id: 'test', name: 'Test', description: 'test', icon: 'test', unlocked: true}];
+         stationsStore.resetBadgePopup();
+         expect(stationsStore.badgeQueue.length).toBe(0);
+
+         stationsStore.resetBadgePopup();
+         expect(stationsStore.badgeQueue.length).toBe(0);
+     });
+
+     it('should check influencer badge', () => {
+         stationsStore.recentActivities = [
+             {id: 1, type: 'comment', text: 'test', author: 'Você', timestamp: 0},
+             {id: 2, type: 'comment', text: 'test', author: 'Você', timestamp: 0},
+             {id: 3, type: 'comment', text: 'test', author: 'Você', timestamp: 0},
+             {id: 4, type: 'comment', text: 'test', author: 'Você', timestamp: 0},
+             {id: 5, type: 'comment', text: 'test', author: 'Você', timestamp: 0},
+         ];
+
+         // Mock un-unlock influencer badge
+         const influencerBadge = stationsStore.badges.find(b => b.id === 'influencer');
+         if (influencerBadge) influencerBadge.unlocked = false;
+
+         stationsStore.checkBadges('comment');
+         expect(stationsStore.badges.find(b => b.id === 'influencer')?.unlocked).toBe(true);
+     });
+
+     it('should check bicycle badge', () => {
+         // Mock un-unlock bicycle badge
+         const bicycleBadge = stationsStore.badges.find(b => b.id === 'bicycle_secret');
+         if (bicycleBadge) bicycleBadge.unlocked = false;
+
+         stationsStore.checkBadges('bicycle');
+         expect(stationsStore.badges.find(b => b.id === 'bicycle_secret')?.unlocked).toBe(true);
+     });
   });
 });
