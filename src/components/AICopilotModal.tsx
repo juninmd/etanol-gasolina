@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, View, ScrollView, Animated, Dimensions} from 'react-native';
-import {Modal, Card, Text, Button, Icon, Layout, Input} from '@ui-kitten/components';
+import {StyleSheet, View, ScrollView, Dimensions} from 'react-native';
+import {Modal, Card, Text, Button, Icon} from '@ui-kitten/components';
 import {observer} from 'mobx-react';
 import StationsStore from '../stores/stations.store';
 
