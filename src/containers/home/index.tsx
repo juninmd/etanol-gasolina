@@ -48,6 +48,8 @@ import FuelMatchModal from '../../components/FuelMatchModal';
 import FuelWrappedModal from '../../components/FuelWrappedModal';
 import AICopilotModal from '../../components/AICopilotModal';
 import TimeMachineModal from '../../components/TimeMachineModal';
+import Caragotchi from '../../components/Caragotchi';
+import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -528,6 +530,7 @@ const Home = observer(() => {
   const [showFuelWrapped, setShowFuelWrapped] = useState(false);
   const [showCopilot, setShowCopilot] = useState(false);
   const [showTimeMachine, setShowTimeMachine] = useState(false);
+  const [showARScanner, setShowARScanner] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -676,6 +679,8 @@ const Home = observer(() => {
         <DreamGoals stationsStore={stationsStore} />
 
         <EcoImpactCard stationsStore={stationsStore} />
+
+        <Caragotchi stationsStore={stationsStore} />
 
         <DailyChallengeCard stationsStore={stationsStore} />
 
@@ -969,6 +974,12 @@ const Home = observer(() => {
         onClose={() => setShowTimeMachine(false)}
       />
 
+      <ARPriceScannerModal
+        visible={showARScanner}
+        onClose={() => setShowARScanner(false)}
+        stationsStore={stationsStore}
+      />
+
       {/* New FABs */}
       <TouchableOpacity
         style={[styles.wrappedFab, {bottom: 230, backgroundColor: '#00E096'}]}
@@ -985,6 +996,12 @@ const Home = observer(() => {
         style={[styles.wrappedFab, {bottom: 300, backgroundColor: '#9C27B0'}]}
         onPress={() => setShowTimeMachine(true)}>
         <Icon name="clock-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 370, backgroundColor: '#FF8C00'}]}
+        onPress={() => setShowARScanner(true)}>
+        <Icon name="camera-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
     </Layout>
   );
