@@ -10,6 +10,8 @@ import FuelMatchModal from '../../components/FuelMatchModal';
 import FuelWrappedModal from '../../components/FuelWrappedModal';
 import AICopilotModal from '../../components/AICopilotModal';
 import TimeMachineModal from '../../components/TimeMachineModal';
+import Caragotchi from '../../components/Caragotchi';
+import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -27,6 +29,7 @@ class HomeWeb extends React.Component<Props> {
     showFuelWrapped: false,
     showCopilot: false,
     showTimeMachine: false,
+    showARScanner: false,
   };
 
   handleSurpriseMe = () => {
@@ -87,6 +90,10 @@ class HomeWeb extends React.Component<Props> {
             </Card>
           </View>
         )}
+
+        <View style={{ marginTop: 20 }}>
+          <Caragotchi stationsStore={stationsStore} />
+        </View>
 
         <View style={styles.inputSection}>
           <View style={styles.inputRow}>
@@ -168,6 +175,16 @@ class HomeWeb extends React.Component<Props> {
             status="primary">
             Máquina do Tempo ⏰
           </Button>
+
+          <Button
+            onPress={() => this.setState({showARScanner: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#FF8C00', marginTop: 15},
+            ]}
+            status="primary">
+            Scanner de Preços AR 📸
+          </Button>
         </View>
 
         {resultado && (
@@ -225,6 +242,12 @@ class HomeWeb extends React.Component<Props> {
         <TimeMachineModal
           visible={this.state.showTimeMachine}
           onClose={() => this.setState({showTimeMachine: false})}
+        />
+
+        <ARPriceScannerModal
+          visible={this.state.showARScanner}
+          onClose={() => this.setState({showARScanner: false})}
+          stationsStore={stationsStore}
         />
       </ScrollView>
     );
