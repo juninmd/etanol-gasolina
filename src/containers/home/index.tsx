@@ -50,6 +50,7 @@ import AICopilotModal from '../../components/AICopilotModal';
 import TimeMachineModal from '../../components/TimeMachineModal';
 import Caragotchi from '../../components/Caragotchi';
 import ARPriceScannerModal from '../../components/ARPriceScannerModal';
+import ChurrascometroModal from '../../components/ChurrascometroModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -531,6 +532,7 @@ const Home = observer(() => {
   const [showCopilot, setShowCopilot] = useState(false);
   const [showTimeMachine, setShowTimeMachine] = useState(false);
   const [showARScanner, setShowARScanner] = useState(false);
+  const [showChurrasco, setShowChurrasco] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -980,6 +982,12 @@ const Home = observer(() => {
         stationsStore={stationsStore}
       />
 
+      <ChurrascometroModal
+        visible={showChurrasco}
+        onClose={() => setShowChurrasco(false)}
+        stationsStore={stationsStore}
+      />
+
       {/* New FABs */}
       <TouchableOpacity
         style={[styles.wrappedFab, {bottom: 230, backgroundColor: '#00E096'}]}
@@ -1002,6 +1010,12 @@ const Home = observer(() => {
         style={[styles.wrappedFab, {bottom: 370, backgroundColor: '#FF8C00'}]}
         onPress={() => setShowARScanner(true)}>
         <Icon name="camera-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 440, backgroundColor: '#FF3D71'}]}
+        onPress={() => setShowChurrasco(true)}>
+        <Icon name="sun-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
     </Layout>
   );

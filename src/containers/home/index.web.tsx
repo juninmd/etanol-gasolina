@@ -12,6 +12,7 @@ import AICopilotModal from '../../components/AICopilotModal';
 import TimeMachineModal from '../../components/TimeMachineModal';
 import Caragotchi from '../../components/Caragotchi';
 import ARPriceScannerModal from '../../components/ARPriceScannerModal';
+import ChurrascometroModal from '../../components/ChurrascometroModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -30,6 +31,7 @@ class HomeWeb extends React.Component<Props> {
     showCopilot: false,
     showTimeMachine: false,
     showARScanner: false,
+    showChurrasco: false,
   };
 
   handleSurpriseMe = () => {
@@ -185,6 +187,16 @@ class HomeWeb extends React.Component<Props> {
             status="primary">
             Scanner de Preços AR 📸
           </Button>
+
+          <Button
+            onPress={() => this.setState({showChurrasco: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#FF3D71', marginTop: 15},
+            ]}
+            status="danger">
+            Churrascómetro 🔥
+          </Button>
         </View>
 
         {resultado && (
@@ -247,6 +259,12 @@ class HomeWeb extends React.Component<Props> {
         <ARPriceScannerModal
           visible={this.state.showARScanner}
           onClose={() => this.setState({showARScanner: false})}
+          stationsStore={stationsStore}
+        />
+
+        <ChurrascometroModal
+          visible={this.state.showChurrasco}
+          onClose={() => this.setState({showChurrasco: false})}
           stationsStore={stationsStore}
         />
       </ScrollView>
