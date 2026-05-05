@@ -206,6 +206,13 @@ export default class StationsStore {
       icon: 'bicycle-outline',
       unlocked: false,
     },
+    {
+      id: 'churrasqueiro',
+      name: 'Mestre Churrasqueiro',
+      description: 'Descobriu o Churrascómetro secreto!',
+      icon: 'star-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
