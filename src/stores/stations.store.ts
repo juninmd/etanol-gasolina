@@ -213,6 +213,13 @@ export default class StationsStore {
       icon: 'star-outline',
       unlocked: false,
     },
+    {
+      id: 'smart_commuter',
+      name: 'Smart Commuter',
+      description: 'Descobriu a funcionalidade Me Surpreenda: Vou de quê?',
+      icon: 'car-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 

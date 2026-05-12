@@ -13,6 +13,7 @@ import TimeMachineModal from '../../components/TimeMachineModal';
 import Caragotchi from '../../components/Caragotchi';
 import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 import ChurrascometroModal from '../../components/ChurrascometroModal';
+import RideVsCarModal from '../../components/RideVsCarModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -32,10 +33,11 @@ class HomeWeb extends React.Component<Props> {
     showTimeMachine: false,
     showARScanner: false,
     showChurrasco: false,
+    showRideVsCar: false,
   };
 
   handleSurpriseMe = () => {
-    this.setState({showFuelMatch: true});
+    this.setState({showRideVsCar: true});
   };
 
   handleFuelMatch = (stationId: number) => {
@@ -93,7 +95,7 @@ class HomeWeb extends React.Component<Props> {
           </View>
         )}
 
-        <View style={{ marginTop: 20 }}>
+        <View style={{marginTop: 20}}>
           <Caragotchi stationsStore={stationsStore} />
         </View>
 
@@ -266,6 +268,13 @@ class HomeWeb extends React.Component<Props> {
           visible={this.state.showChurrasco}
           onClose={() => this.setState({showChurrasco: false})}
           stationsStore={stationsStore}
+        />
+
+        <RideVsCarModal
+          visible={this.state.showRideVsCar}
+          onClose={() => this.setState({showRideVsCar: false})}
+          stationsStore={stationsStore}
+          garageStore={garageStore}
         />
       </ScrollView>
     );
