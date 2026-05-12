@@ -51,6 +51,7 @@ import TimeMachineModal from '../../components/TimeMachineModal';
 import Caragotchi from '../../components/Caragotchi';
 import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 import ChurrascometroModal from '../../components/ChurrascometroModal';
+import RideVsCarModal from '../../components/RideVsCarModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -533,6 +534,7 @@ const Home = observer(() => {
   const [showTimeMachine, setShowTimeMachine] = useState(false);
   const [showARScanner, setShowARScanner] = useState(false);
   const [showChurrasco, setShowChurrasco] = useState(false);
+  const [showRideVsCar, setShowRideVsCar] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -586,7 +588,7 @@ const Home = observer(() => {
   };
 
   const handleSurpriseMe = () => {
-    setShowFuelMatch(true);
+    setShowRideVsCar(true);
   };
 
   const handleFuelMatch = (stationId: number) => {
@@ -986,6 +988,13 @@ const Home = observer(() => {
         visible={showChurrasco}
         onClose={() => setShowChurrasco(false)}
         stationsStore={stationsStore}
+      />
+
+      <RideVsCarModal
+        visible={showRideVsCar}
+        onClose={() => setShowRideVsCar(false)}
+        stationsStore={stationsStore}
+        garageStore={garageStore}
       />
 
       {/* New FABs */}

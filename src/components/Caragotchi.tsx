@@ -50,7 +50,12 @@ const Caragotchi = observer(({stationsStore}: {stationsStore: any}) => {
     <Card style={[styles.card, {borderColor: color}]}>
       <View style={styles.header}>
         <View style={[styles.iconWrapper, {backgroundColor: `${color}15`}]}>
-          <Icon name="smiling-face-outline" width={24} height={24} fill={color} />
+          <Icon
+            name="smiling-face-outline"
+            width={24}
+            height={24}
+            fill={color}
+          />
         </View>
         <Text category="h6" style={[styles.title, {color}]}>
           Caragotchi
@@ -71,10 +76,20 @@ const Caragotchi = observer(({stationsStore}: {stationsStore: any}) => {
         </View>
       </View>
       <View style={styles.progressContainer}>
-         <View style={[styles.progressBar, {backgroundColor: `${color}30`}]}>
-            <View style={[styles.progressFill, {backgroundColor: color, width: `${Math.min(100, (totalSavings / 100) * 100)}%`}]} />
-         </View>
-         <Text category="c2" appearance="hint" style={styles.progressText}>Nível de Saciedade</Text>
+        <View style={[styles.progressBar, {backgroundColor: `${color}30`}]}>
+          <View
+            style={[
+              styles.progressFill,
+              {
+                backgroundColor: color,
+                width: `${Math.min(100, (totalSavings / 100) * 100)}%`,
+              },
+            ]}
+          />
+        </View>
+        <Text category="c2" appearance="hint" style={styles.progressText}>
+          Nível de Saciedade
+        </Text>
       </View>
     </Card>
   );
@@ -120,21 +135,21 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   progressContainer: {
-      marginTop: 15,
+    marginTop: 15,
   },
   progressBar: {
-      height: 10,
-      borderRadius: 5,
-      overflow: 'hidden',
+    height: 10,
+    borderRadius: 5,
+    overflow: 'hidden',
   },
   progressFill: {
-      height: '100%',
-      borderRadius: 5,
+    height: '100%',
+    borderRadius: 5,
   },
   progressText: {
-      marginTop: 5,
-      textAlign: 'right'
-  }
+    marginTop: 5,
+    textAlign: 'right',
+  },
 });
 
 export default Caragotchi;
