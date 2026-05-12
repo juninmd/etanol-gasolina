@@ -10,10 +10,34 @@ interface Props {
 }
 
 const ITEMS = [
-  {id: 'picanha', name: 'Kg de Picanha', price: 80, icon: 'sun-outline', color: '#FF3D71'},
-  {id: 'cerveja', name: 'Fardo de Cerveja', price: 40, icon: 'droplet-outline', color: '#FFD700'},
-  {id: 'carvao', name: 'Saco de Carvão', price: 20, icon: 'cube-outline', color: '#8F9BB3'},
-  {id: 'pao_alho', name: 'Pão de Alho', price: 15, icon: 'star-outline', color: '#00E096'},
+  {
+    id: 'picanha',
+    name: 'Kg de Picanha',
+    price: 80,
+    icon: 'sun-outline',
+    color: '#FF3D71',
+  },
+  {
+    id: 'cerveja',
+    name: 'Fardo de Cerveja',
+    price: 40,
+    icon: 'droplet-outline',
+    color: '#FFD700',
+  },
+  {
+    id: 'carvao',
+    name: 'Saco de Carvão',
+    price: 20,
+    icon: 'cube-outline',
+    color: '#8F9BB3',
+  },
+  {
+    id: 'pao_alho',
+    name: 'Pão de Alho',
+    price: 15,
+    icon: 'star-outline',
+    color: '#00E096',
+  },
 ];
 
 const ChurrascometroModal = ({visible, onClose, stationsStore}: Props) => {
@@ -43,7 +67,9 @@ const ChurrascometroModal = ({visible, onClose, stationsStore}: Props) => {
   const savings = stationsStore.totalSavings || 0;
 
   const calculateItems = () => {
-    if (savings <= 0) return [];
+    if (savings <= 0) {
+      return [];
+    }
 
     const items = [];
     let remaining = savings;
@@ -118,7 +144,12 @@ const ChurrascometroModal = ({visible, onClose, stationsStore}: Props) => {
               affordableItems.map((item, index) => (
                 <View key={index} style={styles.itemRow}>
                   <View style={[styles.iconBox, {backgroundColor: item.color}]}>
-                    <Icon name={item.icon} width={24} height={24} fill="white" />
+                    <Icon
+                      name={item.icon}
+                      width={24}
+                      height={24}
+                      fill="white"
+                    />
                   </View>
                   <View style={styles.itemInfo}>
                     <Text category="s1" style={styles.itemName}>
