@@ -220,6 +220,13 @@ export default class StationsStore {
       icon: 'car-outline',
       unlocked: false,
     },
+    {
+      id: 'sortudo',
+      name: 'Sortudo da Roleta',
+      description: 'Tirou a sorte grande na roleta de descontos',
+      icon: 'star',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -712,6 +719,14 @@ export default class StationsStore {
 
   @action resetLevelUp = () => {
     this.showLevelUp = false;
+  };
+
+  @action unlockSortudoBadge = () => {
+    const badge = this.badges.find(b => b.id === 'sortudo');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
+    }
   };
 
   @action resetBadgePopup = () => {
