@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Modal as RNModal, Dimensions, Animated, Easing} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Modal as RNModal,
+  Dimensions,
+  Animated,
+  Easing,
+} from 'react-native';
 import {Card, Text, Button, Icon} from '@ui-kitten/components';
 import {observer} from 'mobx-react';
 import StationsStore from '../stores/stations.store';
@@ -15,169 +22,207 @@ interface Props {
 const EMOJIS = ['⛽', '💰', '🚗', '💸', '🍀', '🌟'];
 
 const FORTUNES = [
-  "Hoje seu carro vai gastar menos que camelo no deserto!",
-  "Cuidado com o pé pesado, a gasolina tá cara e seu bolso agradece.",
-  "Um posto com gasolina barata cruzará seu caminho em breve.",
-  "Sua próxima viagem será suave e econômica.",
-  "Os deuses do etanol sorriem para você hoje.",
-  "Evite o ar condicionado hoje, o clima está a favor da economia!",
+  'Hoje seu carro vai gastar menos que camelo no deserto!',
+  'Cuidado com o pé pesado, a gasolina tá cara e seu bolso agradece.',
+  'Um posto com gasolina barata cruzará seu caminho em breve.',
+  'Sua próxima viagem será suave e econômica.',
+  'Os deuses do etanol sorriem para você hoje.',
+  'Evite o ar condicionado hoje, o clima está a favor da economia!',
 ];
 
-const RoletaDaSorteModal = observer(({visible, onClose, stationsStore}: Props) => {
-  const [spinning, setSpinning] = useState(false);
-  const [result, setResult] = useState(['❓', '❓', '❓']);
-  const [fortune, setFortune] = useState('');
-  const [won, setWon] = useState(false);
+const secureRandom = () => {
+  const array = new Uint32Array(1);
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    crypto.getRandomValues(array);
+    return array[0] / (0xffffffff + 1);
+  }
+  return Math.random(); // Fallback if crypto isn't available
+};
 
-  // Simple animation for the slots
-  const [spinAnim] = useState(new Animated.Value(0));
+const RoletaDaSorteModal = observer(
+  ({visible, onClose, stationsStore}: Props) => {
+    const [spinning, setSpinning] = useState(false);
+    const [result, setResult] = useState([
+      {id: 'slot-0', emoji: '❓'},
+      {id: 'slot-1', emoji: '❓'},
+      {id: 'slot-2', emoji: '❓'},
+    ]);
+    const [fortune, setFortune] = useState('');
+    const [won, setWon] = useState(false);
 
-  useEffect(() => {
-    if (visible) {
-      setResult(['❓', '❓', '❓']);
+    // Simple animation for the slots
+    const [spinAnim] = useState(new Animated.Value(0));
+
+    useEffect(() => {
+      if (visible) {
+        setResult([
+          {id: 'slot-0', emoji: '❓'},
+          {id: 'slot-1', emoji: '❓'},
+          {id: 'slot-2', emoji: '❓'},
+        ]);
+        setFortune('');
+        setWon(false);
+        setSpinning(false);
+        spinAnim.setValue(0);
+      }
+    }, [visible]);
+
+    const handleSpin = () => {
+      if (spinning) {
+        return;
+      }
+      setSpinning(true);
+      setWon(false);
       setFortune('');
-      setWon(false);
+
+      // Start animation
+      Animated.timing(spinAnim, {
+        toValue: 1,
+        duration: 2000,
+        easing: Easing.inOut(Easing.cubic),
+        useNativeDriver: true,
+      }).start();
+
+      // Randomize slots during "spin"
+      let spins = 0;
+      const interval = setInterval(() => {
+        setResult([
+          {
+            id: 'slot-0',
+            emoji: EMOJIS[Math.floor(secureRandom() * EMOJIS.length)],
+          },
+          {
+            id: 'slot-1',
+            emoji: EMOJIS[Math.floor(secureRandom() * EMOJIS.length)],
+          },
+          {
+            id: 'slot-2',
+            emoji: EMOJIS[Math.floor(secureRandom() * EMOJIS.length)],
+          },
+        ]);
+        spins++;
+        if (spins > 20) {
+          clearInterval(interval);
+          finalizeSpin();
+        }
+      }, 100);
+    };
+
+    const finalizeSpin = () => {
       setSpinning(false);
-      spinAnim.setValue(0);
-    }
-  }, [visible]);
 
-  const handleSpin = () => {
-    if (spinning) return;
-    setSpinning(true);
-    setWon(false);
-    setFortune('');
+      // 15% chance to win just for fun, or totally random
+      const isWin = secureRandom() < 0.15;
+      let finalEmojis: string[] = [];
 
-    // Start animation
-    Animated.timing(spinAnim, {
-      toValue: 1,
-      duration: 2000,
-      easing: Easing.inOut(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
+      if (isWin) {
+        const winEmoji = EMOJIS[Math.floor(secureRandom() * EMOJIS.length)];
+        finalEmojis = [winEmoji, winEmoji, winEmoji];
+        setWon(true);
+        stationsStore.addPoints(50);
 
-    // Randomize slots during "spin"
-    let spins = 0;
-    const interval = setInterval(() => {
+        // Unlock badge if it exists
+        if (stationsStore.unlockSortudoBadge) {
+          stationsStore.unlockSortudoBadge();
+        }
+
+        setFortune('🎰 JACKPOT! Você ganhou 50 pontos e muita sorte!');
+      } else {
+        finalEmojis = [
+          EMOJIS[Math.floor(secureRandom() * EMOJIS.length)],
+          EMOJIS[Math.floor(secureRandom() * EMOJIS.length)],
+          EMOJIS[Math.floor(secureRandom() * EMOJIS.length)],
+        ];
+        // Prevent accidental wins
+        if (
+          finalEmojis[0] === finalEmojis[1] &&
+          finalEmojis[1] === finalEmojis[2]
+        ) {
+          finalEmojis[2] =
+            EMOJIS[(EMOJIS.indexOf(finalEmojis[2]) + 1) % EMOJIS.length];
+        }
+        setWon(false);
+        setFortune(FORTUNES[Math.floor(secureRandom() * FORTUNES.length)]);
+      }
+
       setResult([
-        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
-        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
-        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
+        {id: 'slot-0', emoji: finalEmojis[0]},
+        {id: 'slot-1', emoji: finalEmojis[1]},
+        {id: 'slot-2', emoji: finalEmojis[2]},
       ]);
-      spins++;
-      if (spins > 20) {
-        clearInterval(interval);
-        finalizeSpin();
-      }
-    }, 100);
-  };
+    };
 
-  const finalizeSpin = () => {
-    setSpinning(false);
+    const spinInterpolate = spinAnim.interpolate({
+      inputRange: [0, 0.5, 1],
+      outputRange: ['0deg', '180deg', '360deg'],
+    });
 
-    // 10% chance to win just for fun, or totally random
-    const isWin = Math.random() < 0.15;
-    let finalSlots = [];
-
-    if (isWin) {
-      const winEmoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-      finalSlots = [winEmoji, winEmoji, winEmoji];
-      setWon(true);
-      stationsStore.addPoints(50);
-
-      // Unlock badge if it exists
-      if (stationsStore.unlockSortudoBadge) {
-        stationsStore.unlockSortudoBadge();
-      }
-
-      setFortune('🎰 JACKPOT! Você ganhou 50 pontos e muita sorte!');
-    } else {
-      finalSlots = [
-        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
-        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
-        EMOJIS[Math.floor(Math.random() * EMOJIS.length)],
-      ];
-      // Prevent accidental wins
-      if (finalSlots[0] === finalSlots[1] && finalSlots[1] === finalSlots[2]) {
-        finalSlots[2] = EMOJIS[(EMOJIS.indexOf(finalSlots[2]) + 1) % EMOJIS.length];
-      }
-      setWon(false);
-      setFortune(FORTUNES[Math.floor(Math.random() * FORTUNES.length)]);
-    }
-
-    setResult(finalSlots);
-  };
-
-  const spinInterpolate = spinAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ['0deg', '180deg', '360deg'],
-  });
-
-  return (
-    <RNModal
-      visible={visible}
-      transparent={true}
-      animationType="fade"
-      onRequestClose={onClose}>
-      <View style={styles.backdrop}>
-        <Card disabled={true} style={styles.modalCard}>
-          <View style={styles.header}>
-            <Icon name="star" width={24} height={24} fill="#FFD700" />
-            <Text category="h5" style={styles.title}>
-              Roleta da Sorte
-            </Text>
-            <Icon name="star" width={24} height={24} fill="#FFD700" />
-          </View>
-
-          <Text category="s1" appearance="hint" style={styles.subtitle}>
-            Gire para ganhar pontos e uma previsão do futuro motorizado!
-          </Text>
-
-          <View style={styles.slotMachine}>
-            {result.map((emoji, index) => (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.slot,
-                  {transform: spinning ? [{rotateX: spinInterpolate}] : []}
-                ]}
-              >
-                <Text style={styles.slotText}>{emoji}</Text>
-              </Animated.View>
-            ))}
-          </View>
-
-          {fortune !== '' && (
-            <View style={[styles.fortuneBox, won && styles.fortuneBoxWon]}>
-              <Text category="s1" style={[styles.fortuneText, won && styles.fortuneTextWon]}>
-                {fortune}
+    return (
+      <RNModal
+        visible={visible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={onClose}>
+        <View style={styles.backdrop}>
+          <Card disabled={true} style={styles.modalCard}>
+            <View style={styles.header}>
+              <Icon name="star" width={24} height={24} fill="#FFD700" />
+              <Text category="h5" style={styles.title}>
+                Roleta da Sorte
               </Text>
+              <Icon name="star" width={24} height={24} fill="#FFD700" />
             </View>
-          )}
 
-          <Button
-            size="giant"
-            status={spinning ? "basic" : "primary"}
-            onPress={handleSpin}
-            disabled={spinning}
-            style={styles.spinButton}
-            accessoryLeft={(p) => <Icon {...p} name="loader-outline" />}
-          >
-            {spinning ? 'Girando...' : 'GIRAR AGORA'}
-          </Button>
+            <Text category="s1" appearance="hint" style={styles.subtitle}>
+              Gire para ganhar pontos e uma previsão do futuro motorizado!
+            </Text>
 
-          <Button
-            appearance="ghost"
-            status="basic"
-            style={styles.closeButton}
-            onPress={onClose}>
-            Fechar
-          </Button>
-        </Card>
-      </View>
-    </RNModal>
-  );
-});
+            <View style={styles.slotMachine}>
+              {result.map(slot => (
+                <Animated.View
+                  key={slot.id}
+                  style={[
+                    styles.slot,
+                    {transform: spinning ? [{rotateX: spinInterpolate}] : []},
+                  ]}>
+                  <Text style={styles.slotText}>{slot.emoji}</Text>
+                </Animated.View>
+              ))}
+            </View>
+
+            {fortune !== '' && (
+              <View style={[styles.fortuneBox, won && styles.fortuneBoxWon]}>
+                <Text
+                  category="s1"
+                  style={[styles.fortuneText, won && styles.fortuneTextWon]}>
+                  {fortune}
+                </Text>
+              </View>
+            )}
+
+            <Button
+              size="giant"
+              status={spinning ? 'basic' : 'primary'}
+              onPress={handleSpin}
+              disabled={spinning}
+              style={styles.spinButton}
+              accessoryLeft={p => <Icon {...p} name="loader-outline" />}>
+              {spinning ? 'Girando...' : 'GIRAR AGORA'}
+            </Button>
+
+            <Button
+              appearance="ghost"
+              status="basic"
+              style={styles.closeButton}
+              onPress={onClose}>
+              Fechar
+            </Button>
+          </Card>
+        </View>
+      </RNModal>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   backdrop: {
