@@ -14,6 +14,7 @@ import Caragotchi from '../../components/Caragotchi';
 import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 import ChurrascometroModal from '../../components/ChurrascometroModal';
 import RideVsCarModal from '../../components/RideVsCarModal';
+import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -34,10 +35,11 @@ class HomeWeb extends React.Component<Props> {
     showARScanner: false,
     showChurrasco: false,
     showRideVsCar: false,
+    showRoleta: false,
   };
 
   handleSurpriseMe = () => {
-    this.setState({showRideVsCar: true});
+    this.setState({showRoleta: true});
   };
 
   handleFuelMatch = (stationId: number) => {
@@ -148,6 +150,16 @@ class HomeWeb extends React.Component<Props> {
             ]}
             status="success">
             Me Surpreenda 🎁
+          </Button>
+
+          <Button
+            onPress={() => this.setState({showRideVsCar: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#3366FF', marginTop: 15},
+            ]}
+            status="primary">
+            Vou de Quê? 🚕
           </Button>
 
           <Button
@@ -275,6 +287,12 @@ class HomeWeb extends React.Component<Props> {
           onClose={() => this.setState({showRideVsCar: false})}
           stationsStore={stationsStore}
           garageStore={garageStore}
+        />
+
+        <RoletaDaSorteModal
+          visible={this.state.showRoleta}
+          onClose={() => this.setState({showRoleta: false})}
+          stationsStore={stationsStore!}
         />
       </ScrollView>
     );
