@@ -52,6 +52,7 @@ import Caragotchi from '../../components/Caragotchi';
 import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 import ChurrascometroModal from '../../components/ChurrascometroModal';
 import RideVsCarModal from '../../components/RideVsCarModal';
+import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -535,6 +536,7 @@ const Home = observer(() => {
   const [showARScanner, setShowARScanner] = useState(false);
   const [showChurrasco, setShowChurrasco] = useState(false);
   const [showRideVsCar, setShowRideVsCar] = useState(false);
+  const [showRoleta, setShowRoleta] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -588,7 +590,7 @@ const Home = observer(() => {
   };
 
   const handleSurpriseMe = () => {
-    setShowRideVsCar(true);
+    setShowRoleta(true);
   };
 
   const handleFuelMatch = (stationId: number) => {
@@ -997,7 +999,19 @@ const Home = observer(() => {
         garageStore={garageStore}
       />
 
+      <RoletaDaSorteModal
+        visible={showRoleta}
+        onClose={() => setShowRoleta(false)}
+        stationsStore={stationsStore}
+      />
+
       {/* New FABs */}
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 510, backgroundColor: '#3366FF'}]}
+        onPress={() => setShowRideVsCar(true)}>
+        <Icon name="navigation-2-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.wrappedFab, {bottom: 230, backgroundColor: '#00E096'}]}
         onPress={() => setShowCopilot(true)}>
