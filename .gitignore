@@ -58,3 +58,6 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 .expo/*
+# secrets
+.env
+**/.env
