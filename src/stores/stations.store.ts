@@ -227,6 +227,13 @@ export default class StationsStore {
       icon: 'star',
       unlocked: false,
     },
+    {
+      id: 'trunfo_master',
+      name: 'Mestre do Trunfo',
+      description: 'Ganhou uma partida épica na Batalha de Postos!',
+      icon: 'flash-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -723,6 +730,14 @@ export default class StationsStore {
 
   @action unlockSortudoBadge = () => {
     const badge = this.badges.find(b => b.id === 'sortudo');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
+    }
+  };
+
+  @action unlockTrunfoBadge = () => {
+    const badge = this.badges.find(b => b.id === 'trunfo_master');
     if (badge && !badge.unlocked) {
       badge.unlocked = true;
       this.badgeQueue.push(badge);

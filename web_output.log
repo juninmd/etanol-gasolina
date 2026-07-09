@@ -1,0 +1,20 @@
+
+> etanol@1.0.0 web
+> expo start --web
+
+Starting project at /app
+(node:170329) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Starting Metro Bundler
+The following packages should be updated for best compatibility with the installed expo version:
+  react-native-gesture-handler@2.32.0 - expected version: ~2.14.0
+  react-native-reanimated@3.19.5 - expected version: ~3.6.2
+  react-native-safe-area-context@4.14.1 - expected version: 4.8.2
+  react-native-screens@3.37.0 - expected version: ~3.29.0
+  react-native-svg@14.2.0 - expected version: 14.1.0
+  @types/react@18.3.31 - expected version: ~18.2.45
+  expo-build-properties@1.0.10 - expected version: ~0.11.1
+Your project may not work correctly until you install the correct versions of the packages.
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web Bundled 22874ms (index.tsx)
