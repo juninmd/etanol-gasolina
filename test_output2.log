@@ -1,0 +1,16 @@
+
+> etanol@1.0.0 test
+> jest
+
+PASS src/stores/__tests__/stations.store.test.ts
+PASS src/stores/__tests__/home.store.test.ts
+PASS src/stores/__tests__/garage.store.test.ts
+
+Test Suites: 3 passed, 3 total
+Tests:       20 passed, 20 total
+Snapshots:   0 total
+Time:        0.632 s, estimated 1 s
+Ran all test suites.
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.
