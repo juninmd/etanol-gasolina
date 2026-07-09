@@ -53,6 +53,7 @@ import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 import ChurrascometroModal from '../../components/ChurrascometroModal';
 import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
+import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -75,10 +76,11 @@ const PricePredictionWidget = observer(({stationsStore}) => {
 
     // Simulate AI scanning
     setTimeout(() => {
-      const upCount = stationsStore.stations.filter(s => s.priceTrend === 'up')
-        .length;
+      const upCount = stationsStore.stations.filter(
+        (s) => s.priceTrend === 'up',
+      ).length;
       const downCount = stationsStore.stations.filter(
-        s => s.priceTrend === 'down',
+        (s) => s.priceTrend === 'down',
       ).length;
 
       let result;
@@ -212,7 +214,7 @@ const DreamGoals = observer(({stationsStore}) => {
 
   // Find the next achievable goal
   const nextGoal =
-    goals.find(g => totalSavings < g.cost) || goals[goals.length - 1];
+    goals.find((g) => totalSavings < g.cost) || goals[goals.length - 1];
   const progress = Math.min(1, totalSavings / nextGoal.cost);
 
   return (
@@ -369,7 +371,9 @@ const DailyChallengeCard = observer(({stationsStore}) => {
           status="success"
           style={{marginTop: 10}}
           disabled={true}
-          accessoryLeft={props => <Icon {...props} name="checkmark-outline" />}>
+          accessoryLeft={(props) => (
+            <Icon {...props} name="checkmark-outline" />
+          )}>
           COMPLETADO
         </Button>
       )}
@@ -537,6 +541,7 @@ const Home = observer(() => {
   const [showChurrasco, setShowChurrasco] = useState(false);
   const [showRideVsCar, setShowRideVsCar] = useState(false);
   const [showRoleta, setShowRoleta] = useState(false);
+  const [showBatalha, setShowBatalha] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -544,11 +549,11 @@ const Home = observer(() => {
       () => {
         const {favorites, stations} = stationsStore;
         return stations
-          .filter(s => favorites.includes(s.id) && s.isPromo)
-          .map(s => s.id)
+          .filter((s) => favorites.includes(s.id) && s.isPromo)
+          .map((s) => s.id)
           .join(',');
       },
-      _promoIds => {
+      (_promoIds) => {
         checkPromos();
       },
     );
@@ -560,10 +565,10 @@ const Home = observer(() => {
     const {favorites, stations} = stationsStore;
     if (favorites.length > 0) {
       const promoStations = stations.filter(
-        s => favorites.includes(s.id) && s.isPromo,
+        (s) => favorites.includes(s.id) && s.isPromo,
       );
       if (promoStations.length > 0) {
-        const stationNames = promoStations.map(s => s.name).join(', ');
+        const stationNames = promoStations.map((s) => s.name).join(', ');
         setPromoMessage(`Promoção nos favoritos: ${stationNames}!`);
       } else {
         setPromoMessage(null);
@@ -599,7 +604,7 @@ const Home = observer(() => {
     navigation.navigate('StationDetails', {stationId});
   };
 
-  const renderActivityItem = item => {
+  const renderActivityItem = (item) => {
     let iconName = 'activity-outline';
     let iconColor = '#8F9BB3';
 
@@ -667,7 +672,7 @@ const Home = observer(() => {
           <Button
             appearance="ghost"
             status="basic"
-            accessoryLeft={props => (
+            accessoryLeft={(props) => (
               <Icon {...props} name="settings-2-outline" />
             )}
           />
@@ -770,7 +775,7 @@ const Home = observer(() => {
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.badgeScroll}>
-          {stationsStore.badges.map(badge => (
+          {stationsStore.badges.map((badge) => (
             <View
               key={badge.id}
               style={[
@@ -822,14 +827,14 @@ const Home = observer(() => {
             <Input
               placeholder="Etanol"
               value={homeStore.etanol}
-              onChangeText={t => homeStore.handleForm({etanol: t})}
+              onChangeText={(t) => homeStore.handleForm({etanol: t})}
               keyboardType="numeric"
               style={{flex: 1, marginRight: 5}}
             />
             <Input
               placeholder="Gasolina"
               value={homeStore.gasolina}
-              onChangeText={t => homeStore.handleForm({gasolina: t})}
+              onChangeText={(t) => homeStore.handleForm({gasolina: t})}
               keyboardType="numeric"
               style={{flex: 1, marginLeft: 5}}
             />
@@ -1005,7 +1010,19 @@ const Home = observer(() => {
         stationsStore={stationsStore}
       />
 
+      <BatalhaDePostosModal
+        visible={showBatalha}
+        onClose={() => setShowBatalha(false)}
+        stationsStore={stationsStore}
+      />
+
       {/* New FABs */}
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 580, backgroundColor: '#00D084'}]}
+        onPress={() => setShowBatalha(true)}>
+        <Icon name="flash-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.wrappedFab, {bottom: 510, backgroundColor: '#3366FF'}]}
         onPress={() => setShowRideVsCar(true)}>

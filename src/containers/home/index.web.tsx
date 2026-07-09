@@ -15,6 +15,7 @@ import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 import ChurrascometroModal from '../../components/ChurrascometroModal';
 import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
+import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -36,6 +37,7 @@ class HomeWeb extends React.Component<Props> {
     showChurrasco: false,
     showRideVsCar: false,
     showRoleta: false,
+    showBatalha: false,
   };
 
   handleSurpriseMe = () => {
@@ -108,7 +110,7 @@ class HomeWeb extends React.Component<Props> {
               <Input
                 placeholder="Ex: 5.89"
                 value={gasolina}
-                onChangeText={t => homeStore.handleForm({gasolina: t})}
+                onChangeText={(t) => homeStore.handleForm({gasolina: t})}
                 keyboardType="numeric"
                 style={styles.input}
               />
@@ -118,7 +120,7 @@ class HomeWeb extends React.Component<Props> {
               <Input
                 placeholder="Ex: 4.12"
                 value={etanol}
-                onChangeText={t => homeStore.handleForm({etanol: t})}
+                onChangeText={(t) => homeStore.handleForm({etanol: t})}
                 keyboardType="numeric"
                 style={styles.input}
               />
@@ -130,6 +132,16 @@ class HomeWeb extends React.Component<Props> {
             disabled={isCalculating}
             style={styles.calculateButton}>
             {isCalculating ? 'Calculando...' : 'Calcular'}
+          </Button>
+
+          <Button
+            onPress={() => this.setState({showBatalha: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#00D084', marginTop: 15},
+            ]}
+            status="success">
+            Batalha de Postos ⚡
           </Button>
 
           <Button
@@ -293,6 +305,12 @@ class HomeWeb extends React.Component<Props> {
           visible={this.state.showRoleta}
           onClose={() => this.setState({showRoleta: false})}
           stationsStore={stationsStore!}
+        />
+
+        <BatalhaDePostosModal
+          visible={this.state.showBatalha}
+          onClose={() => this.setState({showBatalha: false})}
+          stationsStore={stationsStore}
         />
       </ScrollView>
     );
