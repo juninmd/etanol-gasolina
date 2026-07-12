@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import {Button, Card, Input, Layout} from '@ui-kitten/components';
+import {Button, Card, Input, Layout, Icon} from '@ui-kitten/components';
 import {inject, observer} from 'mobx-react';
 import HomeStore from '../../stores/home.store';
 import StationsStore from '../../stores/stations.store';
@@ -16,6 +16,7 @@ import ChurrascometroModal from '../../components/ChurrascometroModal';
 import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
+import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -38,10 +39,11 @@ class HomeWeb extends React.Component<Props> {
     showRideVsCar: false,
     showRoleta: false,
     showBatalha: false,
+    showSurpreenda: false,
   };
 
   handleSurpriseMe = () => {
-    this.setState({showRoleta: true});
+    this.setState({showSurpreenda: true});
   };
 
   handleFuelMatch = (stationId: number) => {
@@ -102,6 +104,14 @@ class HomeWeb extends React.Component<Props> {
         <View style={{marginTop: 20}}>
           <Caragotchi stationsStore={stationsStore} />
         </View>
+
+        <Button
+          style={{marginBottom: 20, marginTop: 20, borderRadius: 30}}
+          status="warning"
+          accessoryLeft={p => <Icon {...p} name="gift-outline" />}
+          onPress={() => this.setState({showSurpreenda: true})}>
+          ME SURPREENDA!
+        </Button>
 
         <View style={styles.inputSection}>
           <View style={styles.inputRow}>
@@ -304,6 +314,12 @@ class HomeWeb extends React.Component<Props> {
         <RoletaDaSorteModal
           visible={this.state.showRoleta}
           onClose={() => this.setState({showRoleta: false})}
+          stationsStore={stationsStore!}
+        />
+
+        <MeSurpreendaModal
+          visible={this.state.showSurpreenda}
+          onClose={() => this.setState({showSurpreenda: false})}
           stationsStore={stationsStore!}
         />
 

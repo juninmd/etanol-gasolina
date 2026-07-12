@@ -1,3 +1,4 @@
+import { secureRandom } from "../utils/random";
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -30,20 +31,6 @@ const FORTUNES = [
   'Evite o ar condicionado hoje, o clima está a favor da economia!',
 ];
 
-const secureRandom = () => {
-  let r = 0;
-  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
-    const array = new Uint32Array(1);
-    crypto.getRandomValues(array);
-    r = array[0] / (0xffffffff + 1);
-  } else {
-    // Basic fallback pseudo-random generator to avoid Math.random() entirely
-    // for strict static analysis tools.
-    const now = Date.now();
-    r = ((now * 9301 + 49297) % 233280) / 233280;
-  }
-  return r;
-};
 
 const RoletaDaSorteModal = observer(
   ({visible, onClose, stationsStore}: Props) => {
