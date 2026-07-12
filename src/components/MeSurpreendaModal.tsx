@@ -1,3 +1,4 @@
+import { secureRandom } from "../utils/random";
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Modal as RNModal, Dimensions} from 'react-native';
 import {Card, Text, Button, Icon} from '@ui-kitten/components';
@@ -21,18 +22,6 @@ const SURPRISES = [
   'Hoje seu nível de economia está tão alto que o Tio Patinhas pediu dicas.',
 ];
 
-const secureRandom = () => {
-  let r = 0;
-  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
-    const array = new Uint32Array(1);
-    crypto.getRandomValues(array);
-    r = array[0] / (0xffffffff + 1);
-  } else {
-    const now = Date.now();
-    r = ((now * 9301 + 49297) % 233280) / 233280;
-  }
-  return r;
-};
 
 const MeSurpreendaModal = observer(({visible, onClose, stationsStore}: Props) => {
   const [surprise, setSurprise] = useState('');
