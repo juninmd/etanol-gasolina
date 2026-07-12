@@ -234,6 +234,13 @@ export default class StationsStore {
       icon: 'flash-outline',
       unlocked: false,
     },
+    {
+      id: 'surpreendido',
+      name: 'Caçador de Surpresas',
+      description: 'Encontrou o botão secreto Me Surpreenda!',
+      icon: 'gift-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -726,6 +733,14 @@ export default class StationsStore {
 
   @action resetLevelUp = () => {
     this.showLevelUp = false;
+  };
+
+  @action unlockSurpresaBadge = () => {
+    const badge = this.badges.find(b => b.id === 'surpreendido');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
+    }
   };
 
   @action unlockSortudoBadge = () => {
