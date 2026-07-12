@@ -54,6 +54,7 @@ import ChurrascometroModal from '../../components/ChurrascometroModal';
 import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
+import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
@@ -542,6 +543,7 @@ const Home = observer(() => {
   const [showRideVsCar, setShowRideVsCar] = useState(false);
   const [showRoleta, setShowRoleta] = useState(false);
   const [showBatalha, setShowBatalha] = useState(false);
+  const [showSurpreenda, setShowSurpreenda] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -595,7 +597,7 @@ const Home = observer(() => {
   };
 
   const handleSurpriseMe = () => {
-    setShowRoleta(true);
+    setShowSurpreenda(true);
   };
 
   const handleFuelMatch = (stationId: number) => {
@@ -706,6 +708,14 @@ const Home = observer(() => {
             <Text style={styles.promoText}>{promoMessage}</Text>
           </View>
         )}
+
+        <Button
+          style={{marginBottom: 20, borderRadius: 30}}
+          status="warning"
+          accessoryLeft={p => <Icon {...p} name="gift-outline" />}
+          onPress={() => setShowSurpreenda(true)}>
+          ME SURPREENDA!
+        </Button>
 
         {/* Smart Choice */}
         <Text category="h6" style={styles.sectionTitle}>
@@ -1007,6 +1017,12 @@ const Home = observer(() => {
       <RoletaDaSorteModal
         visible={showRoleta}
         onClose={() => setShowRoleta(false)}
+        stationsStore={stationsStore}
+      />
+
+      <MeSurpreendaModal
+        visible={showSurpreenda}
+        onClose={() => setShowSurpreenda(false)}
         stationsStore={stationsStore}
       />
 
