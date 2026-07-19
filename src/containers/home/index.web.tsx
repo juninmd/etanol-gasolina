@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
-import {Button, Card, Input, Layout} from '@ui-kitten/components';
+import {Button, Card, Input, Icon} from '@ui-kitten/components';
 import {inject, observer} from 'mobx-react';
+import {reaction} from 'mobx';
 import HomeStore from '../../stores/home.store';
 import StationsStore from '../../stores/stations.store';
 import GarageStore from '../../stores/garage.store';
@@ -40,6 +41,54 @@ class HomeWeb extends React.Component<Props> {
     showRoleta: false,
     showBatalha: false,
     showSurpreenda: false,
+    promoMessage: null as string | null,
+  };
+
+  promoReactionDispose?: () => void;
+
+  componentDidMount() {
+    this.promoReactionDispose = reaction(
+      () => {
+        const {stationsStore} = this.props;
+        if (!stationsStore) {
+          return '';
+        }
+        const {favorites, stations} = stationsStore;
+        return stations
+          .filter((s) => favorites.includes(s.id) && s.isPromo)
+          .map((s) => s.id)
+          .join(',');
+      },
+      (_promoIds) => {
+        this.checkPromos();
+      },
+    );
+    this.checkPromos();
+  }
+
+  componentWillUnmount() {
+    this.promoReactionDispose?.();
+  }
+
+  checkPromos = () => {
+    const {stationsStore} = this.props;
+    if (!stationsStore) {
+      return;
+    }
+    const {favorites, stations} = stationsStore;
+    if (favorites.length > 0) {
+      const promoStations = stations.filter(
+        (s) => favorites.includes(s.id) && s.isPromo,
+      );
+      if (promoStations.length > 0) {
+        const stationNames = promoStations.map((s) => s.name).join(', ');
+        this.setState({
+          promoMessage: `Promoção nos favoritos: ${stationNames}!`,
+        });
+      } else {
+        this.setState({promoMessage: null});
+      }
+    }
   };
 
   handleSurpriseMe = () => {
@@ -105,10 +154,22 @@ class HomeWeb extends React.Component<Props> {
           <Caragotchi stationsStore={stationsStore} />
         </View>
 
+        {this.state.promoMessage && (
+          <View style={styles.promoBanner}>
+            <Icon
+              name="alert-circle-outline"
+              width={24}
+              height={24}
+              fill="#fff"
+            />
+            <Text style={styles.promoText}>{this.state.promoMessage}</Text>
+          </View>
+        )}
+
         <Button
           style={{marginBottom: 20, marginTop: 20, borderRadius: 30}}
           status="warning"
-          accessoryLeft={p => <Icon {...p} name="gift-outline" />}
+          accessoryLeft={(p) => <Icon {...p} name="gift-outline" />}
           onPress={() => this.setState({showSurpreenda: true})}>
           ME SURPREENDA!
         </Button>
@@ -483,6 +544,21 @@ const styles = StyleSheet.create({
   ecoLabel: {
     fontSize: 12,
     color: '#666',
+  },
+  promoBanner: {
+    backgroundColor: '#FFA500',
+    padding: 12,
+    marginHorizontal: 20,
+    marginBottom: 10,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  promoText: {
+    color: 'white',
+    marginLeft: 10,
+    fontWeight: 'bold',
+    flex: 1,
   },
 });
 
