@@ -48,7 +48,7 @@ describe('StationsStore', () => {
 
   it('should update price', () => {
     stationsStore.updatePrice(1, 6.0, 4.0);
-    const station = stationsStore.stations.find(function(s) {
+    const station = stationsStore.stations.find(function (s) {
       return s.id === 1;
     });
     expect(station && station.priceGas).toBe(6.0);
@@ -57,7 +57,7 @@ describe('StationsStore', () => {
 
   it('should add comment', () => {
     stationsStore.addComment(1, 'Nice!', 5);
-    const station = stationsStore.stations.find(function(s) {
+    const station = stationsStore.stations.find(function (s) {
       return s.id === 1;
     });
     expect(station && station.comments.length).toBe(1);
@@ -68,7 +68,7 @@ describe('StationsStore', () => {
   it('should verify price and log activity', () => {
     const initialCount = stationsStore.stations[0].verificationsCount || 0;
     stationsStore.verifyPrice(1);
-    const station = stationsStore.stations.find(function(s) {
+    const station = stationsStore.stations.find(function (s) {
       return s.id === 1;
     });
     expect(station && station.verificationsCount).toBe(initialCount + 1);

@@ -59,7 +59,7 @@ export const StationComments: React.FC<StationCommentsProps> = ({
           comments
             .slice()
             .reverse()
-            .map(item => renderCommentItem(item))
+            .map((item) => renderCommentItem(item))
         ) : (
           <Text
             appearance="hint"
@@ -97,7 +97,7 @@ export const StationComments: React.FC<StationCommentsProps> = ({
         <Button
           size="small"
           onPress={handleAdd}
-          accessoryRight={p => <Icon {...p} name="paper-plane-outline" />}
+          accessoryRight={(p) => <Icon {...p} name="paper-plane-outline" />}
           disabled={!commentText.trim() || rating === 0}>
           Publicar Avaliação
         </Button>

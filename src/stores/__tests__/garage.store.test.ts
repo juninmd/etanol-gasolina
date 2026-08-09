@@ -34,7 +34,7 @@ describe('GarageStore', () => {
       avgEthanolConsumption: 8,
     });
 
-    const car2 = garageStore.vehicles.find(function(v) {
+    const car2 = garageStore.vehicles.find(function (v) {
       return v.name === 'Car 2';
     });
     if (!car2) {

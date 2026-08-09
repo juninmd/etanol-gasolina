@@ -40,9 +40,7 @@ export default class Favorites extends Component<Props> {
   renderItem = ({item}) => (
     <ListItem
       title={`${item.name}`}
-      description={`${item.address}\nGas: R$ ${item.priceGas} | Etanol: R$ ${
-        item.priceEthanol
-      }`}
+      description={`${item.address}\nGas: R$ ${item.priceGas} | Etanol: R$ ${item.priceEthanol}`}
       accessory={() => this.renderItemAccessory(item.id)}
       style={styles.item}
       onPress={() => this.onItemPress(item.id)}
@@ -51,7 +49,7 @@ export default class Favorites extends Component<Props> {
 
   render() {
     const {stations, favorites} = this.props.stationsStore;
-    const favoriteStations = stations.filter(s => favorites.includes(s.id));
+    const favoriteStations = stations.filter((s) => favorites.includes(s.id));
 
     return (
       <Layout style={styles.container}>

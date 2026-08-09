@@ -1,4 +1,4 @@
-import { secureRandom } from "../utils/random";
+import {secureRandom} from '../utils/random';
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -18,7 +18,6 @@ interface Props {
   onClose: () => void;
   stationsStore: StationsStore;
 }
-
 
 const getRating = (station: Station) => {
   if (!station.comments || station.comments.length === 0) {
