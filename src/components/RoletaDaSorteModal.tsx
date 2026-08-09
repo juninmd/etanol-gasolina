@@ -1,4 +1,4 @@
-import { secureRandom } from "../utils/random";
+import {secureRandom} from '../utils/random';
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -31,7 +31,6 @@ const FORTUNES = [
   'Evite o ar condicionado hoje, o clima está a favor da economia!',
 ];
 
-
 const RoletaDaSorteModal = observer(
   ({visible, onClose, stationsStore}: Props) => {
     const [spinning, setSpinning] = useState(false);
@@ -58,7 +57,7 @@ const RoletaDaSorteModal = observer(
         setSpinning(false);
         spinAnim.setValue(0);
       }
-    }, [visible]);
+    }, [visible, spinAnim]);
 
     const handleSpin = () => {
       if (spinning) {
@@ -171,7 +170,7 @@ const RoletaDaSorteModal = observer(
             </Text>
 
             <View style={styles.slotMachine}>
-              {result.map(slot => (
+              {result.map((slot) => (
                 <Animated.View
                   key={slot.id}
                   style={[
@@ -199,7 +198,7 @@ const RoletaDaSorteModal = observer(
               onPress={handleSpin}
               disabled={spinning}
               style={styles.spinButton}
-              accessoryLeft={p => <Icon {...p} name="loader-outline" />}>
+              accessoryLeft={(p) => <Icon {...p} name="loader-outline" />}>
               {spinning ? 'Girando...' : 'GIRAR AGORA'}
             </Button>
 

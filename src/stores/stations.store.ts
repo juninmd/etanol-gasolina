@@ -317,12 +317,14 @@ export default class StationsStore {
     // Fetches real-time price updates from an API
     setInterval(async () => {
       try {
-        const stationIds = this.stations.map(s => s.id);
+        const stationIds = this.stations.map((s) => s.id);
         const updates = await fetchLivePrices(stationIds);
 
         runInAction(() => {
-          updates.forEach(update => {
-            const station = this.stations.find(s => s.id === update.stationId);
+          updates.forEach((update) => {
+            const station = this.stations.find(
+              (s) => s.id === update.stationId,
+            );
             if (
               station &&
               (update.priceGas !== 0 || update.priceEthanol !== 0)
@@ -370,9 +372,8 @@ export default class StationsStore {
       if (!this.checkinStation) {
         runInAction(() => {
           // Randomly pick a station to "be at"
-          this.checkinStation = this.stations[
-            Math.floor(Math.random() * this.stations.length)
-          ];
+          this.checkinStation =
+            this.stations[Math.floor(secureRandom() * this.stations.length)];
         });
       }
     };
@@ -416,8 +417,10 @@ export default class StationsStore {
   }
 
   @computed get globalMarketAdvice() {
-    const upCount = this.stations.filter(s => s.priceTrend === 'up').length;
-    const downCount = this.stations.filter(s => s.priceTrend === 'down').length;
+    const upCount = this.stations.filter((s) => s.priceTrend === 'up').length;
+    const downCount = this.stations.filter(
+      (s) => s.priceTrend === 'down',
+    ).length;
     const total = this.stations.length;
 
     if (total === 0) {
@@ -434,7 +437,7 @@ export default class StationsStore {
 
   @computed get filteredStations() {
     if (this.filterPromo) {
-      return this.stations.filter(s => s.isPromo);
+      return this.stations.filter((s) => s.isPromo);
     }
     return this.stations;
   }
@@ -552,7 +555,7 @@ export default class StationsStore {
 
   @action toggleFavorite = (id: number) => {
     if (this.favorites.includes(id)) {
-      this.favorites = this.favorites.filter(favId => favId !== id);
+      this.favorites = this.favorites.filter((favId) => favId !== id);
     } else {
       this.favorites.push(id);
     }
@@ -563,7 +566,7 @@ export default class StationsStore {
   };
 
   @action addComment = (stationId: number, text: string, rating: number) => {
-    const station = this.stations.find(s => s.id === stationId);
+    const station = this.stations.find((s) => s.id === stationId);
     if (station) {
       station.comments.push({
         id: Date.now(),
@@ -580,7 +583,7 @@ export default class StationsStore {
   };
 
   @action updatePrice = (stationId: number, gas: number, ethanol: number) => {
-    const station = this.stations.find(s => s.id === stationId);
+    const station = this.stations.find((s) => s.id === stationId);
     if (station) {
       station.priceGas = gas;
       station.priceEthanol = ethanol;
@@ -612,7 +615,7 @@ export default class StationsStore {
   };
 
   @action verifyPrice = (stationId: number) => {
-    const station = this.stations.find(s => s.id === stationId);
+    const station = this.stations.find((s) => s.id === stationId);
     if (station) {
       station.lastVerified = new Date().toISOString();
       station.verificationsCount = (station.verificationsCount || 0) + 1;
@@ -684,7 +687,7 @@ export default class StationsStore {
   @action checkBadges = (actionType: string) => {
     // First Collaboration Badge
     if (['comment', 'update', 'verify'].includes(actionType)) {
-      const badge = this.badges.find(b => b.id === 'first_collab');
+      const badge = this.badges.find((b) => b.id === 'first_collab');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
@@ -693,7 +696,7 @@ export default class StationsStore {
 
     // Price Watcher
     if (actionType === 'update') {
-      const badge = this.badges.find(b => b.id === 'price_watcher');
+      const badge = this.badges.find((b) => b.id === 'price_watcher');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
@@ -702,7 +705,7 @@ export default class StationsStore {
 
     // Saver
     if (this.totalSavings >= 50) {
-      const badge = this.badges.find(b => b.id === 'saver');
+      const badge = this.badges.find((b) => b.id === 'saver');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
@@ -711,10 +714,11 @@ export default class StationsStore {
 
     // Influencer
     // Count activities by 'Você'
-    const myActivities = this.recentActivities.filter(a => a.author === 'Você')
-      .length;
+    const myActivities = this.recentActivities.filter(
+      (a) => a.author === 'Você',
+    ).length;
     if (myActivities >= 5) {
-      const badge = this.badges.find(b => b.id === 'influencer');
+      const badge = this.badges.find((b) => b.id === 'influencer');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
@@ -723,7 +727,7 @@ export default class StationsStore {
 
     // Bicycle Secret
     if (actionType === 'bicycle') {
-      const badge = this.badges.find(b => b.id === 'bicycle_secret');
+      const badge = this.badges.find((b) => b.id === 'bicycle_secret');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
@@ -736,7 +740,7 @@ export default class StationsStore {
   };
 
   @action unlockSurpresaBadge = () => {
-    const badge = this.badges.find(b => b.id === 'surpreendido');
+    const badge = this.badges.find((b) => b.id === 'surpreendido');
     if (badge && !badge.unlocked) {
       badge.unlocked = true;
       this.badgeQueue.push(badge);
@@ -744,7 +748,7 @@ export default class StationsStore {
   };
 
   @action unlockSortudoBadge = () => {
-    const badge = this.badges.find(b => b.id === 'sortudo');
+    const badge = this.badges.find((b) => b.id === 'sortudo');
     if (badge && !badge.unlocked) {
       badge.unlocked = true;
       this.badgeQueue.push(badge);
@@ -752,7 +756,7 @@ export default class StationsStore {
   };
 
   @action unlockTrunfoBadge = () => {
-    const badge = this.badges.find(b => b.id === 'trunfo_master');
+    const badge = this.badges.find((b) => b.id === 'trunfo_master');
     if (badge && !badge.unlocked) {
       badge.unlocked = true;
       this.badgeQueue.push(badge);

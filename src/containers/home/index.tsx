@@ -712,7 +712,7 @@ const Home = observer(() => {
         <Button
           style={{marginBottom: 20, borderRadius: 30}}
           status="warning"
-          accessoryLeft={p => <Icon {...p} name="gift-outline" />}
+          accessoryLeft={(p) => <Icon {...p} name="gift-outline" />}
           onPress={() => setShowSurpreenda(true)}>
           ME SURPREENDA!
         </Button>

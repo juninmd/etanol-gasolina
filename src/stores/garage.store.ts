@@ -35,12 +35,12 @@ export default class GarageStore {
   @observable selectedVehicleId: string | null = '1';
 
   @computed get selectedVehicle() {
-    return this.vehicles.find(v => v.id === this.selectedVehicleId) || null;
+    return this.vehicles.find((v) => v.id === this.selectedVehicleId) || null;
   }
 
   @computed get logsForSelectedVehicle() {
     return this.logs
-      .filter(l => l.vehicleId === this.selectedVehicleId)
+      .filter((l) => l.vehicleId === this.selectedVehicleId)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
@@ -53,10 +53,10 @@ export default class GarageStore {
 
   @computed get fuelStats() {
     const gasLogs = this.logsForSelectedVehicle.filter(
-      l => l.fuelType === 'gas',
+      (l) => l.fuelType === 'gas',
     );
     const ethLogs = this.logsForSelectedVehicle.filter(
-      l => l.fuelType === 'ethanol',
+      (l) => l.fuelType === 'ethanol',
     );
 
     return {
@@ -108,7 +108,7 @@ export default class GarageStore {
     gasCons: number,
     ethCons: number,
   ) => {
-    const vehicle = this.vehicles.find(v => v.id === id);
+    const vehicle = this.vehicles.find((v) => v.id === id);
     if (vehicle) {
       vehicle.avgGasConsumption = gasCons;
       vehicle.avgEthanolConsumption = ethCons;

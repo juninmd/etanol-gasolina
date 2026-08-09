@@ -89,7 +89,7 @@ export default class HomeStore {
     if (typeof keyOrObject === 'string') {
       this[keyOrObject] = value;
     } else if (typeof keyOrObject === 'object') {
-      Object.keys(keyOrObject).forEach(key => {
+      Object.keys(keyOrObject).forEach((key) => {
         this[key] = keyOrObject[key];
       });
     }

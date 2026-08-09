@@ -30,7 +30,9 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
       setMessages([
         {
           id: Date.now().toString(),
-          text: `Olá! Sou seu Copiloto de Economia 🤖. Notei que você já economizou R$ ${stationsStore.totalSavings.toFixed(2)}. Como posso surpreender você hoje?`,
+          text: `Olá! Sou seu Copiloto de Economia 🤖. Notei que você já economizou R$ ${stationsStore.totalSavings.toFixed(
+            2,
+          )}. Como posso surpreender você hoje?`,
           sender: 'ai',
           options: ['Dica do dia', 'Previsão de preços', 'Desafio maluco'],
         },
@@ -47,7 +49,7 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
       text: option,
       sender: 'user',
     };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
 
     // Simulate AI thinking and replying
@@ -56,7 +58,10 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
       let newOptions: string[] = [];
 
       if (option === 'Dica do dia') {
-        const bestFuel = stationsStore.marketAnalysis.bestFuel === 'Ethanol' ? 'Etanol' : 'Gasolina';
+        const bestFuel =
+          stationsStore.marketAnalysis.bestFuel === 'Ethanol'
+            ? 'Etanol'
+            : 'Gasolina';
         aiResponse = `A dica de ouro de hoje: O mercado está favorável para ${bestFuel}. Mantenha os pneus calibrados e você pode economizar até 3% a mais!`;
         newOptions = ['Obrigado!', 'Previsão de preços'];
       } else if (option === 'Previsão de preços') {
@@ -64,13 +69,16 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
         aiResponse = `Minha análise de dados indica: ${trend}. Que tal abastecer agora e garantir o preço?`;
         newOptions = ['Ver mapa', 'Desafio maluco'];
       } else if (option === 'Desafio maluco') {
-        aiResponse = 'Desafio aceito! Tente andar de bicicleta amanhã. Economia de 100% e as pernas agradecem! 🚲💨 Aceita?';
+        aiResponse =
+          'Desafio aceito! Tente andar de bicicleta amanhã. Economia de 100% e as pernas agradecem! 🚲💨 Aceita?';
         newOptions = ['Aceito!', 'Nem pensar'];
       } else if (option === 'Aceito!') {
-        aiResponse = 'Incrível! Ganhou 50 pontos virtuais de coragem ambiental. 🌳';
+        aiResponse =
+          'Incrível! Ganhou 50 pontos virtuais de coragem ambiental. 🌳';
         stationsStore.addPoints(50);
       } else if (option === 'Ver mapa') {
-        aiResponse = 'Feche este chat e olhe o mapa na tela principal. Encontrei ótimos preços por lá.';
+        aiResponse =
+          'Feche este chat e olhe o mapa na tela principal. Encontrei ótimos preços por lá.';
       } else {
         aiResponse = 'Estou sempre aprendendo. Continue economizando!';
       }
@@ -82,12 +90,14 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
         options: newOptions.length > 0 ? newOptions : undefined,
       };
 
-      setMessages(prev => [...prev, aiMsg]);
+      setMessages((prev) => [...prev, aiMsg]);
       setIsTyping(false);
     }, 1500);
   };
 
-  if (!visible) {return null;}
+  if (!visible) {
+    return null;
+  }
 
   return (
     <Modal
@@ -96,26 +106,49 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
       onBackdropPress={onClose}>
       <Card disabled={true} style={styles.modalCard}>
         <View style={styles.header}>
-          <Icon name="message-circle-outline" width={24} height={24} fill="#00E096" />
-          <Text category="h6" style={{marginLeft: 10}}>AI Copilot</Text>
+          <Icon
+            name="message-circle-outline"
+            width={24}
+            height={24}
+            fill="#00E096"
+          />
+          <Text category="h6" style={{marginLeft: 10}}>
+            AI Copilot
+          </Text>
         </View>
 
         <ScrollView
           ref={scrollViewRef}
           style={styles.chatArea}
           contentContainerStyle={{paddingBottom: 20}}
-          onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({animated: true})}
-        >
+          onContentSizeChange={() =>
+            scrollViewRef.current?.scrollToEnd({animated: true})
+          }>
           {messages.map((msg) => (
-            <View key={msg.id} style={msg.sender === 'ai' ? styles.msgAiContainer : styles.msgUserContainer}>
-              <View style={[styles.msgBubble, msg.sender === 'ai' ? styles.msgBubbleAi : styles.msgBubbleUser]}>
-                <Text style={msg.sender === 'ai' ? {color: '#333'} : {color: '#fff'}}>
+            <View
+              key={msg.id}
+              style={
+                msg.sender === 'ai'
+                  ? styles.msgAiContainer
+                  : styles.msgUserContainer
+              }>
+              <View
+                style={[
+                  styles.msgBubble,
+                  msg.sender === 'ai'
+                    ? styles.msgBubbleAi
+                    : styles.msgBubbleUser,
+                ]}>
+                <Text
+                  style={
+                    msg.sender === 'ai' ? {color: '#333'} : {color: '#fff'}
+                  }>
                   {msg.text}
                 </Text>
               </View>
               {msg.options && msg.sender === 'ai' && (
                 <View style={styles.optionsContainer}>
-                  {msg.options.map(opt => (
+                  {msg.options.map((opt) => (
                     <Button
                       key={opt}
                       size="tiny"
@@ -123,8 +156,7 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
                       status="success"
                       style={styles.optionButton}
                       onPress={() => handleOptionSelect(opt)}
-                      disabled={isTyping}
-                    >
+                      disabled={isTyping}>
                       {opt}
                     </Button>
                   ))}
@@ -134,12 +166,20 @@ const AICopilotModal = observer(({visible, onClose, stationsStore}: Props) => {
           ))}
           {isTyping && (
             <View style={styles.typingContainer}>
-              <Icon name="more-horizontal" width={32} height={32} fill="#8F9BB3" animation="pulse" />
+              <Icon
+                name="more-horizontal"
+                width={32}
+                height={32}
+                fill="#8F9BB3"
+                animation="pulse"
+              />
             </View>
           )}
         </ScrollView>
 
-        <Button appearance="ghost" onPress={onClose} status="basic">Fechar Chat</Button>
+        <Button appearance="ghost" onPress={onClose} status="basic">
+          Fechar Chat
+        </Button>
       </Card>
     </Modal>
   );
