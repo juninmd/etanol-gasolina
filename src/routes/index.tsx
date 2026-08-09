@@ -20,18 +20,18 @@ import TripPlanner from '../containers/trip-planner';
 const {Navigator, Screen} = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const CalculatorIcon = props => <Icon {...props} name="pricetags-outline" />;
+const CalculatorIcon = (props) => <Icon {...props} name="pricetags-outline" />;
 
-const MapIcon = props => <Icon {...props} name="map-outline" />;
+const MapIcon = (props) => <Icon {...props} name="map-outline" />;
 
-const HeartIcon = props => <Icon {...props} name="heart-outline" />;
+const HeartIcon = (props) => <Icon {...props} name="heart-outline" />;
 
-const CarIcon = props => <Icon {...props} name="car-outline" />;
+const CarIcon = (props) => <Icon {...props} name="car-outline" />;
 
 const BottomTabBar = ({navigation, state}) => (
   <BottomNavigation
     selectedIndex={state.index}
-    onSelect={index => navigation.navigate(state.routeNames[index])}>
+    onSelect={(index) => navigation.navigate(state.routeNames[index])}>
     <BottomNavigationTab title="Calculadora" icon={CalculatorIcon} />
     <BottomNavigationTab title="Postos" icon={MapIcon} />
     <BottomNavigationTab title="Favoritos" icon={HeartIcon} />
@@ -40,7 +40,7 @@ const BottomTabBar = ({navigation, state}) => (
 );
 
 const TabNavigator = () => (
-  <Navigator tabBar={props => <BottomTabBar {...props} />}>
+  <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
     <Screen name="Calculator" component={Home} />
     <Screen name="Stations" component={Stations} />
     <Screen name="Favorites" component={Favorites} />

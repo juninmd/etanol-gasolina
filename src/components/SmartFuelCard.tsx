@@ -18,13 +18,8 @@ interface Props {
 const SmartFuelCard = observer(({stationsStore}: Props) => {
   const theme = useTheme();
   const {marketAnalysis} = stationsStore;
-  const {
-    avgGas,
-    avgEthanol,
-    ratio,
-    bestFuel,
-    potentialSavingsPct,
-  } = marketAnalysis;
+  const {avgGas, avgEthanol, ratio, bestFuel, potentialSavingsPct} =
+    marketAnalysis;
 
   // Handle empty state
   if (ratio === 0) {

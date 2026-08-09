@@ -12,9 +12,9 @@ export interface FuelPriceResponse {
 export const fetchLivePrices = async (
   stationIds: number[],
 ): Promise<FuelPriceResponse[]> => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
-      const updates: FuelPriceResponse[] = stationIds.map(id => {
+      const updates: FuelPriceResponse[] = stationIds.map((id) => {
         // Simulating 30% chance of price update per station
         const willUpdate = Math.random() > 0.7;
         let change = 0;
