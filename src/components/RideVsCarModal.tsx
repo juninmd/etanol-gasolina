@@ -11,7 +11,12 @@ interface Props {
   garageStore: GarageStore;
 }
 
-const RideVsCarModal = ({visible, onClose, stationsStore, garageStore}: Props) => {
+const RideVsCarModal = ({
+  visible,
+  onClose,
+  stationsStore,
+  garageStore,
+}: Props) => {
   const [animation] = useState(new Animated.Value(0));
   const [distance, setDistance] = useState('');
   const [parkingCost, setParkingCost] = useState('');
@@ -20,7 +25,7 @@ const RideVsCarModal = ({visible, onClose, stationsStore, garageStore}: Props) =
   useEffect(() => {
     if (visible) {
       // Reward the user for discovering the easter egg
-      const badge = stationsStore.badges.find(b => b.id === 'smart_commuter');
+      const badge = stationsStore.badges.find((b) => b.id === 'smart_commuter');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         stationsStore.badgeQueue.push(badge);
@@ -46,7 +51,9 @@ const RideVsCarModal = ({visible, onClose, stationsStore, garageStore}: Props) =
     const park = parseFloat(parkingCost.replace(',', '.')) || 0;
     const ride = parseFloat(rideCost.replace(',', '.')) || 0;
 
-    if (dist === 0 || ride === 0) {return null;}
+    if (dist === 0 || ride === 0) {
+      return null;
+    }
 
     // Get fuel cost
     const {marketAnalysis} = stationsStore;
@@ -55,13 +62,13 @@ const RideVsCarModal = ({visible, onClose, stationsStore, garageStore}: Props) =
     let fuelType = 'Gasolina';
 
     if (marketAnalysis.bestFuel === 'Ethanol') {
-        pricePerLiter = marketAnalysis.avgEthanol;
-        consumption = garageStore.selectedVehicle?.avgEthanolConsumption || 7;
-        fuelType = 'Etanol';
+      pricePerLiter = marketAnalysis.avgEthanol;
+      consumption = garageStore.selectedVehicle?.avgEthanolConsumption || 7;
+      fuelType = 'Etanol';
     }
 
     if (pricePerLiter === 0) {
-        pricePerLiter = 5.0; // fallback
+      pricePerLiter = 5.0; // fallback
     }
 
     const fuelCost = (dist / consumption) * pricePerLiter;
@@ -110,13 +117,15 @@ const RideVsCarModal = ({visible, onClose, stationsStore, garageStore}: Props) =
           </View>
 
           <ScrollView style={styles.content}>
-             <Input
+            <Input
               placeholder="Distância da viagem (km)"
               value={distance}
               onChangeText={setDistance}
               keyboardType="numeric"
               style={styles.input}
-              accessoryLeft={(props: any) => <Icon {...props} name="navigation-2-outline" />}
+              accessoryLeft={(props: any) => (
+                <Icon {...props} name="navigation-2-outline" />
+              )}
             />
             <Input
               placeholder="Preço estimado do App (R$)"
@@ -124,7 +133,9 @@ const RideVsCarModal = ({visible, onClose, stationsStore, garageStore}: Props) =
               onChangeText={setRideCost}
               keyboardType="numeric"
               style={styles.input}
-              accessoryLeft={(props: any) => <Icon {...props} name="car-outline" />}
+              accessoryLeft={(props: any) => (
+                <Icon {...props} name="car-outline" />
+              )}
             />
             <Input
               placeholder="Estacionamento (R$) - Opcional"
@@ -132,31 +143,60 @@ const RideVsCarModal = ({visible, onClose, stationsStore, garageStore}: Props) =
               onChangeText={setParkingCost}
               keyboardType="numeric"
               style={styles.input}
-              accessoryLeft={(props: any) => <Icon {...props} name="square-outline" />}
+              accessoryLeft={(props: any) => (
+                <Icon {...props} name="square-outline" />
+              )}
             />
 
             {results && (
               <View style={styles.resultsContainer}>
-                <View style={[styles.resultBox, {borderColor: results.isCarCheaper ? '#00E096' : '#FF3D71'}]}>
-                    <Text category="h6" style={{color: results.isCarCheaper ? '#00E096' : '#FF3D71', textAlign: 'center', marginBottom: 10}}>
-                        {results.isCarCheaper ? 'Vá com seu carro!' : 'Vá de App!'}
-                    </Text>
+                <View
+                  style={[
+                    styles.resultBox,
+                    {borderColor: results.isCarCheaper ? '#00E096' : '#FF3D71'},
+                  ]}>
+                  <Text
+                    category="h6"
+                    style={{
+                      color: results.isCarCheaper ? '#00E096' : '#FF3D71',
+                      textAlign: 'center',
+                      marginBottom: 10,
+                    }}>
+                    {results.isCarCheaper ? 'Vá com seu carro!' : 'Vá de App!'}
+                  </Text>
 
-                    <View style={styles.comparisonRow}>
-                         <View style={styles.costCol}>
-                             <Text category="s2" appearance="hint">Carro Próprio</Text>
-                             <Text category="h6">R$ {results.totalCarCost.toFixed(2)}</Text>
-                             <Text category="c1" appearance="hint">Combustível: R$ {results.fuelCost.toFixed(2)} ({results.fuelType})</Text>
-                         </View>
-                         <View style={styles.costCol}>
-                             <Text category="s2" appearance="hint">App</Text>
-                             <Text category="h6">R$ {results.rideCost.toFixed(2)}</Text>
-                         </View>
+                  <View style={styles.comparisonRow}>
+                    <View style={styles.costCol}>
+                      <Text category="s2" appearance="hint">
+                        Carro Próprio
+                      </Text>
+                      <Text category="h6">
+                        R$ {results.totalCarCost.toFixed(2)}
+                      </Text>
+                      <Text category="c1" appearance="hint">
+                        Combustível: R$ {results.fuelCost.toFixed(2)} (
+                        {results.fuelType})
+                      </Text>
                     </View>
+                    <View style={styles.costCol}>
+                      <Text category="s2" appearance="hint">
+                        App
+                      </Text>
+                      <Text category="h6">
+                        R$ {results.rideCost.toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
 
-                    <Text category="s2" style={{textAlign: 'center', marginTop: 10, fontWeight: 'bold'}}>
-                        Economia de R$ {results.diff.toFixed(2)}
-                    </Text>
+                  <Text
+                    category="s2"
+                    style={{
+                      textAlign: 'center',
+                      marginTop: 10,
+                      fontWeight: 'bold',
+                    }}>
+                    Economia de R$ {results.diff.toFixed(2)}
+                  </Text>
                 </View>
               </View>
             )}
@@ -201,28 +241,28 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-      marginBottom: 10,
+    marginBottom: 10,
   },
   button: {
     borderRadius: 12,
   },
   resultsContainer: {
-      marginTop: 15,
+    marginTop: 15,
   },
   resultBox: {
-      borderWidth: 2,
-      borderRadius: 12,
-      padding: 15,
-      backgroundColor: '#f8f9ff',
+    borderWidth: 2,
+    borderRadius: 12,
+    padding: 15,
+    backgroundColor: '#f8f9ff',
   },
   comparisonRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
   costCol: {
-      alignItems: 'center',
-      flex: 1,
+    alignItems: 'center',
+    flex: 1,
   },
 });
 

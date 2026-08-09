@@ -46,7 +46,7 @@ const ChurrascometroModal = ({visible, onClose, stationsStore}: Props) => {
   useEffect(() => {
     if (visible) {
       // Reward the user for discovering the easter egg
-      const badge = stationsStore.badges.find(b => b.id === 'churrasqueiro');
+      const badge = stationsStore.badges.find((b) => b.id === 'churrasqueiro');
       if (badge && !badge.unlocked) {
         badge.unlocked = true;
         stationsStore.badgeQueue.push(badge);

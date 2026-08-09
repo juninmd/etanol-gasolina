@@ -24,7 +24,7 @@ interface State {
   ethCons: string;
 }
 
-const BackIcon = props => <Icon {...props} name="arrow-back" />;
+const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 @inject('garageStore')
 @observer
@@ -74,7 +74,7 @@ export default class AddVehicle extends Component<Props, State> {
             label="Nome do Veículo"
             placeholder="Ex: Meu Gol"
             value={this.state.name}
-            onChangeText={name => this.setState({name})}
+            onChangeText={(name) => this.setState({name})}
             style={styles.input}
           />
           <Input
@@ -82,7 +82,7 @@ export default class AddVehicle extends Component<Props, State> {
             placeholder="Ex: 50"
             keyboardType="numeric"
             value={this.state.tank}
-            onChangeText={tank => this.setState({tank})}
+            onChangeText={(tank) => this.setState({tank})}
             style={styles.input}
           />
           <Input
@@ -90,7 +90,7 @@ export default class AddVehicle extends Component<Props, State> {
             placeholder="Ex: 10.5"
             keyboardType="numeric"
             value={this.state.gasCons}
-            onChangeText={gasCons => this.setState({gasCons})}
+            onChangeText={(gasCons) => this.setState({gasCons})}
             style={styles.input}
           />
           <Input
@@ -98,7 +98,7 @@ export default class AddVehicle extends Component<Props, State> {
             placeholder="Ex: 7.2"
             keyboardType="numeric"
             value={this.state.ethCons}
-            onChangeText={ethCons => this.setState({ethCons})}
+            onChangeText={(ethCons) => this.setState({ethCons})}
             style={styles.input}
           />
           <Button onPress={this.handleSave} style={styles.button}>

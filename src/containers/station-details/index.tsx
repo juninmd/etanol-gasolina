@@ -29,7 +29,7 @@ interface State {
   simAmount: string;
 }
 
-const BackIcon = props => <Icon {...props} name="arrow-back" />;
+const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 @inject('stationsStore')
 @observer
@@ -77,7 +77,7 @@ export default class StationDetails extends Component<Props, State> {
     const {stationId} = route.params;
     const isFav = stationsStore.isFavorite(stationId);
 
-    const HeartIcon = props => (
+    const HeartIcon = (props) => (
       <Icon
         {...props}
         name={isFav ? 'heart' : 'heart-outline'}
@@ -142,17 +142,17 @@ export default class StationDetails extends Component<Props, State> {
     );
   };
 
-  handleRoute = station => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${
-      station.latitude
-    },${station.longitude}`;
-    Linking.openURL(url).catch(err => console.error('An error occurred', err));
+  handleRoute = (station) => {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}`;
+    Linking.openURL(url).catch((err) =>
+      console.error('An error occurred', err),
+    );
   };
 
   render() {
     const {route, stationsStore, navigation} = this.props;
     const {stationId} = route.params;
-    const station = stationsStore.stations.find(s => s.id === stationId);
+    const station = stationsStore.stations.find((s) => s.id === stationId);
 
     if (!station) {
       return (
@@ -442,7 +442,7 @@ export default class StationDetails extends Component<Props, State> {
             <Input
               placeholder="Quanto você quer gastar? (R$)"
               value={this.state.simAmount}
-              onChangeText={text => this.setState({simAmount: text})}
+              onChangeText={(text) => this.setState({simAmount: text})}
               keyboardType="numeric"
               style={styles.input}
             />
@@ -486,7 +486,7 @@ export default class StationDetails extends Component<Props, State> {
             style={styles.button}
             status="info"
             onPress={() => this.handleRoute(station)}
-            accessoryLeft={props => (
+            accessoryLeft={(props) => (
               <Icon {...props} name="navigation-2-outline" />
             )}>
             Traçar Rota
@@ -498,7 +498,7 @@ export default class StationDetails extends Component<Props, State> {
             onPress={() =>
               navigation.navigate('AddFill', {stationId: station.id})
             }
-            accessoryLeft={props => <Icon {...props} name="droplet" />}>
+            accessoryLeft={(props) => <Icon {...props} name="droplet" />}>
             Registrar Abastecimento
           </Button>
 
@@ -508,7 +508,7 @@ export default class StationDetails extends Component<Props, State> {
               status="success"
               appearance="outline"
               onPress={this.handleConfirmPrice}
-              accessoryLeft={props => (
+              accessoryLeft={(props) => (
                 <Icon {...props} name="checkmark-circle-2-outline" />
               )}>
               Confirmar Preço
@@ -519,7 +519,9 @@ export default class StationDetails extends Component<Props, State> {
               onPress={() =>
                 this.setState({showUpdatePrice: !this.state.showUpdatePrice})
               }
-              accessoryLeft={props => <Icon {...props} name="edit-outline" />}>
+              accessoryLeft={(props) => (
+                <Icon {...props} name="edit-outline" />
+              )}>
               Atualizar
             </Button>
           </View>
@@ -529,7 +531,7 @@ export default class StationDetails extends Component<Props, State> {
             status="info"
             appearance="outline"
             onPress={this.handleCreateAlert}
-            accessoryLeft={props => <Icon {...props} name="bell-outline" />}>
+            accessoryLeft={(props) => <Icon {...props} name="bell-outline" />}>
             Criar Alerta de Preço
           </Button>
 
@@ -539,14 +541,14 @@ export default class StationDetails extends Component<Props, State> {
               <Input
                 placeholder="Preço Gasolina"
                 value={this.state.newGasPrice}
-                onChangeText={text => this.setState({newGasPrice: text})}
+                onChangeText={(text) => this.setState({newGasPrice: text})}
                 keyboardType="numeric"
                 style={styles.input}
               />
               <Input
                 placeholder="Preço Etanol"
                 value={this.state.newEthanolPrice}
-                onChangeText={text => this.setState({newEthanolPrice: text})}
+                onChangeText={(text) => this.setState({newEthanolPrice: text})}
                 keyboardType="numeric"
                 style={styles.input}
               />

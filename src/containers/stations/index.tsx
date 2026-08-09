@@ -88,7 +88,7 @@ export default class Stations extends Component<Props, State> {
         size="tiny"
         appearance="ghost"
         status={fav ? 'danger' : 'basic'}
-        icon={style => (
+        icon={(style) => (
           <Icon {...style} name={fav ? 'heart' : 'heart-outline'} />
         )}
         onPress={() => toggleFavorite(id)}
@@ -103,9 +103,7 @@ export default class Stations extends Component<Props, State> {
   renderItem = ({item}) => (
     <ListItem
       title={`${item.name} ${item.isPromo ? '(Promoção!)' : ''}`}
-      description={`${item.address}\nGas: R$ ${item.priceGas} | Etanol: R$ ${
-        item.priceEthanol
-      }`}
+      description={`${item.address}\nGas: R$ ${item.priceGas} | Etanol: R$ ${item.priceEthanol}`}
       accessory={() => this.renderItemAccessory(item.id)}
       style={styles.item}
       onPress={() => this.onItemPress(item.id)}
@@ -117,11 +115,8 @@ export default class Stations extends Component<Props, State> {
   };
 
   render() {
-    const {
-      filteredStations,
-      filterPromo,
-      toggleFilterPromo,
-    } = this.props.stationsStore;
+    const {filteredStations, filterPromo, toggleFilterPromo} =
+      this.props.stationsStore;
     const {showMap} = this.state;
 
     // Calculate Average Gas Price for Color Coding
@@ -161,7 +156,7 @@ export default class Stations extends Component<Props, State> {
         {showMap ? (
           <View style={{flex: 1}}>
             <MapView
-              ref={ref => (this.mapRef = ref)}
+              ref={(ref) => (this.mapRef = ref)}
               style={styles.map}
               initialRegion={{
                 latitude: -23.561684,
@@ -169,7 +164,7 @@ export default class Stations extends Component<Props, State> {
                 latitudeDelta: 0.05,
                 longitudeDelta: 0.05,
               }}>
-              {filteredStations.map(station => {
+              {filteredStations.map((station) => {
                 let pinColor = 'orange'; // Average
                 if (station.isPromo) {
                   pinColor = 'gold';
@@ -191,9 +186,7 @@ export default class Stations extends Component<Props, State> {
                       longitude: station.longitude,
                     }}
                     title={station.name}
-                    description={`Gas: ${station.priceGas} | Etanol: ${
-                      station.priceEthanol
-                    }`}
+                    description={`Gas: ${station.priceGas} | Etanol: ${station.priceEthanol}`}
                     onCalloutPress={() => this.onItemPress(station.id)}
                     pinColor={pinColor}
                   />
