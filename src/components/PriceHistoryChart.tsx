@@ -20,7 +20,7 @@ export const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({
   }
 
   const maxPrice =
-    Math.max(...history.map(h => Math.max(h.gas, h.ethanol))) || 6.0;
+    Math.max(...history.map((h) => Math.max(h.gas, h.ethanol))) || 6.0;
 
   return (
     <View>

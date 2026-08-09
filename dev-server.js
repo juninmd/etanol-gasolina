@@ -167,6 +167,6 @@ server.listen(PORT, () => {
   console.log('Pressione Ctrl+C para parar');
 });
 
-server.on('error', err => {
+server.on('error', (err) => {
   console.error('Erro no servidor:', err);
 });

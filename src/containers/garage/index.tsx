@@ -91,7 +91,7 @@ export default class Garage extends Component<Props> {
           <Button
             size="small"
             appearance="ghost"
-            accessoryLeft={props => <Icon {...props} name="plus" />}
+            accessoryLeft={(props) => <Icon {...props} name="plus" />}
             onPress={() => navigation.navigate('AddVehicle')}>
             Adicionar
           </Button>
@@ -139,7 +139,7 @@ export default class Garage extends Component<Props> {
                 style={styles.logButton}
                 status="success"
                 onPress={() => navigation.navigate('AddFill')}
-                accessoryLeft={props => <Icon {...props} name="droplet" />}>
+                accessoryLeft={(props) => <Icon {...props} name="droplet" />}>
                 Registrar Abastecimento
               </Button>
 
@@ -147,7 +147,7 @@ export default class Garage extends Component<Props> {
                 Histórico
               </Text>
               {logsForSelectedVehicle.length > 0 ? (
-                logsForSelectedVehicle.map(log => (
+                logsForSelectedVehicle.map((log) => (
                   <View key={log.id}>
                     <ListItem
                       title={`${log.date} - ${log.stationName}`}

@@ -71,7 +71,7 @@ const FuelMatchModal = ({visible, onClose, stations, onMatch}: Props) => {
       onClose();
     } else {
       position.setValue({x: 0, y: 0});
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
     }
   };
 

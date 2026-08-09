@@ -133,7 +133,7 @@ export default class TripPlanner extends React.Component<Props> {
               label="Destino"
               placeholder="Ex: Praia Grande, SP"
               value={destination}
-              onChangeText={t => this.setState({destination: t})}
+              onChangeText={(t) => this.setState({destination: t})}
               style={styles.input}
               accessoryLeft={(props: any) => (
                 <Icon {...props} name="pin-outline" />
@@ -143,7 +143,7 @@ export default class TripPlanner extends React.Component<Props> {
               label="Distância Estimada (km)"
               placeholder="Ex: 80"
               value={distance}
-              onChangeText={t => this.setState({distance: t})}
+              onChangeText={(t) => this.setState({distance: t})}
               keyboardType="numeric"
               style={styles.input}
               accessoryLeft={(props: any) => (
@@ -169,7 +169,7 @@ export default class TripPlanner extends React.Component<Props> {
               <View style={styles.mapContainer}>
                 {MapView ? (
                   <MapView
-                    ref={ref => {
+                    ref={(ref) => {
                       if (Platform.OS !== 'web') {
                         this.mapRef = ref;
                       }
@@ -203,9 +203,7 @@ export default class TripPlanner extends React.Component<Props> {
                         }}
                         title={`Parada: ${bestStop.name}`}
                         pinColor="gold"
-                        description={`Gas: ${bestStop.priceGas} | Etanol: ${
-                          bestStop.priceEthanol
-                        }`}
+                        description={`Gas: ${bestStop.priceGas} | Etanol: ${bestStop.priceEthanol}`}
                       />
                     )}
                     {Polyline && (
