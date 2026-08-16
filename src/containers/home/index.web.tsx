@@ -16,6 +16,7 @@ import ARPriceScannerModal from '../../components/ARPriceScannerModal';
 import ChurrascometroModal from '../../components/ChurrascometroModal';
 import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
+import FrentistaSimulatorModal from '../../components/FrentistaSimulatorModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 
@@ -236,6 +237,16 @@ class HomeWeb extends React.Component<Props> {
           </Button>
 
           <Button
+            onPress={() => this.setState({showFrentista: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#00E096', marginTop: 15},
+            ]}
+            status="success">
+            Simulador Frentista ⛽
+          </Button>
+
+          <Button
             onPress={() => this.setState({showRideVsCar: true})}
             style={[
               styles.calculateButton,
@@ -387,6 +398,12 @@ class HomeWeb extends React.Component<Props> {
         <BatalhaDePostosModal
           visible={this.state.showBatalha}
           onClose={() => this.setState({showBatalha: false})}
+          stationsStore={stationsStore}
+        />
+
+        <FrentistaSimulatorModal
+          visible={this.state.showFrentista}
+          onClose={() => this.setState({showFrentista: false})}
           stationsStore={stationsStore}
         />
       </ScrollView>
