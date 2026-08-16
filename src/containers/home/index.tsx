@@ -1,10 +1,9 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
   ScrollView,
   Platform,
-  Dimensions,
   TouchableOpacity,
 } from 'react-native';
 import {
@@ -15,7 +14,6 @@ import {
   Card,
   Input,
   Modal,
-  Toggle,
 } from '@ui-kitten/components';
 import {observer} from 'mobx-react';
 import {useNavigation} from '@react-navigation/native';
@@ -56,7 +54,6 @@ import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 
-const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 180;
 const STROKE_WIDTH = 15;
 const RADIUS = (CIRCLE_SIZE - STROKE_WIDTH) / 2;
