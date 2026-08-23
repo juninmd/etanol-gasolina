@@ -241,6 +241,13 @@ export default class StationsStore {
       icon: 'gift-outline',
       unlocked: false,
     },
+    {
+      id: 'tycoon_master',
+      name: 'Tycoon Master',
+      description: 'Ganhou mais de R$ 2000 no Posto Tycoon!',
+      icon: 'briefcase-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -741,6 +748,14 @@ export default class StationsStore {
 
   @action unlockSurpresaBadge = () => {
     const badge = this.badges.find((b) => b.id === 'surpreendido');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
+    }
+  };
+
+  @action unlockTycoonBadge = () => {
+    const badge = this.badges.find((b) => b.id === 'tycoon_master');
     if (badge && !badge.unlocked) {
       badge.unlocked = true;
       this.badgeQueue.push(badge);

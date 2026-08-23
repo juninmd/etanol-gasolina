@@ -19,6 +19,7 @@ import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import FrentistaSimulatorModal from '../../components/FrentistaSimulatorModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
+import PostoTycoonModal from '../../components/PostoTycoonModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -42,6 +43,7 @@ class HomeWeb extends React.Component<Props> {
     showRoleta: false,
     showBatalha: false,
     showSurpreenda: false,
+    showTycoon: false,
     promoMessage: null as string | null,
   };
 
@@ -168,11 +170,19 @@ class HomeWeb extends React.Component<Props> {
         )}
 
         <Button
-          style={{marginBottom: 20, marginTop: 20, borderRadius: 30}}
+          style={{marginBottom: 10, marginTop: 20, borderRadius: 30}}
           status="warning"
           accessoryLeft={(p) => <Icon {...p} name="gift-outline" />}
           onPress={() => this.setState({showSurpreenda: true})}>
           ME SURPREENDA!
+        </Button>
+
+        <Button
+          style={{marginBottom: 20, borderRadius: 30}}
+          status="info"
+          accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
+          onPress={() => this.setState({showTycoon: true})}>
+          POSTO TYCOON!
         </Button>
 
         <View style={styles.inputSection}>
@@ -392,6 +402,12 @@ class HomeWeb extends React.Component<Props> {
         <MeSurpreendaModal
           visible={this.state.showSurpreenda}
           onClose={() => this.setState({showSurpreenda: false})}
+          stationsStore={stationsStore!}
+        />
+
+        <PostoTycoonModal
+          visible={this.state.showTycoon}
+          onClose={() => this.setState({showTycoon: false})}
           stationsStore={stationsStore!}
         />
 
