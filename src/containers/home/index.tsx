@@ -53,6 +53,7 @@ import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
+import PostoTycoonModal from '../../components/PostoTycoonModal';
 
 const CIRCLE_SIZE = 180;
 const STROKE_WIDTH = 15;
@@ -541,6 +542,7 @@ const Home = observer(() => {
   const [showRoleta, setShowRoleta] = useState(false);
   const [showBatalha, setShowBatalha] = useState(false);
   const [showSurpreenda, setShowSurpreenda] = useState(false);
+  const [showTycoon, setShowTycoon] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -707,11 +709,19 @@ const Home = observer(() => {
         )}
 
         <Button
-          style={{marginBottom: 20, borderRadius: 30}}
+          style={{marginBottom: 10, borderRadius: 30}}
           status="warning"
           accessoryLeft={(p) => <Icon {...p} name="gift-outline" />}
           onPress={() => setShowSurpreenda(true)}>
           ME SURPREENDA!
+        </Button>
+
+        <Button
+          style={{marginBottom: 20, borderRadius: 30}}
+          status="info"
+          accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
+          onPress={() => setShowTycoon(true)}>
+          POSTO TYCOON!
         </Button>
 
         {/* Smart Choice */}
@@ -1020,6 +1030,12 @@ const Home = observer(() => {
       <MeSurpreendaModal
         visible={showSurpreenda}
         onClose={() => setShowSurpreenda(false)}
+        stationsStore={stationsStore}
+      />
+
+      <PostoTycoonModal
+        visible={showTycoon}
+        onClose={() => setShowTycoon(false)}
         stationsStore={stationsStore}
       />
 
