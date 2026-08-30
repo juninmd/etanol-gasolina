@@ -20,6 +20,9 @@ const SURPRISES = [
   'Dica de ouro: Economize combustível dirigindo apenas em ladeiras abaixo.',
   'Descobrimos um posto que aceita abraços como pagamento. Mentira, continue economizando!',
   'Hoje seu nível de economia está tão alto que o Tio Patinhas pediu dicas.',
+  'Seu posto de gasolina favorito quer te eleger cliente do ano!',
+  'O cheiro da gasolina não é perfume, use com moderação.',
+  'Se o seu carro falasse, ele pediria para você usar as pernas hoje.',
 ];
 
 const TRIVIA = [
@@ -47,6 +50,16 @@ const TRIVIA = [
       'Rendimento Por Motor',
     ],
     answer: 'Rotações Por Minuto',
+  },
+  {
+    question: 'A gasolina é mais densa ou menos densa que a água?',
+    options: ['Mais densa', 'Menos densa', 'Mesma densidade', 'Varia'],
+    answer: 'Menos densa',
+  },
+  {
+    question: 'Qual foi o primeiro animal a viajar em um carro?',
+    options: ['Cachorro', 'Gato', 'Macaco', 'Pato'],
+    answer: 'Cachorro',
   },
 ];
 
