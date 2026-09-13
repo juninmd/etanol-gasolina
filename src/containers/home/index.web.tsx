@@ -19,6 +19,7 @@ import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import FrentistaSimulatorModal from '../../components/FrentistaSimulatorModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
+import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 
 interface Props {
@@ -43,6 +44,7 @@ class HomeWeb extends React.Component<Props> {
     showRoleta: false,
     showBatalha: false,
     showSurpreenda: false,
+    showCrystalBall: false,
     showTycoon: false,
     promoMessage: null as string | null,
   };
@@ -214,6 +216,16 @@ class HomeWeb extends React.Component<Props> {
             disabled={isCalculating}
             style={styles.calculateButton}>
             {isCalculating ? 'Calculando...' : 'Calcular'}
+          </Button>
+
+          <Button
+            onPress={() => this.setState({showCrystalBall: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#9C27B0', marginTop: 15},
+            ]}
+            status="primary">
+            Bola de Cristal 🔮
           </Button>
 
           <Button
@@ -414,6 +426,12 @@ class HomeWeb extends React.Component<Props> {
         <BatalhaDePostosModal
           visible={this.state.showBatalha}
           onClose={() => this.setState({showBatalha: false})}
+          stationsStore={stationsStore}
+        />
+
+        <CrystalBallModal
+          visible={this.state.showCrystalBall}
+          onClose={() => this.setState({showCrystalBall: false})}
           stationsStore={stationsStore}
         />
 
