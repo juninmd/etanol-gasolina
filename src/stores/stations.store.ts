@@ -248,6 +248,13 @@ export default class StationsStore {
       icon: 'briefcase-outline',
       unlocked: false,
     },
+    {
+      id: 'vidente',
+      name: 'Vidente da Economia',
+      description: 'Consultou a Bola de Cristal dos preços!',
+      icon: 'globe-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -739,6 +746,14 @@ export default class StationsStore {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
       }
+    }
+  };
+
+  @action unlockVidenteBadge = () => {
+    const badge = this.badges.find((b) => b.id === 'vidente');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.addActivity('savings', 'Ganhou badge: Vidente da Economia!');
     }
   };
 
