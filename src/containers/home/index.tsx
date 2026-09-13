@@ -53,6 +53,7 @@ import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
+import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 
 const CIRCLE_SIZE = 180;
@@ -542,6 +543,7 @@ const Home = observer(() => {
   const [showRoleta, setShowRoleta] = useState(false);
   const [showBatalha, setShowBatalha] = useState(false);
   const [showSurpreenda, setShowSurpreenda] = useState(false);
+  const [showCrystalBall, setShowCrystalBall] = useState(false);
   const [showTycoon, setShowTycoon] = useState(false);
 
   // Reactions & Effects
@@ -1045,7 +1047,19 @@ const Home = observer(() => {
         stationsStore={stationsStore}
       />
 
+      <CrystalBallModal
+        visible={showCrystalBall}
+        onClose={() => setShowCrystalBall(false)}
+        stationsStore={stationsStore}
+      />
+
       {/* New FABs */}
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 650, backgroundColor: '#9C27B0'}]}
+        onPress={() => setShowCrystalBall(true)}>
+        <Icon name="globe-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.wrappedFab, {bottom: 580, backgroundColor: '#00D084'}]}
         onPress={() => setShowBatalha(true)}>
