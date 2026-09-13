@@ -80,19 +80,13 @@ const CrystalBallModal = observer(
             </View>
 
             <View style={styles.messageBox}>
-              {isConsulting ? (
-                <Text category="s1" style={styles.messageText}>
-                  Consultando os astros... 🔮
-                </Text>
-              ) : prediction ? (
-                <Text category="s1" style={styles.messageText}>
-                  {prediction}
-                </Text>
-              ) : (
-                <Text category="s1" style={styles.messageText}>
-                  Quer saber o futuro dos preços dos combustíveis?
-                </Text>
-              )}
+              <Text category="s1" style={styles.messageText}>
+                {isConsulting
+                  ? 'Consultando os astros... 🔮'
+                  : prediction
+                  ? prediction
+                  : 'Quer saber o futuro dos preços dos combustíveis?'}
+              </Text>
             </View>
 
             {!prediction && !isConsulting && (
