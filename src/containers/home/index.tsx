@@ -55,6 +55,7 @@ import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
+import PeNaTabuaModal from '../../components/PeNaTabuaModal';
 
 const CIRCLE_SIZE = 180;
 const STROKE_WIDTH = 15;
@@ -545,6 +546,7 @@ const Home = observer(() => {
   const [showSurpreenda, setShowSurpreenda] = useState(false);
   const [showCrystalBall, setShowCrystalBall] = useState(false);
   const [showTycoon, setShowTycoon] = useState(false);
+  const [showPeNaTabua, setShowPeNaTabua] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -716,6 +718,14 @@ const Home = observer(() => {
           accessoryLeft={(p) => <Icon {...p} name="gift-outline" />}
           onPress={() => setShowSurpreenda(true)}>
           ME SURPREENDA!
+        </Button>
+
+        <Button
+          style={{marginBottom: 10, borderRadius: 30}}
+          status="danger"
+          accessoryLeft={(p) => <Icon {...p} name="alert-triangle-outline" />}
+          onPress={() => setShowPeNaTabua(true)}>
+          PÉ NA TÁBUA 🏎️
         </Button>
 
         <Button
@@ -1032,6 +1042,12 @@ const Home = observer(() => {
       <MeSurpreendaModal
         visible={showSurpreenda}
         onClose={() => setShowSurpreenda(false)}
+        stationsStore={stationsStore}
+      />
+
+      <PeNaTabuaModal
+        visible={showPeNaTabua}
+        onClose={() => setShowPeNaTabua(false)}
         stationsStore={stationsStore}
       />
 
