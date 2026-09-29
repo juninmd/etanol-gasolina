@@ -221,6 +221,13 @@ export default class StationsStore {
       unlocked: false,
     },
     {
+      id: 'pe_pesado',
+      name: 'Pé Pesado',
+      description: 'Queimou muito dinheiro acelerando parado no simulador.',
+      icon: 'alert-triangle-outline',
+      unlocked: false,
+    },
+    {
       id: 'sortudo',
       name: 'Sortudo da Roleta',
       description: 'Tirou a sorte grande na roleta de descontos',
@@ -766,6 +773,14 @@ export default class StationsStore {
         badge.unlocked = true;
         this.badgeQueue.push(badge);
       }
+    }
+  };
+
+  @action unlockPePesadoBadge = () => {
+    const badge = this.badges.find((b) => b.id === 'pe_pesado');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
     }
   };
 

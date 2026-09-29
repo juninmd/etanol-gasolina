@@ -21,7 +21,7 @@ import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
-import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
+import PeNaTabuaModal from '../../components/PeNaTabuaModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -47,7 +47,7 @@ class HomeWeb extends React.Component<Props> {
     showSurpreenda: false,
     showCrystalBall: false,
     showTycoon: false,
-    showCalculadoraRole: false,
+    showPeNaTabua: false,
     promoMessage: null as string | null,
   };
 
@@ -271,6 +271,16 @@ class HomeWeb extends React.Component<Props> {
           </Button>
 
           <Button
+            onPress={() => this.setState({showPeNaTabua: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#FF3D71', marginTop: 15},
+            ]}
+            status="danger">
+            Pé na Tábua 🏎️
+          </Button>
+
+          <Button
             onPress={() => this.setState({showFrentista: true})}
             style={[
               styles.calculateButton,
@@ -426,6 +436,12 @@ class HomeWeb extends React.Component<Props> {
         <MeSurpreendaModal
           visible={this.state.showSurpreenda}
           onClose={() => this.setState({showSurpreenda: false})}
+          stationsStore={stationsStore!}
+        />
+
+        <PeNaTabuaModal
+          visible={this.state.showPeNaTabua}
+          onClose={() => this.setState({showPeNaTabua: false})}
           stationsStore={stationsStore!}
         />
 
