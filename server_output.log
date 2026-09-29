@@ -1,29 +1,29 @@
-npm warn exec The following package was not found and will be installed: http-server@14.1.1
-npm warn deprecated whatwg-encoding@2.0.0: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Starting up http-server, serving build
 
-http-server version: 14.1.1
+> etanol@1.0.0 start
+> expo start
 
-http-server settings:
-CORS: disabled
-Cache: 3600 seconds
-Connection Timeout: 120 seconds
-Directory Listings: visible
-AutoIndex: visible
-Serve GZIP Files: false
-Serve Brotli Files: false
-Default File Extension: none
-
-Available on:
-  http://127.0.0.1:8080
-  http://192.168.0.2:8080
-Hit CTRL-C to stop the server
-
-[2026-03-01T10:19:30.608Z]  "GET /" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"
-(node:3716) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+Starting project at /app
+(node:104544) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-[2026-03-01T10:19:30.696Z]  "GET /_expo/static/js/web/index-ed5678c0f6c6abd4c54403b3a428e2d5.js" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"
-[2026-03-01T10:19:50.998Z]  "GET /" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"
-[2026-03-01T10:19:51.007Z]  "GET /_expo/static/js/web/index-ed5678c0f6c6abd4c54403b3a428e2d5.js" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"
-[2026-03-01T10:20:48.814Z]  "GET /" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"
-[2026-03-01T10:20:48.823Z]  "GET /_expo/static/js/web/index-e312e92541c186fe2e379fbee76850af.js" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/143.0.7499.4 Safari/537.36"
+Starting Metro Bundler
+The following packages should be updated for best compatibility with the installed expo version:
+  react-native-gesture-handler@2.30.0 - expected version: ~2.14.0
+  react-native-reanimated@3.19.5 - expected version: ~3.6.2
+  react-native-safe-area-context@4.14.1 - expected version: 4.8.2
+  react-native-screens@3.37.0 - expected version: ~3.29.0
+  react-native-svg@14.2.0 - expected version: 14.1.0
+  @types/react@18.3.27 - expected version: ~18.2.45
+  expo-build-properties@1.0.10 - expected version: ~0.11.1
+Your project may not work correctly until you install the correct versions of the packages.
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+transform[stderr]: Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+transform[stderr]:   npx update-browserslist-db@latest
+transform[stderr]:   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+transform[stderr]: Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+transform[stderr]:   npx update-browserslist-db@latest
+transform[stderr]:   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+transform[stderr]: Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+transform[stderr]:   npx update-browserslist-db@latest
+transform[stderr]:   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Web Bundled 21623ms (index.tsx)

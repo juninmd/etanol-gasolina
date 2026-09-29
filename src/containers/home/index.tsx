@@ -54,6 +54,7 @@ import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
+import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 
 const CIRCLE_SIZE = 180;
@@ -544,6 +545,7 @@ const Home = observer(() => {
   const [showBatalha, setShowBatalha] = useState(false);
   const [showSurpreenda, setShowSurpreenda] = useState(false);
   const [showCrystalBall, setShowCrystalBall] = useState(false);
+  const [showCalculadoraRole, setShowCalculadoraRole] = useState(false);
   const [showTycoon, setShowTycoon] = useState(false);
 
   // Reactions & Effects
@@ -1053,7 +1055,19 @@ const Home = observer(() => {
         stationsStore={stationsStore}
       />
 
+      <CalculadoraDeRoleModal
+        visible={showCalculadoraRole}
+        onClose={() => setShowCalculadoraRole(false)}
+        stationsStore={stationsStore}
+      />
+
       {/* New FABs */}
+      <TouchableOpacity
+        style={[styles.wrappedFab, {bottom: 720, backgroundColor: '#00D084'}]}
+        onPress={() => setShowCalculadoraRole(true)}>
+        <Icon name="people-outline" width={32} height={32} fill="white" />
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.wrappedFab, {bottom: 650, backgroundColor: '#9C27B0'}]}
         onPress={() => setShowCrystalBall(true)}>
