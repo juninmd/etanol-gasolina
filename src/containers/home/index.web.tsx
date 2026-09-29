@@ -21,6 +21,7 @@ import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
+import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -46,6 +47,7 @@ class HomeWeb extends React.Component<Props> {
     showSurpreenda: false,
     showCrystalBall: false,
     showTycoon: false,
+    showCalculadoraRole: false,
     promoMessage: null as string | null,
   };
 
@@ -216,6 +218,16 @@ class HomeWeb extends React.Component<Props> {
             disabled={isCalculating}
             style={styles.calculateButton}>
             {isCalculating ? 'Calculando...' : 'Calcular'}
+          </Button>
+
+          <Button
+            onPress={() => this.setState({showCalculadoraRole: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#00D084', marginTop: 15},
+            ]}
+            status="success">
+            Calculadora de Rolê 💸
           </Button>
 
           <Button
@@ -439,6 +451,12 @@ class HomeWeb extends React.Component<Props> {
           visible={this.state.showFrentista}
           onClose={() => this.setState({showFrentista: false})}
           stationsStore={stationsStore}
+        />
+
+        <CalculadoraDeRoleModal
+          visible={this.state.showCalculadoraRole}
+          onClose={() => this.setState({showCalculadoraRole: false})}
+          stationsStore={stationsStore!}
         />
       </ScrollView>
     );

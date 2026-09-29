@@ -255,6 +255,13 @@ export default class StationsStore {
       icon: 'globe-outline',
       unlocked: false,
     },
+    {
+      id: 'rei_do_role',
+      name: 'Rei do Rolê',
+      description: 'Calculou o racha da gasolina e salvou a amizade!',
+      icon: 'people',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -572,6 +579,19 @@ export default class StationsStore {
       this.favorites = this.favorites.filter((favId) => favId !== id);
     } else {
       this.favorites.push(id);
+    }
+  };
+
+  @action
+  unlockReiDoRoleBadge = () => {
+    const badge = this.badges.find((b) => b.id === 'rei_do_role');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.addSmartAlert({
+        message: '🏆 Nova Badge: Rei do Rolê! (+100 XP)',
+        type: 'success',
+      });
+      this.addPoints(100);
     }
   };
 
