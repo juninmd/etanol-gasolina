@@ -19,9 +19,11 @@ import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import FrentistaSimulatorModal from '../../components/FrentistaSimulatorModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
+import DetectorMentirasModal from '../../components/DetectorMentirasModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 import PeNaTabuaModal from '../../components/PeNaTabuaModal';
+import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -48,6 +50,7 @@ class HomeWeb extends React.Component<Props> {
     showCrystalBall: false,
     showTycoon: false,
     showPeNaTabua: false,
+    showDetectorMentiras: false,
     promoMessage: null as string | null,
   };
 
@@ -182,11 +185,20 @@ class HomeWeb extends React.Component<Props> {
         </Button>
 
         <Button
-          style={{marginBottom: 20, borderRadius: 30}}
+          style={{marginBottom: 10, borderRadius: 30}}
           status="info"
           accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
           onPress={() => this.setState({showTycoon: true})}>
           POSTO TYCOON!
+        </Button>
+
+        <Button
+          style={{marginBottom: 20, borderRadius: 30}}
+          status="success"
+          appearance="outline"
+          accessoryLeft={(p) => <Icon {...p} name="shield-outline" />}
+          onPress={() => this.setState({showDetectorMentiras: true})}>
+          DETECTOR DE CILADA 🚨
         </Button>
 
         <View style={styles.inputSection}>
@@ -430,6 +442,12 @@ class HomeWeb extends React.Component<Props> {
         <RoletaDaSorteModal
           visible={this.state.showRoleta}
           onClose={() => this.setState({showRoleta: false})}
+          stationsStore={stationsStore!}
+        />
+
+        <DetectorMentirasModal
+          visible={this.state.showDetectorMentiras}
+          onClose={() => this.setState({showDetectorMentiras: false})}
           stationsStore={stationsStore!}
         />
 

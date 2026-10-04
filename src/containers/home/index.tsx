@@ -53,6 +53,7 @@ import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
+import DetectorMentirasModal from '../../components/DetectorMentirasModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
 import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
@@ -549,6 +550,7 @@ const Home = observer(() => {
   const [showCalculadoraRole, setShowCalculadoraRole] = useState(false);
   const [showTycoon, setShowTycoon] = useState(false);
   const [showPeNaTabua, setShowPeNaTabua] = useState(false);
+  const [showDetectorMentiras, setShowDetectorMentiras] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -731,11 +733,20 @@ const Home = observer(() => {
         </Button>
 
         <Button
-          style={{marginBottom: 20, borderRadius: 30}}
+          style={{marginBottom: 10, borderRadius: 30}}
           status="info"
           accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
           onPress={() => setShowTycoon(true)}>
           POSTO TYCOON!
+        </Button>
+
+        <Button
+          style={{marginBottom: 20, borderRadius: 30}}
+          status="success"
+          appearance="outline"
+          accessoryLeft={(p) => <Icon {...p} name="shield-outline" />}
+          onPress={() => setShowDetectorMentiras(true)}>
+          DETECTOR DE CILADA 🚨
         </Button>
 
         {/* Smart Choice */}
@@ -1038,6 +1049,12 @@ const Home = observer(() => {
       <RoletaDaSorteModal
         visible={showRoleta}
         onClose={() => setShowRoleta(false)}
+        stationsStore={stationsStore}
+      />
+
+      <DetectorMentirasModal
+        visible={showDetectorMentiras}
+        onClose={() => setShowDetectorMentiras(false)}
         stationsStore={stationsStore}
       />
 

@@ -269,6 +269,13 @@ export default class StationsStore {
       icon: 'people',
       unlocked: false,
     },
+    {
+      id: 'detector_master',
+      name: 'Mestre Detetive',
+      description: 'Não caiu na cilada do frentista!',
+      icon: 'alert-triangle-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -789,6 +796,14 @@ export default class StationsStore {
     if (badge && !badge.unlocked) {
       badge.unlocked = true;
       this.addActivity('savings', 'Ganhou badge: Vidente da Economia!');
+    }
+  };
+
+  @action unlockDetectorBadge = () => {
+    const badge = this.badges.find((b) => b.id === 'detector_master');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
     }
   };
 
