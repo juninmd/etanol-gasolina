@@ -22,6 +22,7 @@ import MeSurpreendaModal from '../../components/MeSurpreendaModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 import PeNaTabuaModal from '../../components/PeNaTabuaModal';
+import DetectorMentirasModal from '../../components/DetectorMentirasModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -48,6 +49,7 @@ class HomeWeb extends React.Component<Props> {
     showCrystalBall: false,
     showTycoon: false,
     showPeNaTabua: false,
+    showDetector: false,
     promoMessage: null as string | null,
   };
 
@@ -271,6 +273,16 @@ class HomeWeb extends React.Component<Props> {
           </Button>
 
           <Button
+            onPress={() => this.setState({showDetector: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#FF3D71', marginTop: 15},
+            ]}
+            status="danger">
+            Detector de Cilada 🛡️
+          </Button>
+
+          <Button
             onPress={() => this.setState({showPeNaTabua: true})}
             style={[
               styles.calculateButton,
@@ -472,6 +484,12 @@ class HomeWeb extends React.Component<Props> {
         <CalculadoraDeRoleModal
           visible={this.state.showCalculadoraRole}
           onClose={() => this.setState({showCalculadoraRole: false})}
+          stationsStore={stationsStore!}
+        />
+
+        <DetectorMentirasModal
+          visible={this.state.showDetector}
+          onClose={() => this.setState({showDetector: false})}
           stationsStore={stationsStore!}
         />
       </ScrollView>
