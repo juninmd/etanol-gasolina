@@ -269,6 +269,13 @@ export default class StationsStore {
       icon: 'people',
       unlocked: false,
     },
+    {
+      id: 'detector_master',
+      name: 'Mestre Anti-Cilada',
+      description: 'Analisou uma oferta suspeita e escapou da cilada!',
+      icon: 'shield-outline',
+      unlocked: false,
+    },
   ];
   @observable badgeQueue: Badge[] = [];
 
@@ -778,6 +785,14 @@ export default class StationsStore {
 
   @action unlockPePesadoBadge = () => {
     const badge = this.badges.find((b) => b.id === 'pe_pesado');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
+    }
+  };
+
+  @action unlockDetectorBadge = () => {
+    const badge = this.badges.find((b) => b.id === 'detector_master');
     if (badge && !badge.unlocked) {
       badge.unlocked = true;
       this.badgeQueue.push(badge);
