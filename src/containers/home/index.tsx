@@ -57,6 +57,7 @@ import CrystalBallModal from '../../components/CrystalBallModal';
 import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 import PeNaTabuaModal from '../../components/PeNaTabuaModal';
+import DetectorMentirasModal from '../../components/DetectorMentirasModal';
 
 const CIRCLE_SIZE = 180;
 const STROKE_WIDTH = 15;
@@ -549,6 +550,7 @@ const Home = observer(() => {
   const [showCalculadoraRole, setShowCalculadoraRole] = useState(false);
   const [showTycoon, setShowTycoon] = useState(false);
   const [showPeNaTabua, setShowPeNaTabua] = useState(false);
+  const [showDetector, setShowDetector] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -736,6 +738,14 @@ const Home = observer(() => {
           accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
           onPress={() => setShowTycoon(true)}>
           POSTO TYCOON!
+        </Button>
+
+        <Button
+          style={{marginBottom: 20, borderRadius: 30}}
+          status="danger"
+          accessoryLeft={(p) => <Icon {...p} name="shield-outline" />}
+          onPress={() => setShowDetector(true)}>
+          DETECTOR DE CILADA!
         </Button>
 
         {/* Smart Choice */}
@@ -1074,6 +1084,12 @@ const Home = observer(() => {
       <CalculadoraDeRoleModal
         visible={showCalculadoraRole}
         onClose={() => setShowCalculadoraRole(false)}
+        stationsStore={stationsStore}
+      />
+
+      <DetectorMentirasModal
+        visible={showDetector}
+        onClose={() => setShowDetector(false)}
         stationsStore={stationsStore}
       />
 
