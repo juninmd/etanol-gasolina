@@ -61,3 +61,4 @@ buck-out/
 # secrets
 .env
 **/.env
+dist/

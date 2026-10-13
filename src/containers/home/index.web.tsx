@@ -283,6 +283,16 @@ class HomeWeb extends React.Component<Props> {
           </Button>
 
           <Button
+            onPress={() => this.setState({showDetectorMentiras: true})}
+            style={[
+              styles.calculateButton,
+              {backgroundColor: '#FF3D71', marginTop: 15},
+            ]}
+            status="danger">
+            Detector de Cilada 🛡️
+          </Button>
+
+          <Button
             onPress={() => this.setState({showPeNaTabua: true})}
             style={[
               styles.calculateButton,
