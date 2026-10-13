@@ -58,6 +58,7 @@ import CrystalBallModal from '../../components/CrystalBallModal';
 import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 import PeNaTabuaModal from '../../components/PeNaTabuaModal';
+import DetectorMentirasModal from '../../components/DetectorMentirasModal';
 
 const CIRCLE_SIZE = 180;
 const STROKE_WIDTH = 15;
@@ -550,7 +551,7 @@ const Home = observer(() => {
   const [showCalculadoraRole, setShowCalculadoraRole] = useState(false);
   const [showTycoon, setShowTycoon] = useState(false);
   const [showPeNaTabua, setShowPeNaTabua] = useState(false);
-  const [showDetectorMentiras, setShowDetectorMentiras] = useState(false);
+  const [showDetector, setShowDetector] = useState(false);
 
   // Reactions & Effects
   useEffect(() => {
@@ -742,11 +743,10 @@ const Home = observer(() => {
 
         <Button
           style={{marginBottom: 20, borderRadius: 30}}
-          status="success"
-          appearance="outline"
+          status="danger"
           accessoryLeft={(p) => <Icon {...p} name="shield-outline" />}
-          onPress={() => setShowDetectorMentiras(true)}>
-          DETECTOR DE CILADA 🚨
+          onPress={() => setShowDetector(true)}>
+          DETECTOR DE CILADA!
         </Button>
 
         {/* Smart Choice */}
@@ -1053,8 +1053,8 @@ const Home = observer(() => {
       />
 
       <DetectorMentirasModal
-        visible={showDetectorMentiras}
-        onClose={() => setShowDetectorMentiras(false)}
+        visible={showDetector}
+        onClose={() => setShowDetector(false)}
         stationsStore={stationsStore}
       />
 
@@ -1120,7 +1120,7 @@ const Home = observer(() => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.wrappedFab, {bottom: 230, backgroundColor: '#00E096'}]}
+        style={[styles.wrappedFab, {bottom: 370, backgroundColor: '#FF8C00'}]}
         onPress={() => setShowCopilot(true)}>
         <Icon
           name="message-circle-outline"
@@ -1134,12 +1134,6 @@ const Home = observer(() => {
         style={[styles.wrappedFab, {bottom: 300, backgroundColor: '#9C27B0'}]}
         onPress={() => setShowTimeMachine(true)}>
         <Icon name="clock-outline" width={32} height={32} fill="white" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.wrappedFab, {bottom: 370, backgroundColor: '#FF8C00'}]}
-        onPress={() => setShowARScanner(true)}>
-        <Icon name="camera-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
 
       <TouchableOpacity
