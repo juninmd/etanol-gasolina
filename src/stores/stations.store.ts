@@ -807,6 +807,14 @@ export default class StationsStore {
     }
   };
 
+  @action unlockDetectorBadge = () => {
+    const badge = this.badges.find((b) => b.id === 'detector_master');
+    if (badge && !badge.unlocked) {
+      badge.unlocked = true;
+      this.badgeQueue.push(badge);
+    }
+  };
+
   @action resetLevelUp = () => {
     this.showLevelUp = false;
   };

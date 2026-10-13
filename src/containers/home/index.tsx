@@ -53,6 +53,7 @@ import RideVsCarModal from '../../components/RideVsCarModal';
 import RoletaDaSorteModal from '../../components/RoletaDaSorteModal';
 import BatalhaDePostosModal from '../../components/BatalhaDePostosModal';
 import MeSurpreendaModal from '../../components/MeSurpreendaModal';
+import DetectorMentirasModal from '../../components/DetectorMentirasModal';
 import CrystalBallModal from '../../components/CrystalBallModal';
 import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
@@ -733,7 +734,7 @@ const Home = observer(() => {
         </Button>
 
         <Button
-          style={{marginBottom: 20, borderRadius: 30}}
+          style={{marginBottom: 10, borderRadius: 30}}
           status="info"
           accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
           onPress={() => setShowTycoon(true)}>
@@ -1051,6 +1052,12 @@ const Home = observer(() => {
         stationsStore={stationsStore}
       />
 
+      <DetectorMentirasModal
+        visible={showDetector}
+        onClose={() => setShowDetector(false)}
+        stationsStore={stationsStore}
+      />
+
       <MeSurpreendaModal
         visible={showSurpreenda}
         onClose={() => setShowSurpreenda(false)}
@@ -1087,12 +1094,6 @@ const Home = observer(() => {
         stationsStore={stationsStore}
       />
 
-      <DetectorMentirasModal
-        visible={showDetector}
-        onClose={() => setShowDetector(false)}
-        stationsStore={stationsStore}
-      />
-
       {/* New FABs */}
       <TouchableOpacity
         style={[styles.wrappedFab, {bottom: 720, backgroundColor: '#00D084'}]}
@@ -1119,7 +1120,7 @@ const Home = observer(() => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.wrappedFab, {bottom: 230, backgroundColor: '#00E096'}]}
+        style={[styles.wrappedFab, {bottom: 370, backgroundColor: '#FF8C00'}]}
         onPress={() => setShowCopilot(true)}>
         <Icon
           name="message-circle-outline"
@@ -1133,12 +1134,6 @@ const Home = observer(() => {
         style={[styles.wrappedFab, {bottom: 300, backgroundColor: '#9C27B0'}]}
         onPress={() => setShowTimeMachine(true)}>
         <Icon name="clock-outline" width={32} height={32} fill="white" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.wrappedFab, {bottom: 370, backgroundColor: '#FF8C00'}]}
-        onPress={() => setShowARScanner(true)}>
-        <Icon name="camera-outline" width={32} height={32} fill="white" />
       </TouchableOpacity>
 
       <TouchableOpacity
