@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Animated, Dimensions} from 'react-native';
-import {Modal, Card, Text, Button, Icon} from '@ui-kitten/components';
-import {observer} from 'mobx-react';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Animated, Dimensions } from 'react-native';
+import { Modal, Card, Text, Button, Icon } from '@ui-kitten/components';
+import { observer } from 'mobx-react';
 import StationsStore from '../stores/stations.store';
-import {secureRandom} from '../utils/random';
+import { secureRandom } from '../utils/random';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 interface Props {
   visible: boolean;
@@ -22,7 +22,7 @@ const UPSELL_OPTIONS = [
   'Lavar o para-brisa com shampoo de pH neutro',
 ];
 
-const DetectorMentirasModal = observer(({visible, onClose, stationsStore}: Props) => {
+const DetectorMentirasModal = observer(({ visible, onClose, stationsStore }: Props) => {
   const [animation] = useState(() => new Animated.Value(0));
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<'cilada' | 'seguro' | null>(null);
@@ -83,7 +83,8 @@ const DetectorMentirasModal = observer(({visible, onClose, stationsStore}: Props
             ],
             opacity: animation,
           },
-        ]}>
+        ]}
+      >
         <Card disabled={true} style={styles.card}>
           <View style={styles.header}>
             <Icon name="shield-outline" width={32} height={32} fill="#FF3D71" />
@@ -121,7 +122,7 @@ const DetectorMentirasModal = observer(({visible, onClose, stationsStore}: Props
                 fill="#FF3D71"
                 animation="spin"
               />
-              <Text category="h6" style={{marginTop: 15, color: '#FF3D71'}}>
+              <Text category="h6" style={{ marginTop: 15, color: '#FF3D71' }}>
                 Analisando a lábia...
               </Text>
             </View>
@@ -129,15 +130,40 @@ const DetectorMentirasModal = observer(({visible, onClose, stationsStore}: Props
 
           {result && (
             <View style={styles.resultContainer}>
-              <View style={[styles.resultBox, {backgroundColor: result === 'cilada' ? '#FFE5E5' : '#E5F9F1'}]}>
+              <View
+                style={[
+                  styles.resultBox,
+                  {
+                    backgroundColor:
+                      result === 'cilada' ? '#FFE5E5' : '#E5F9F1',
+                  },
+                ]}
+              >
                 <Icon
-                  name={result === 'cilada' ? 'alert-triangle-outline' : 'checkmark-circle-outline'}
+                  name={
+                    result === 'cilada'
+                      ? 'alert-triangle-outline'
+                      : 'checkmark-circle-outline'
+                  }
                   width={60}
                   height={60}
-                  fill={result === 'cilada' ? '#FF3D71' : '#00E096'}
+                  fill={
+                    result === 'cilada' ? '#FF3D71' : '#00E096'
+                  }
                 />
-                <Text category="h3" style={[styles.resultTitle, {color: result === 'cilada' ? '#FF3D71' : '#00E096'}]}>
-                  {result === 'cilada' ? 'É CILADA, BINO!' : 'PODE CONFIAR!'}
+                <Text
+                  category="h3"
+                  style={[
+                    styles.resultTitle,
+                    {
+                      color:
+                        result === 'cilada' ? '#FF3D71' : '#00E096',
+                    },
+                  ]}
+                >
+                  {result === 'cilada'
+                    ? 'É CILADA, BINO!'
+                    : 'PODE CONFIAR!'}
                 </Text>
                 <Text category="s1" style={styles.resultText}>
                   {result === 'cilada'
@@ -146,11 +172,19 @@ const DetectorMentirasModal = observer(({visible, onClose, stationsStore}: Props
                 </Text>
               </View>
 
-              <Text category="c1" status="success" style={{textAlign: 'center', marginTop: 10}}>
+              <Text
+                category="c1"
+                status="success"
+                style={{ textAlign: 'center', marginTop: 10 }}
+              >
                 +30 XP - Badge Mestre Anti-Cilada 🛡️
               </Text>
 
-              <Button style={{marginTop: 15}} onPress={onClose} status="primary">
+              <Button
+                style={{ marginTop: 15 }}
+                onPress={onClose}
+                status="primary"
+              >
                 Entendido
               </Button>
             </View>
@@ -160,8 +194,9 @@ const DetectorMentirasModal = observer(({visible, onClose, stationsStore}: Props
             <Button
               appearance="ghost"
               status="basic"
-              style={{marginTop: 15}}
-              onPress={onClose}>
+              style={{ marginTop: 15 }}
+              onPress={onClose}
+            >
               Voltar
             </Button>
           )}
