@@ -1,77 +1,55 @@
-```markdown
-# AGENTS.md - AI Coding Agent Guidelines
+# AGENTS.md
 
-These guidelines outline the principles and rules for development of this AI coding agent repository. Adherence to these principles is crucial for maintaining a sustainable, maintainable, and high-quality codebase.
+Regras para agentes de IA e contribuidores deste repositório (app React Native/Expo + Web em TypeScript). Visão geral e comandos: [`README.md`](README.md).
 
-## 1. DRY (Don't Repeat Yourself)
+## Contexto do projeto
 
-*   Every concept, function, and class should have a single, clearly defined purpose.
-*   Avoid duplicating logic or data structures.
-*   Refactor when a common pattern is identified and reused.
+- Stack: Expo 50, React Native 0.73, React 18, MobX 6 (decorators), React Navigation 6, UI Kitten 5, Jest 29.
+- Gerenciador de pacotes: **pnpm**. Não adicione `package-lock.json`/`yarn.lock` novos.
+- Código em `src/`: `containers/` (telas), `components/` (UI reutilizável), `stores/` (estado e regra de negócio), `services/`, `utils/`, `routes/`.
+- Arquivos `*.web.tsx` sobrescrevem a versão nativa no Web; ao mudar uma tela, verifique as duas.
+- Dados de postos/preços são mock. Não invente backend nem chaves de API.
 
-## 2. KISS (Keep It Simple, Stupid)
+## Princípios
 
-*   Prioritize readability and simplicity over complex solutions.
-*   Design for ease of understanding and maintenance.
-*   Avoid unnecessary abstractions or complexities.
-*   Focus on core functionality; avoid feature creep.
+1. **DRY** — um conceito, um lugar. Extraia padrões repetidos (ex.: modais de extras com layout igual).
+2. **KISS** — prefira a solução mais simples e legível.
+3. **SOLID** — uma responsabilidade por módulo; componentes dependem de stores/serviços, não de detalhes internos.
+4. **YAGNI** — implemente só o que foi pedido; sem features, flags ou abstrações especulativas.
 
-## 3. SOLID Principles
+## Qualidade de código
 
-*   **Single Responsibility Principle:** Each class/module should have one, and only one, reason to change.
-*   **Open/Closed Principle:**  The system should be extensible without modifying the core implementation. (Requires APIs)
-*   **Liskov Substitution Principle:**  Subclasses should be able to replace all their base class implementations without affecting the correctness of the program.
-*   **Interface Segregation Principle:** Clients should not be forced to implement interfaces they do not use.
-*   **Dependency Inversion Principle:** Client code should not depend on implementation details; they should depend on abstractions.
+- **Limite de 180 linhas por arquivo novo ou alterado.** Alguns arquivos legados excedem (ex.: `containers/home/index.tsx`, `stores/stations.store.ts`); ao tocá-los, extraia em vez de crescer.
+- Regra de negócio e cálculos nas stores/utils, nunca dentro de JSX.
+- Nomes descritivos e consistentes: componentes `PascalCase`, stores `nome.store.ts`, testes `nome.test.ts` em `__tests__/`.
+- Comentários só para o "porquê" não óbvio; nunca para narrar o código.
+- Tratamento de erro básico em I/O e parsing; não exponha detalhes internos ao usuário.
+- Formatação: Prettier (`.prettierrc.js`) e ESLint (`.eslintrc.js`). Não commite warnings novos.
+- Textos de UI em português do Brasil.
+- Nunca versione segredos (keystores, `service-account-key.json`, chaves de API). O CI roda gitleaks.
+- Não commite artefatos gerados: logs (`*.log`), `coverage/`, `build/`.
 
-## 4. YAGNI (You Aren't Gonna Need It)
+## Testes
 
-*   Implement functionality only when absolutely necessary.
-*   Avoid adding features or code without a clear and demonstrable need.
-*   Focus on delivering working code first, and add complexity later.
+- Todo código novo de lógica (stores, utils, services) precisa de teste unitário; bug fix começa por um teste que reproduz.
+- Cobertura mínima global: **80%**. Dados de teste realistas (preços em R$, consumo em km/l).
+- Antes de abrir PR:
 
-## 5. Code Quality & Structure
-
-*   **File Size Limit:** Each file must be no more than 180 lines of code.
-*   **Naming Conventions:**  Use consistent and descriptive naming conventions. (See example in README)
-*   **Comments:**  Provide concise and informative comments explaining complex logic or non-obvious choices.  Do *not* write comments explaining code—code should explain itself.
-*   **Code Formatting:**  Follow a consistent code formatting style (e.g., using `black` for Python).  Automatic formatting is preferred.
-*   **Error Handling:** Implement basic error handling for potential exceptions.  Don't expose internal logic to the public.
-*   **Data Structures:** Choose appropriate data structures for each task, based on performance and maintainability.
-*   **Testing:**  All code must be thoroughly tested with unit tests.
-
-## 6. Development Workflow
-
-*   **Version Control:** Use Git for version control. Commit frequently and with clear commit messages.
-*   **Code Review:** All code must undergo peer review before merging.
-*   **Static Analysis:**  Use static analysis tools (e.g., pylint, flake8) to identify potential issues and enforce coding standards.
-*   **Integration Testing:**  Focus on integration testing to ensure components work together correctly.
-
-## 7. Testing
-
-*   **Unit Tests:** A minimum of 80% of the code must be covered by unit tests.
-*   **Test-Driven Development (TDD):**  Consider using TDD principles (write tests before code) for new functionality.
-*   **Test Data Management:**  Use realistic and representative test data.
-*   **Coverage Reporting:**  Utilize code coverage tools to ensure tests are executed adequately.
-
-## 8.  Specific Considerations
-
-*   **Agent Types:** Clearly define the different agent types and their responsibilities.
-*   **Communication Protocols:** Define clear communication protocols between agents.
-*   **Data Serialization/Deserialization:**  Use a consistent and efficient serialization/deserialization mechanism.
-*   **Error Handling Strategy:** Implement a defined error handling strategy with configurable behavior.
-
-## 9.  README
-
-*   Include a detailed README explaining this document and its purpose.
-*   Provide examples of how to run the tests and interact with the agent.
-*   Document any dependencies or required tools.
-
-## 10.  Maintainability
-
-*   Document APIs (if applicable) clearly.
-*   Maintain a well-organized codebase with a clear structure.
-*   Use meaningful variable names and comments.
-
-These guidelines are crucial for maintaining a robust and efficient AGENTS.md repository and ensure it meets the required standards for the AI coding agent project.
+```bash
+pnpm lint
+pnpm test
 ```
+
+## Fluxo de desenvolvimento
+
+- Branch a partir da principal; commits pequenos com mensagens claras (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`).
+- PR descreve o que mudou e como foi testado; só mergeia com o workflow **Validate** verde.
+- Mudou comando, estrutura ou feature? Atualize o `README.md` no mesmo PR.
+
+## Checklist do agente
+
+- [ ] Mudança mínima e dentro do escopo pedido
+- [ ] Arquivos ≤ 180 linhas, sem duplicação
+- [ ] Testes adicionados/atualizados; `pnpm lint` e `pnpm test` passando
+- [ ] Versão `.web.tsx` conferida quando aplicável
+- [ ] README atualizado se necessário
