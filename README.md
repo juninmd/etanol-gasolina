@@ -1,198 +1,110 @@
 # Etanol ou Gasolina? 🚗⛽
 
-Aplicativo para calcular se vale mais a pena abastecer com etanol ou gasolina no Brasil.
+App multiplataforma (Android, iOS e Web) que diz se compensa abastecer com **etanol** ou **gasolina**, usando a regra dos 70% e o consumo real de cada veículo.
 
-## 📱 Features Implementadas
+## ✨ Funcionalidades
 
-✅ **Calculadora de Combustível**
-- Cálculo baseado na regra dos 70%
-- Suporte para consumo personalizado por veículo
-- Recomendação inteligente
+| Área | O que faz |
+| --- | --- |
+| **Calculadora** | Compara preços pela regra dos 70% e pelo consumo (km/l) de cada combustível, com recomendação. |
+| **Postos** | Lista e mapa, filtro de promoções, histórico de preços, comentários e avaliações. |
+| **Favoritos** | Postos favoritos e detalhes. |
+| **Garagem** | Vários veículos, registro de abastecimentos, estatísticas e economia. |
+| **Insights de mercado** | Análise de preços entre postos. |
+| **Planejador de viagem** | Custo estimado de uma viagem por combustível. |
+| **Gamificação** | Pontos, níveis e badges. |
+| **Extras (modais)** | Churrascômetro, Roleta da Sorte, Batalha de Postos, Posto Tycoon, Pé na Tábua, Detector de Cilada, Calculadora de Rolê, entre outros em `src/components/`. |
+| **Tema** | Claro/escuro. |
 
-✅ **Postos de Combustível**
-- Visualização em lista e mapa
-- Filtro de promoções
-- Busca pelo melhor preço
-- Histórico de preços
+> Postos, preços e comentários são **dados mock** (sem backend). Atualização em tempo real e geofencing estão desabilitados em `src/stores/stations.store.ts`.
 
-✅ **Favoritos**
-- Marcar postos favoritos
-- Ver informações detalhadas
-- Comentários e avaliações
+## 🧱 Stack
 
-✅ **Garagem**
-- Gerenciar múltiplos veículos
-- Registrar abastecimentos
-- Estatísticas de consumo
-- Histórico de economia
+- Expo 50 · React Native 0.73 · React 18 · `react-native-web`
+- MobX 6 + `mobx-react` (stores com decorators)
+- React Navigation 6 (tabs + stack)
+- UI Kitten 5 (Eva Design)
+- TypeScript 5 · Jest 29 · ESLint · Prettier
+- Build Android via EAS (`eas.json`); deploy web no Netlify (`netlify.toml`)
 
-✅ **Gamificação**
-- Sistema de pontos
-- Badges/conquistas
-- Níveis de progresso
+## 🚀 Começando
 
-✅ **Temas**
-- Modo claro/escuro
-
-## 🚀 Setup do Projeto
-
-### Pré-requisitos
-- Node.js 14+
-- pnpm (ou npm/yarn)
-- Android Studio com SDK configurado
-- JDK 11
-
-### Instalação
+Requisitos: Node.js 18+ e pnpm (versão em `packageManager` no `package.json`).
 
 ```bash
-# Instalar dependências
 pnpm install
 
-# Rodar no Android
-npm run android
-
-# Rodar versão Web (desenvolvimento)
-npm run web
-
-# Build para produção Web
-npm run build
+pnpm start            # Expo dev server
+pnpm android          # roda no Android (expo run:android)
+pnpm ios              # roda no iOS (expo run:ios)
+pnpm web              # roda a versão web
+pnpm build            # exporta o web para ./build
 ```
 
-## 🗺️ Configuração do Google Maps
+### Scripts de qualidade
 
-**IMPORTANTE:** Para o mapa funcionar, você precisa configurar a API Key do Google Maps:
+```bash
+pnpm test                     # Jest
+pnpm test -- --coverage       # cobertura (meta: ≥ 80%)
+pnpm lint                     # ESLint
+```
 
-1. Acesse [Google Cloud Console](https://console.cloud.google.com/)
-2. Crie um projeto e habilite a "Maps SDK for Android"
-3. Crie uma API Key
-4. Substitua `YOUR_GOOGLE_MAPS_API_KEY_HERE` em `android/app/src/main/AndroidManifest.xml`
+## 🗂️ Estrutura
+
+```
+src/
+├── App.tsx / App.web.tsx   # raiz (provider de stores, tema, rotas)
+├── routes/                 # tabs (Calculadora, Postos, Favoritos, Garagem) + stack
+├── containers/             # telas: home, stations, station-details, favorites,
+│                           #        garage, market-insights, trip-planner
+├── components/             # modais, cards, gráficos e widgets reutilizáveis
+├── stores/                 # homeStore, stationsStore, garageStore, themeStore
+│   └── __tests__/          # testes unitários das stores
+├── services/               # api.service.ts
+└── utils/
+```
+
+Telas com sufixo `.web.tsx` substituem a versão nativa no Web.
+
+## 🧠 Arquitetura
+
+- **Estado:** quatro stores MobX exportadas por `src/stores/index.tsx`.
+  - `homeStore`: entradas e cálculo da calculadora.
+  - `stationsStore`: postos, mercado, comentários, badges e economia.
+  - `garageStore`: veículos e abastecimentos.
+  - `themeStore`: tema claro/escuro.
+- **Telas** consomem as stores com `inject`/`observer`; regra de negócio fica nas stores, não nos componentes.
+- **Navegação:** tabs inferiores customizadas com UI Kitten; telas secundárias em stack.
+
+## 🗺️ Google Maps (Android)
+
+Configure a chave em `android/app/src/main/AndroidManifest.xml`:
 
 ```xml
-<meta-data
-  android:name="com.google.android.geo.API_KEY"
-  android:value="SUA_CHAVE_AQUI"/>
+<meta-data android:name="com.google.android.geo.API_KEY" android:value="SUA_CHAVE_AQUI"/>
 ```
 
-## 📦 Build para Play Store
+Nunca versione chaves reais; o CI roda gitleaks em cada push.
 
-### 1. Gerar Keystore de Produção
+## 📦 Build e publicação
 
 ```bash
-cd android/app
-keytool -genkeypair -v -storetype PKCS12 -keystore etanol-release.keystore -alias etanol-key -keyalg RSA -keysize 2048 -validity 10000
+pnpm build:android:preview   # APK interno (EAS)
+pnpm build:android           # AAB de produção (EAS)
 ```
 
-### 2. Configurar gradle.properties
+Guias detalhados: [`APK_BUILD_INSTRUCTIONS.md`](APK_BUILD_INSTRUCTIONS.md), [`EXPO_SETUP.md`](EXPO_SETUP.md), [`GITHUB_SECRETS_SETUP.md`](GITHUB_SECRETS_SETUP.md), [`PLAY_STORE_CHECKLIST.md`](PLAY_STORE_CHECKLIST.md), [`PRODUCTION_CHECKLIST.md`](PRODUCTION_CHECKLIST.md) e [`PRIVACY_POLICY.md`](PRIVACY_POLICY.md).
 
-Criar/editar `android/gradle.properties`:
+## 🔄 CI
 
-```properties
-MYAPP_RELEASE_STORE_FILE=etanol-release.keystore
-MYAPP_RELEASE_KEY_ALIAS=etanol-key
-MYAPP_RELEASE_STORE_PASSWORD=sua_senha_aqui
-MYAPP_RELEASE_KEY_PASSWORD=sua_senha_aqui
-```
+- **Validate** (PR e `main`): workflow reutilizável de lint/testes.
+- **Security Scan** (push em `main`): gitleaks.
+- **Release Drafter**: rascunho de release a partir dos PRs.
 
-### 3. Atualizar build.gradle
+## 🤝 Contribuindo
 
-Em `android/app/build.gradle`, adicione no bloco `signingConfigs`:
-
-```gradle
-release {
-    if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-        storeFile file(MYAPP_RELEASE_STORE_FILE)
-        storePassword MYAPP_RELEASE_STORE_PASSWORD
-        keyAlias MYAPP_RELEASE_KEY_ALIAS
-        keyPassword MYAPP_RELEASE_KEY_PASSWORD
-    }
-}
-```
-
-E no bloco `buildTypes`:
-
-```gradle
-release {
-    signingConfig signingConfigs.release
-    minifyEnabled enableProguardInReleaseBuilds
-    proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-}
-```
-
-### 4. Gerar APK/AAB
-
-```bash
-# APK
-cd android
-./gradlew assembleRelease
-
-# AAB (recomendado para Play Store)
-./gradlew bundleRelease
-```
-
-O arquivo estará em:
-- APK: `android/app/build/outputs/apk/release/app-release.apk`
-- AAB: `android/app/build/outputs/bundle/release/app-release.aab`
-
-## 🧪 Testes
-
-```bash
-# Rodar todos os testes
-npm test
-
-# Testes em modo watch
-npm test -- --watch
-
-# Coverage
-npm test -- --coverage
-```
-
-## 🏗️ Arquitetura
-
-- **State Management:** MobX 5
-- **Navigation:** React Navigation 5
-- **UI:** UI Kitten 4 (Eva Design)
-- **Maps:** react-native-maps
-- **Build:** React Native 0.61 + react-app-rewired (web)
-
-### Stores
-
-- `homeStore` - Lógica da calculadora
-- `stationsStore` - Dados de postos, market analysis
-- `garageStore` - Veículos e abastecimentos
-- `themeStore` - Tema claro/escuro
-
-## ⚠️ Observações Importantes
-
-### Funcionalidades Desabilitadas (requerem backend)
-
-Para manter a estabilidade da versão inicial, as seguintes features estão comentadas:
-
-- ✖️ Atualização de preços em tempo real
-- ✖️ Geofencing/check-in automático
-
-Essas features podem ser habilitadas quando um backend for implementado. Veja `src/stores/stations.store.ts`:
-
-```typescript
-constructor() {
-    // Desabilitado para versão de produção - requer backend
-    // this.startRealTimeUpdates();
-    // this.startGeofenceSimulation();
-}
-```
-
-### Dados Mock
-
-Atualmente o app usa dados mock (hardcoded) para demonstração. Para produção, você deve:
-
-1. Implementar um backend/API
-2. Integrar com APIs de postos reais
-3. Implementar autenticação de usuários
-4. Persistir dados localmente (AsyncStorage/Realm)
+Siga as regras de [`AGENTS.md`](AGENTS.md) (DRY, KISS, arquivos ≤ 180 linhas, testes). Fluxo: branch → commits claros → PR com testes passando.
 
 ## 📄 Licença
 
-Privado - Uso pessoal
-
-## 👨‍💻 Desenvolvimento
-
-Para adicionar novas funcionalidades, consulte `.github/copilot-instructions.md` que contém guias detalhados sobre a arquitetura e padrões do projeto.
+Privado — uso pessoal.
