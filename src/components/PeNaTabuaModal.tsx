@@ -1,5 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {StyleSheet, View, Modal as RNModal, Dimensions, TouchableWithoutFeedback} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Modal as RNModal,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {Card, Text, Button, Icon} from '@ui-kitten/components';
 import {observer} from 'mobx-react';
 import StationsStore from '../stores/stations.store';
@@ -34,7 +40,7 @@ const PeNaTabuaModal = observer(({visible, onClose, stationsStore}: Props) => {
           const next = prev + 0.15; // Burn rate
 
           if (next >= 10 && stationsStore.unlockPePesadoBadge) {
-              stationsStore.unlockPePesadoBadge();
+            stationsStore.unlockPePesadoBadge();
           }
 
           return next;
@@ -46,7 +52,9 @@ const PeNaTabuaModal = observer(({visible, onClose, stationsStore}: Props) => {
       }
     }
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
   }, [isPressing, stationsStore]);
 
@@ -62,21 +70,37 @@ const PeNaTabuaModal = observer(({visible, onClose, stationsStore}: Props) => {
       <View style={styles.backdrop}>
         <Card disabled={true} style={styles.modalCard}>
           <View style={styles.header}>
-            <Icon name="alert-triangle-outline" width={32} height={32} fill="#FF3D71" />
+            <Icon
+              name="alert-triangle-outline"
+              width={32}
+              height={32}
+              fill="#FF3D71"
+            />
             <Text category="h4" style={styles.title}>
               Pé na Tábua!
             </Text>
-            <Icon name="alert-triangle-outline" width={32} height={32} fill="#FF3D71" />
+            <Icon
+              name="alert-triangle-outline"
+              width={32}
+              height={32}
+              fill="#FF3D71"
+            />
           </View>
 
           <View style={styles.messageBox}>
             <Text category="s1" style={styles.messageText}>
-              Acelerar parado gasta combustível à toa! Segure o pedal para ver quanto você está queimando.
+              Acelerar parado gasta combustível à toa! Segure o pedal para ver
+              quanto você está queimando.
             </Text>
           </View>
 
           <View style={styles.counterBox}>
-            <Text category="h2" style={[styles.counterText, {color: moneyBurned > 5 ? '#FF3D71' : '#222B45'}]}>
+            <Text
+              category="h2"
+              style={[
+                styles.counterText,
+                {color: moneyBurned > 5 ? '#FF3D71' : '#222B45'},
+              ]}>
               R$ {moneyBurned.toFixed(2)}
             </Text>
             <Text category="c1" appearance="hint">
