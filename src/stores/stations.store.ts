@@ -293,8 +293,8 @@ export default class StationsStore {
 
   constructor() {
     // Desabilitado para versão de produção - requer backend
-    this.startRealTimeUpdates();
-    this.startGeofenceSimulation();
+    // this.startRealTimeUpdates();
+    // this.startGeofenceSimulation();
     this.initDailyChallenge();
   }
 

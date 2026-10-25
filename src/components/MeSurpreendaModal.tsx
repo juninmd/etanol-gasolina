@@ -65,7 +65,9 @@ const TRIVIA = [
 
 const MeSurpreendaModal = observer(
   ({visible, onClose, stationsStore}: Props) => {
-    const [mode, setMode] = useState<'surprise' | 'trivia'>('surprise');
+    const [mode, setMode] = useState<'surprise' | 'trivia' | 'lucky_pump'>(
+      'surprise',
+    );
     const [surprise, setSurprise] = useState('');
     const [triviaItem, setTriviaItem] = useState<{
       question: string;
@@ -76,15 +78,21 @@ const MeSurpreendaModal = observer(
     const [answeredCorrectly, setAnsweredCorrectly] = useState<boolean | null>(
       null,
     );
+    const [pumpReward, setPumpReward] = useState<number>(0);
+    const [pumping, setPumping] = useState(false);
 
     useEffect(() => {
       if (visible) {
-        const isTrivia = secureRandom() > 0.5;
-        setMode(isTrivia ? 'trivia' : 'surprise');
-
-        if (isTrivia) {
+        const rand = secureRandom();
+        if (rand < 0.33) {
+          setMode('trivia');
           setTriviaItem(TRIVIA[Math.floor(secureRandom() * TRIVIA.length)]);
+        } else if (rand < 0.66) {
+          setMode('lucky_pump');
+          setPumpReward(0);
+          setPumping(false);
         } else {
+          setMode('surprise');
           setSurprise(SURPRISES[Math.floor(secureRandom() * SURPRISES.length)]);
         }
 
@@ -92,6 +100,23 @@ const MeSurpreendaModal = observer(
         setAnsweredCorrectly(null);
       }
     }, [visible]);
+
+    const handlePump = () => {
+      setPumping(true);
+      setTimeout(() => {
+        const reward = Math.floor(secureRandom() * 200) + 50; // 50 to 250 points
+        setPumpReward(reward);
+        stationsStore.addPoints(reward);
+        if (stationsStore.unlockSurpresaBadge) {
+          stationsStore.unlockSurpresaBadge();
+        }
+        setClaimed(true);
+        setPumping(false);
+        setTimeout(() => {
+          onClose();
+        }, 3000);
+      }, 1500);
+    };
 
     const handleClaim = () => {
       stationsStore.addPoints(100);
@@ -138,7 +163,46 @@ const MeSurpreendaModal = observer(
               <Icon name="gift-outline" width={32} height={32} fill="#FFD700" />
             </View>
 
-            {mode === 'surprise' ? (
+            {mode === 'lucky_pump' ? (
+              <>
+                <View style={styles.messageBox}>
+                  <Text category="s1" style={styles.messageText}>
+                    Bomba da Sorte! Pressione para abastecer pontos!
+                  </Text>
+                </View>
+
+                {!claimed ? (
+                  <Button
+                    size="giant"
+                    status="warning"
+                    onPress={handlePump}
+                    disabled={pumping}
+                    style={styles.claimButton}
+                    accessoryLeft={(p) => (
+                      <Icon
+                        {...p}
+                        name={pumping ? 'loader-outline' : 'droplet-outline'}
+                      />
+                    )}>
+                    {pumping ? 'ABASTECENDO...' : 'ABASTECER PONTOS!'}
+                  </Button>
+                ) : (
+                  <View style={styles.successBox}>
+                    <Icon
+                      name="droplet"
+                      width={48}
+                      height={48}
+                      fill="#FFAA00"
+                    />
+                    <Text
+                      category="h6"
+                      style={[styles.successText, {color: '#FFAA00'}]}>
+                      Tanque Cheio! +{pumpReward} Pontos!
+                    </Text>
+                  </View>
+                )}
+              </>
+            ) : mode === 'surprise' ? (
               <>
                 <View style={styles.messageBox}>
                   <Text category="s1" style={styles.messageText}>

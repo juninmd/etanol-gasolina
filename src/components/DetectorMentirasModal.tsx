@@ -22,154 +22,183 @@ const UPSELL_OPTIONS = [
   'Lavar o para-brisa com shampoo de pH neutro',
 ];
 
-const DetectorMentirasModal = observer(({visible, onClose, stationsStore}: Props) => {
-  const [animation] = useState(() => new Animated.Value(0));
-  const [analyzing, setAnalyzing] = useState(false);
-  const [result, setResult] = useState<'cilada' | 'seguro' | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+const DetectorMentirasModal = observer(
+  ({visible, onClose, stationsStore}: Props) => {
+    const [animation] = useState(() => new Animated.Value(0));
+    const [analyzing, setAnalyzing] = useState(false);
+    const [result, setResult] = useState<'cilada' | 'seguro' | null>(null);
+    const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (visible) {
-      Animated.spring(animation, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }).start();
-      setResult(null);
-      setSelectedOption(null);
-      setAnalyzing(false);
-    } else {
-      animation.setValue(0);
-    }
-  }, [visible, animation]);
-
-  const analyze = (option: string) => {
-    setSelectedOption(option);
-    setAnalyzing(true);
-    setResult(null);
-
-    // Simulate analysis delay
-    setTimeout(() => {
-      setAnalyzing(false);
-      // Most upsells in this joke feature are "cilada" (traps)
-      const isCilada = secureRandom() > 0.2;
-      setResult(isCilada ? 'cilada' : 'seguro');
-
-      // Award badge and points
-      if (stationsStore.unlockDetectorBadge) {
-        stationsStore.unlockDetectorBadge();
+    useEffect(() => {
+      if (visible) {
+        Animated.spring(animation, {
+          toValue: 1,
+          tension: 50,
+          friction: 7,
+          useNativeDriver: true,
+        }).start();
+        setResult(null);
+        setSelectedOption(null);
+        setAnalyzing(false);
+      } else {
+        animation.setValue(0);
       }
-      stationsStore.addPoints(30);
-    }, 2000);
-  };
+    }, [visible, animation]);
 
-  return (
-    <Modal
-      visible={visible}
-      backdropStyle={styles.backdrop}
-      onBackdropPress={onClose}>
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            transform: [
-              {
-                scale: animation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0.8, 1],
-                }),
-              },
-            ],
-            opacity: animation,
-          },
-        ]}>
-        <Card disabled={true} style={styles.card}>
-          <View style={styles.header}>
-            <Icon name="shield-outline" width={32} height={32} fill="#FF3D71" />
-            <Text category="h4" style={styles.title}>
-              Detector de Cilada
-            </Text>
-          </View>
+    const analyze = (option: string) => {
+      setSelectedOption(option);
+      setAnalyzing(true);
+      setResult(null);
 
-          <Text category="s1" style={styles.subtitle}>
-            O frentista ofereceu algo? Vamos analisar!
-          </Text>
+      // Simulate analysis delay
+      setTimeout(() => {
+        setAnalyzing(false);
+        // Most upsells in this joke feature are "cilada" (traps)
+        const isCilada = secureRandom() > 0.2;
+        setResult(isCilada ? 'cilada' : 'seguro');
 
-          {!analyzing && !result && (
-            <View style={styles.optionsContainer}>
-              {UPSELL_OPTIONS.map((option, idx) => (
-                <Button
-                  key={idx}
-                  style={styles.optionButton}
-                  appearance="outline"
-                  status="danger"
-                  size="small"
-                  onPress={() => analyze(option)}>
-                  {option}
-                </Button>
-              ))}
-            </View>
-          )}
+        // Award badge and points
+        if (stationsStore.unlockDetectorBadge) {
+          stationsStore.unlockDetectorBadge();
+        }
+        stationsStore.addPoints(30);
+      }, 2000);
+    };
 
-          {analyzing && (
-            <View style={styles.analyzingContainer}>
+    return (
+      <Modal
+        visible={visible}
+        backdropStyle={styles.backdrop}
+        onBackdropPress={onClose}>
+        <Animated.View
+          style={[
+            styles.container,
+            {
+              transform: [
+                {
+                  scale: animation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.8, 1],
+                  }),
+                },
+              ],
+              opacity: animation,
+            },
+          ]}>
+          <Card disabled={true} style={styles.card}>
+            <View style={styles.header}>
               <Icon
-                name="loader-outline"
-                width={48}
-                height={48}
+                name="shield-outline"
+                width={32}
+                height={32}
                 fill="#FF3D71"
-                animation="spin"
               />
-              <Text category="h6" style={{marginTop: 15, color: '#FF3D71'}}>
-                Analisando a lábia...
+              <Text category="h4" style={styles.title}>
+                Detector de Cilada
               </Text>
             </View>
-          )}
 
-          {result && (
-            <View style={styles.resultContainer}>
-              <View style={[styles.resultBox, {backgroundColor: result === 'cilada' ? '#FFE5E5' : '#E5F9F1'}]}>
+            <Text category="s1" style={styles.subtitle}>
+              O frentista ofereceu algo? Vamos analisar!
+            </Text>
+
+            {!analyzing && !result && (
+              <View style={styles.optionsContainer}>
+                {UPSELL_OPTIONS.map((option, idx) => (
+                  <Button
+                    key={idx}
+                    style={styles.optionButton}
+                    appearance="outline"
+                    status="danger"
+                    size="small"
+                    onPress={() => analyze(option)}>
+                    {option}
+                  </Button>
+                ))}
+              </View>
+            )}
+
+            {analyzing && (
+              <View style={styles.analyzingContainer}>
                 <Icon
-                  name={result === 'cilada' ? 'alert-triangle-outline' : 'checkmark-circle-outline'}
-                  width={60}
-                  height={60}
-                  fill={result === 'cilada' ? '#FF3D71' : '#00E096'}
+                  name="loader-outline"
+                  width={48}
+                  height={48}
+                  fill="#FF3D71"
+                  animation="spin"
                 />
-                <Text category="h3" style={[styles.resultTitle, {color: result === 'cilada' ? '#FF3D71' : '#00E096'}]}>
-                  {result === 'cilada' ? 'É CILADA, BINO!' : 'PODE CONFIAR!'}
-                </Text>
-                <Text category="s1" style={styles.resultText}>
-                  {result === 'cilada'
-                    ? `Fuja! A chance de "${selectedOption}" ser um golpe para tirar seu dinheiro é enorme.`
-                    : 'Milagre! Dessa vez parece que ele realmente só quer ajudar seu carro.'}
+                <Text category="h6" style={{marginTop: 15, color: '#FF3D71'}}>
+                  Analisando a lábia...
                 </Text>
               </View>
+            )}
 
-              <Text category="c1" status="success" style={{textAlign: 'center', marginTop: 10}}>
-                +30 XP - Badge Mestre Anti-Cilada 🛡️
-              </Text>
+            {result && (
+              <View style={styles.resultContainer}>
+                <View
+                  style={[
+                    styles.resultBox,
+                    {
+                      backgroundColor:
+                        result === 'cilada' ? '#FFE5E5' : '#E5F9F1',
+                    },
+                  ]}>
+                  <Icon
+                    name={
+                      result === 'cilada'
+                        ? 'alert-triangle-outline'
+                        : 'checkmark-circle-outline'
+                    }
+                    width={60}
+                    height={60}
+                    fill={result === 'cilada' ? '#FF3D71' : '#00E096'}
+                  />
+                  <Text
+                    category="h3"
+                    style={[
+                      styles.resultTitle,
+                      {color: result === 'cilada' ? '#FF3D71' : '#00E096'},
+                    ]}>
+                    {result === 'cilada' ? 'É CILADA, BINO!' : 'PODE CONFIAR!'}
+                  </Text>
+                  <Text category="s1" style={styles.resultText}>
+                    {result === 'cilada'
+                      ? `Fuja! A chance de "${selectedOption}" ser um golpe para tirar seu dinheiro é enorme.`
+                      : 'Milagre! Dessa vez parece que ele realmente só quer ajudar seu carro.'}
+                  </Text>
+                </View>
 
-              <Button style={{marginTop: 15}} onPress={onClose} status="primary">
-                Entendido
+                <Text
+                  category="c1"
+                  status="success"
+                  style={{textAlign: 'center', marginTop: 10}}>
+                  +30 XP - Badge Mestre Anti-Cilada 🛡️
+                </Text>
+
+                <Button
+                  style={{marginTop: 15}}
+                  onPress={onClose}
+                  status="primary">
+                  Entendido
+                </Button>
+              </View>
+            )}
+
+            {!result && !analyzing && (
+              <Button
+                appearance="ghost"
+                status="basic"
+                style={{marginTop: 15}}
+                onPress={onClose}>
+                Voltar
               </Button>
-            </View>
-          )}
-
-          {!result && !analyzing && (
-            <Button
-              appearance="ghost"
-              status="basic"
-              style={{marginTop: 15}}
-              onPress={onClose}>
-              Voltar
-            </Button>
-          )}
-        </Card>
-      </Animated.View>
-    </Modal>
-  );
-});
+            )}
+          </Card>
+        </Animated.View>
+      </Modal>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   backdrop: {
