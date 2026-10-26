@@ -34,6 +34,15 @@ describe('HomeStore', () => {
     expect(homeStore.resultado).toBe('Tanto faz');
   });
 
+  it('should treat exact 70% as Equal despite floating point error (4.9/7.0)', () => {
+    // 4.9 / 7.0 === 0.7000000000000001 in IEEE-754
+    homeStore.etanol = '4.9';
+    homeStore.gasolina = '7.0';
+    homeStore.calculate();
+    expect(homeStore.recommendation).toBe('equal');
+    expect(homeStore.resultado).toBe('Tanto faz');
+  });
+
   it('should use custom consumption if provided (Gas is better)', () => {
     homeStore.etanol = '3.00';
     homeStore.gasolina = '5.00';

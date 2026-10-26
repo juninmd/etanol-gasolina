@@ -2,6 +2,9 @@ import {action, observable} from 'mobx';
 import {garageStore} from './garage.store';
 import {stationsStore} from './stations.store';
 
+// Tolerance for comparing floating point results (e.g. 4.9 / 7.0 === 0.7000000000000001)
+const FLOAT_EPSILON = 1e-9;
+
 export default class HomeStore {
   @observable etanol = '';
   @observable gasolina = '';
@@ -53,7 +56,7 @@ export default class HomeStore {
 
         if (costEthanol < costGas) {
           isEthanolBetter = true;
-        } else if (costEthanol === costGas) {
+        } else if (Math.abs(costEthanol - costGas) < FLOAT_EPSILON) {
           isEqual = true;
         }
       } else {
@@ -61,7 +64,7 @@ export default class HomeStore {
         const value = etanolValue / gasolinaValue;
         if (value < 0.7) {
           isEthanolBetter = true;
-        } else if (value === 0.7) {
+        } else if (Math.abs(value - 0.7) < FLOAT_EPSILON) {
           isEqual = true;
         }
       }
