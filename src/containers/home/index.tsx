@@ -717,7 +717,7 @@ const Home = observer(() => {
         )}
 
         <Button
-          style={{marginBottom: 10, borderRadius: 30}}
+          style={{marginHorizontal: 20, marginBottom: 10, borderRadius: 30}}
           status="warning"
           accessoryLeft={(p) => <Icon {...p} name="gift-outline" />}
           onPress={() => setShowSurpreenda(true)}>
@@ -725,7 +725,7 @@ const Home = observer(() => {
         </Button>
 
         <Button
-          style={{marginBottom: 10, borderRadius: 30}}
+          style={{marginHorizontal: 20, marginBottom: 10, borderRadius: 30}}
           status="danger"
           accessoryLeft={(p) => <Icon {...p} name="alert-triangle-outline" />}
           onPress={() => setShowPeNaTabua(true)}>
@@ -733,7 +733,7 @@ const Home = observer(() => {
         </Button>
 
         <Button
-          style={{marginBottom: 20, borderRadius: 30}}
+          style={{marginHorizontal: 20, marginBottom: 20, borderRadius: 30}}
           status="info"
           accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
           onPress={() => setShowTycoon(true)}>
@@ -741,7 +741,7 @@ const Home = observer(() => {
         </Button>
 
         <Button
-          style={{marginBottom: 20, borderRadius: 30}}
+          style={{marginHorizontal: 20, marginBottom: 20, borderRadius: 30}}
           status="danger"
           accessoryLeft={(p) => <Icon {...p} name="shield-outline" />}
           onPress={() => setShowDetector(true)}>
@@ -884,7 +884,7 @@ const Home = observer(() => {
             {homeStore.recommendation === 'bicycle' ? (
               <View style={{alignItems: 'center'}}>
                 <Icon
-                  name="bicycle-outline"
+                  name="activity-outline"
                   width={48}
                   height={48}
                   fill="#00E096"

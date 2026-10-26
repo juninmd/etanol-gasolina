@@ -49,7 +49,7 @@ const TabNavigator = () => (
 );
 
 const RootNavigator = () => (
-  <Stack.Navigator headerMode="none">
+  <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="Root" component={TabNavigator} />
     <Stack.Screen name="StationDetails" component={StationDetails} />
     <Stack.Screen name="AddVehicle" component={AddVehicle} />

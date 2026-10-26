@@ -23,6 +23,7 @@ import CrystalBallModal from '../../components/CrystalBallModal';
 import PostoTycoonModal from '../../components/PostoTycoonModal';
 import PeNaTabuaModal from '../../components/PeNaTabuaModal';
 import DetectorMentirasModal from '../../components/DetectorMentirasModal';
+import CalculadoraDeRoleModal from '../../components/CalculadoraDeRoleModal';
 
 interface Props {
   homeStore?: HomeStore;
@@ -50,6 +51,8 @@ class HomeWeb extends React.Component<Props> {
     showTycoon: false,
     showPeNaTabua: false,
     showDetector: false,
+    showCalculadoraRole: false,
+    showFrentista: false,
     promoMessage: null as string | null,
   };
 
@@ -176,7 +179,7 @@ class HomeWeb extends React.Component<Props> {
         )}
 
         <Button
-          style={{marginBottom: 10, marginTop: 20, borderRadius: 30}}
+          style={{marginHorizontal: 20, marginBottom: 10, marginTop: 20, borderRadius: 30}}
           status="warning"
           accessoryLeft={(p) => <Icon {...p} name="gift-outline" />}
           onPress={() => this.setState({showSurpreenda: true})}>
@@ -184,7 +187,7 @@ class HomeWeb extends React.Component<Props> {
         </Button>
 
         <Button
-          style={{marginBottom: 20, borderRadius: 30}}
+          style={{marginHorizontal: 20, marginBottom: 20, borderRadius: 30}}
           status="info"
           accessoryLeft={(p) => <Icon {...p} name="briefcase-outline" />}
           onPress={() => this.setState({showTycoon: true})}>

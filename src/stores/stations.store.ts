@@ -203,7 +203,7 @@ export default class StationsStore {
       id: 'bicycle_secret',
       name: 'Atleta Sustentável',
       description: 'Descobriu a economia máxima: andar de bicicleta!',
-      icon: 'bicycle-outline',
+      icon: 'activity-outline',
       unlocked: false,
     },
     {
