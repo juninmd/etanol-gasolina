@@ -21,7 +21,6 @@
     "jsx": "react",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "experimentalDecorators": true,
     "ignoreDeprecations": "5.0"
   },
   "include": [

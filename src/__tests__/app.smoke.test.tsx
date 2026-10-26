@@ -1,35 +1,27 @@
 import React from 'react';
 import renderer, {act} from 'react-test-renderer';
+import {Text, TextInput} from 'react-native';
 import App from '../App';
 
-jest.mock('react-native-safe-area-context', () =>
-  require('react-native-safe-area-context/jest/mock').default,
-);
-
-// Os ícones Eva desenham com react-native-svg, que não roda no Jest.
-jest.mock('react-native-svg', () => {
-  const React = require('react');
-  const make = (name: string) => (props: any) =>
-    React.createElement(name, props, props.children);
-  return new Proxy(
-    {__esModule: true, default: make('Svg')} as Record<string, unknown>,
-    {get: (target, key: string) => target[key] ?? make(key)},
-  );
-});
+const textos = (tree: renderer.ReactTestRenderer) =>
+  tree.root.findAllByType(Text).map((t) => [t.props.children].flat().join(''));
 
 describe('App (smoke)', () => {
-  beforeEach(() => jest.useFakeTimers());
-  afterEach(() => {
-    act(() => jest.runOnlyPendingTimers());
-    jest.useRealTimers();
+  beforeEach(() => {
+    global.fetch = jest.fn(() => Promise.reject(new Error('offline'))) as any;
   });
 
-  it('monta a árvore inicial sem lançar erro', async () => {
-    let tree: renderer.ReactTestRenderer | undefined;
+  it('abre com a média nacional da ANP e mostra o resultado', async () => {
+    let tree!: renderer.ReactTestRenderer;
     await act(async () => {
       tree = renderer.create(<App />);
     });
-    expect(tree?.toJSON()).not.toBeNull();
-    act(() => tree?.unmount());
+    const campos = tree.root.findAllByType(TextInput).map((i) => i.props.value);
+    expect(campos.slice(0, 2)).toEqual(['6,53', '4,11']);
+    const saida = textos(tree).join('|');
+    expect(saida).toContain('MELHOR OPÇÃO');
+    expect(saida).toContain('Preços médios de revenda da ANP');
+    expect(saida).toContain('sem conexão');
+    act(() => tree.unmount());
   });
 });

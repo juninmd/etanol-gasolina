@@ -1,0 +1,34 @@
+name: Atualizar preços ANP
+
+on:
+  schedule:
+    - cron: '17 12 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Clonar repositório
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+
+      - name: Baixar preços da ANP
+        run: node scripts/atualizar-precos.js
+
+      - name: Commitar se mudou
+        run: |
+          if git diff --quiet -- data/precos.json; then
+            echo "Sem novos preços."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/precos.json
+          git commit -m "chore: atualiza preços da ANP"
+          git push
