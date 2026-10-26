@@ -108,3 +108,15 @@ Siga as regras de [`AGENTS.md`](AGENTS.md) (DRY, KISS, arquivos ≤ 180 linhas, 
 ## 📄 Licença
 
 Privado — uso pessoal.
+
+## Gerar APK (local)
+
+Requer Android SDK (platform 34, build-tools 34, NDK 25.1, CMake 3.22.1) e JDK 17.
+
+```bash
+pnpm install
+cd android && ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
+# saída: android/app/build/outputs/apk/release/app-release.apk
+```
+
+O release usa a chave debug; troque por uma keystore própria antes de publicar. Os ícones em `assets/` são placeholders.
