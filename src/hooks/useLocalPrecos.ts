@@ -87,5 +87,6 @@ export default function useLocalPrecos() {
     opcoesCidade,
     escolherEstado,
     escolherCidade,
+    preencher,
   };
 }

@@ -10,10 +10,11 @@ App (Android, iOS e Web) que diz se compensa abastecer com **etanol** ou **gasol
 
 Fonte: [Levantamento de Preços de Combustíveis](https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/levantamento-de-precos-de-combustiveis-ultimas-semanas-pesquisadas) (resumo semanal: Brasil, estados e municípios).
 
-- `data/precos.json` é gerado por `pnpm precos` (`scripts/`), que baixa a planilha mais recente da ANP.
-- O workflow `Atualizar preços ANP` roda toda segunda-feira e commita o arquivo.
-- O app busca o JSON no GitHub; sem rede ou com resposta inválida, usa a cópia embutida.
-- Só entram municípios pesquisados pela ANP, que tenham gasolina e etanol na semana.
+- `pnpm precos` (`scripts/`) baixa as duas planilhas semanais da ANP: o resumo (médias) vira `data/precos.json` e a lista de postos vira `data/postos/<UF>.json`.
+- O workflow `Atualizar preços ANP` roda toda segunda-feira e commita `data/`.
+- O app busca os JSON no GitHub; sem rede ou com resposta inválida, usa a cópia embutida das médias. A lista de postos só existe online.
+- Ao escolher uma cidade, o app lista os postos mais baratos pesquisados pela ANP (nome, bandeira, endereço e os dois preços); tocar em um posto usa os preços dele na comparação.
+- Só entram municípios e postos pesquisados pela ANP que tenham gasolina e etanol na semana (ex.: o Amapá pode ficar de fora).
 
 ## Estrutura
 
@@ -23,9 +24,10 @@ src/
   components/          Seletor, CampoNumero, ResultadoCard
   hooks/               useLocalPrecos (estado da tela)
   lib/                 calculo.ts e precos.ts (sem React)
-  services/            carregarPrecos (online + cópia embutida)
+  services/            preços (online + cópia embutida) e postos (online)
 scripts/               download e conversão dos dados da ANP
-data/precos.json       preços reais da última semana
+data/precos.json       médias reais da última semana
+data/postos/<UF>.json  postos pesquisados pela ANP, por estado
 ```
 
 ## Comandos

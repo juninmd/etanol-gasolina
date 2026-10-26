@@ -1,4 +1,4 @@
-const {montarDados, serialParaIso} = require('../anp');
+const {montarDados, montarPostos, serialParaIso} = require('../anp');
 
 const CAB = ['DATA INICIAL', 'DATA FINAL'];
 const linha = (...resto) => [46306, 46312, ...resto];
@@ -98,5 +98,74 @@ describe('montarDados', () => {
 describe('serialParaIso', () => {
   it('converte datas seriais do Excel', () => {
     expect(serialParaIso(46306)).toBe('2026-10-11');
+  });
+});
+
+describe('montarPostos', () => {
+  const cabecalho = [
+    'CNPJ',
+    'RAZÃO',
+    'FANTASIA',
+    'ENDEREÇO',
+    'NÚMERO',
+    'COMPLEMENTO',
+    'BAIRRO',
+    'CEP',
+    'MUNICÍPIO',
+    'ESTADO',
+    'BANDEIRA',
+    'PRODUTO',
+    'UNIDADE DE MEDIDA',
+    'PREÇO DE REVENDA',
+    'DATA DA COLETA',
+  ];
+  const linhaPosto = (cnpj, fantasia, cidadeNome, uf, produto, preco) => [
+    cnpj,
+    `${fantasia} LTDA`,
+    fantasia,
+    'RUA A',
+    10,
+    null,
+    'CENTRO',
+    1000,
+    cidadeNome,
+    uf,
+    'BRANCA',
+    produto,
+    'R$ / litro',
+    preco,
+    46307,
+  ];
+  const planilha = [
+    ['SISTEMA DE LEVANTAMENTO DE PREÇOS'],
+    ['PERÍODO: 11/10/2026 A 17/10/2026'],
+    cabecalho,
+    linhaPosto(1, 'POSTO B', 'CAMPINAS', 'SAO PAULO', 'GASOLINA COMUM', 6.4),
+    linhaPosto(1, 'POSTO B', 'CAMPINAS', 'SAO PAULO', 'ETANOL', 3.9),
+    linhaPosto(1, 'POSTO B', 'CAMPINAS', 'SAO PAULO', 'DIESEL S10', 6),
+    linhaPosto(2, 'POSTO A', 'CAMPINAS', 'SAO PAULO', 'GASOLINA COMUM', 6.5),
+    linhaPosto(2, 'POSTO A', 'CAMPINAS', 'SAO PAULO', 'ETANOL', 4.1),
+    linhaPosto(3, 'SÓ GASOLINA', 'RIO BRANCO', 'ACRE', 'GASOLINA COMUM', 7.5),
+  ];
+
+  it('lê o período e agrupa por UF só postos com os dois combustíveis', () => {
+    const {semana, porUf} = montarPostos(planilha);
+    expect(semana).toEqual({inicio: '2026-10-11', fim: '2026-10-17'});
+    expect(Object.keys(porUf)).toEqual(['SP']);
+    expect(porUf.SP.map((p) => p.nome)).toEqual(['POSTO A', 'POSTO B']);
+    expect(porUf.SP[1]).toEqual({
+      nome: 'POSTO B',
+      bandeira: 'BRANCA',
+      endereco: 'RUA A, 10 - CENTRO',
+      municipio: 'CAMPINAS',
+      gasolina: 6.4,
+      etanol: 3.9,
+      coleta: '2026-10-12',
+    });
+  });
+
+  it('falha sem cabeçalho ou sem período', () => {
+    expect(() => montarPostos([['x']])).toThrow('Cabeçalho');
+    expect(() => montarPostos([cabecalho])).toThrow('Período');
   });
 });

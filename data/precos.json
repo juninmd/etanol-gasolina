@@ -1,31 +1,31 @@
 {
  "fonte": "ANP - Levantamento de Preços de Combustíveis (preço médio de revenda)",
- "fonteUrl": "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/arquivos-lpc/2026/resumo_semanal_lpc_2026_10_11-2026_10_17.xlsx",
+ "fonteUrl": "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/arquivos-lpc/2026/resumo_semanal_lpc_2026_10_18-2026_10_24.xlsx",
  "semana": {
-  "inicio": "2026-10-11",
-  "fim": "2026-10-17"
+  "inicio": "2026-10-18",
+  "fim": "2026-10-24"
  },
  "brasil": {
-  "gasolina": 6.53,
+  "gasolina": 6.49,
   "etanol": 4.11
  },
  "estados": [
   {
    "uf": "AC",
    "nome": "Acre",
-   "gasolina": 7.44,
-   "etanol": 4.9,
+   "gasolina": 7.43,
+   "etanol": 4.92,
    "municipios": [
     {
      "nome": "CRUZEIRO DO SUL",
-     "gasolina": 8.23,
-     "etanol": 6.39,
-     "postos": 1
+     "gasolina": 8.24,
+     "etanol": 6.49,
+     "postos": 3
     },
     {
      "nome": "RIO BRANCO",
-     "gasolina": 7.27,
-     "etanol": 4.82,
+     "gasolina": 7.26,
+     "etanol": 4.84,
      "postos": 12
     }
    ]
@@ -33,13 +33,13 @@
   {
    "uf": "AL",
    "nome": "Alagoas",
-   "gasolina": 6.66,
-   "etanol": 4.94,
+   "gasolina": 6.64,
+   "etanol": 4.96,
    "municipios": [
     {
      "nome": "ARAPIRACA",
-     "gasolina": 6.55,
-     "etanol": 4.88,
+     "gasolina": 6.42,
+     "etanol": 4.81,
      "postos": 15
     },
     {
@@ -50,80 +50,66 @@
     },
     {
      "nome": "MACEIO",
-     "gasolina": 6.65,
-     "etanol": 4.94,
+     "gasolina": 6.67,
+     "etanol": 4.97,
      "postos": 19
     },
     {
      "nome": "PALMEIRA DOS INDIOS",
      "gasolina": 6.65,
-     "etanol": 4.84,
+     "etanol": 4.92,
      "postos": 8
     },
     {
      "nome": "RIO LARGO",
      "gasolina": 6.69,
-     "etanol": 4.99,
+     "etanol": 4.98,
      "postos": 7
-    }
-   ]
-  },
-  {
-   "uf": "AP",
-   "nome": "Amapá",
-   "gasolina": 6.52,
-   "etanol": 5.81,
-   "municipios": [
-    {
-     "nome": "MACAPA",
-     "gasolina": 6.49,
-     "etanol": 5.81,
-     "postos": 17
     }
    ]
   },
   {
    "uf": "AM",
    "nome": "Amazonas",
-   "gasolina": 7.31,
-   "etanol": 5.25,
+   "gasolina": 7.03,
+   "etanol": 4.96,
    "municipios": [
     {
      "nome": "MANACAPURU",
      "gasolina": 6.97,
-     "etanol": 4.96,
+     "etanol": 4.97,
      "postos": 8
     },
     {
      "nome": "MANAUS",
-     "gasolina": 7.28,
-     "etanol": 5.25,
-     "postos": 40
+     "gasolina": 6.97,
+     "etanol": 4.96,
+     "postos": 39
     }
    ]
   },
   {
    "uf": "BA",
    "nome": "Bahia",
-   "gasolina": 6.75,
-   "etanol": 4.58,
+   "gasolina": 6.7,
+   "etanol": 4.49,
    "municipios": [
     {
      "nome": "ALAGOINHAS",
-     "gasolina": 6.23,
+     "gasolina": 6.24,
      "etanol": 4.28,
      "postos": 8
     },
     {
      "nome": "BARREIRAS",
-     "gasolina": 6.82,
-     "etanol": 4.03,
-     "postos": 8
+     "gasolina": 6.81,
+     "etanol": 4.04,
+     "postos": 7
     },
     {
      "nome": "BRUMADO",
-     "gasolina": 6.66,
-     "etanol": 4.49,
+     "gasolina": 6.65,
+     "etanol": 4.48,
      "postos": 14
     },
     {
@@ -134,39 +120,51 @@
     },
     {
      "nome": "EUNAPOLIS",
-     "gasolina": 6.99,
-     "etanol": 4.88,
+     "gasolina": 7.36,
+     "etanol": 4.9,
      "postos": 8
     },
     {
+     "nome": "FEIRA DE SANTANA",
+     "gasolina": 6.34,
+     "etanol": 4.36,
+     "postos": 10
+    },
+    {
      "nome": "GUANAMBI",
-     "gasolina": 6.78,
-     "etanol": 4.42,
+     "gasolina": 6.79,
+     "etanol": 4.41,
      "postos": 8
     },
     {
      "nome": "ILHEUS",
      "gasolina": 6.86,
      "etanol": 4.5,
-     "postos": 9
+     "postos": 10
     },
     {
      "nome": "IPIRA",
-     "gasolina": 6.37,
+     "gasolina": 6.47,
      "etanol": 4.49,
      "postos": 7
     },
     {
+     "nome": "IRECE",
+     "gasolina": 6.74,
+     "etanol": 4.58,
+     "postos": 4
+    },
+    {
      "nome": "ITABUNA",
-     "gasolina": 6.95,
-     "etanol": 4.57,
-     "postos": 9
+     "gasolina": 6.85,
+     "etanol": 4.47,
+     "postos": 4
     },
     {
      "nome": "ITAMARAJU",
      "gasolina": 6.99,
-     "etanol": 4.7,
-     "postos": 8
+     "etanol": 4.72,
+     "postos": 7
     },
     {
      "nome": "JACOBINA",
@@ -182,74 +180,80 @@
     },
     {
      "nome": "JEQUIE",
-     "gasolina": 6.58,
-     "etanol": 4.43,
+     "gasolina": 6.57,
+     "etanol": 4.42,
      "postos": 12
     },
     {
      "nome": "JUAZEIRO",
-     "gasolina": 7.15,
-     "etanol": 5.16,
+     "gasolina": 7.06,
+     "etanol": 4.99,
      "postos": 8
     },
     {
+     "nome": "LIVRAMENTO DE NOSSA SENHORA",
+     "gasolina": 7.15,
+     "etanol": 4.94,
+     "postos": 7
+    },
+    {
      "nome": "PAULO AFONSO",
-     "gasolina": 6.55,
-     "etanol": 4.77,
+     "gasolina": 6.65,
+     "etanol": 5.03,
      "postos": 8
     },
     {
      "nome": "POCOES",
-     "gasolina": 6.57,
-     "etanol": 4.46,
-     "postos": 8
-    },
-    {
-     "nome": "PORTO SEGURO",
-     "gasolina": 7.23,
-     "etanol": 5.08,
-     "postos": 5
-    },
-    {
-     "nome": "SALVADOR",
-     "gasolina": 6.65,
-     "etanol": 4.6,
-     "postos": 19
-    },
-    {
-     "nome": "SANTO ANTONIO DE JESUS",
-     "gasolina": 6.93,
-     "etanol": 4.92,
-     "postos": 8
-    },
-    {
-     "nome": "SENHOR DO BONFIM",
-     "gasolina": 6.87,
-     "etanol": 4.79,
-     "postos": 15
-    },
-    {
-     "nome": "SERRINHA",
-     "gasolina": 6.7,
-     "etanol": 4.27,
-     "postos": 8
-    },
-    {
-     "nome": "TEIXEIRA DE FREITAS",
-     "gasolina": 7.05,
-     "etanol": 4.76,
+     "gasolina": 6.55,
+     "etanol": 4.48,
      "postos": 7
     },
     {
+     "nome": "PORTO SEGURO",
+     "gasolina": 7.22,
+     "etanol": 5,
+     "postos": 6
+    },
+    {
+     "nome": "SALVADOR",
+     "gasolina": 6.57,
+     "etanol": 4.48,
+     "postos": 6
+    },
+    {
+     "nome": "SANTO ANTONIO DE JESUS",
+     "gasolina": 6.92,
+     "etanol": 4.91,
+     "postos": 7
+    },
+    {
+     "nome": "SENHOR DO BONFIM",
+     "gasolina": 6.86,
+     "etanol": 4.75,
+     "postos": 14
+    },
+    {
+     "nome": "SERRINHA",
+     "gasolina": 6.67,
+     "etanol": 4.33,
+     "postos": 9
+    },
+    {
+     "nome": "TEIXEIRA DE FREITAS",
+     "gasolina": 7.1,
+     "etanol": 4.74,
+     "postos": 6
+    },
+    {
      "nome": "VALENCA",
-     "gasolina": 7.04,
+     "gasolina": 7.01,
      "etanol": 4.99,
      "postos": 7
     },
     {
      "nome": "VITORIA DA CONQUISTA",
-     "gasolina": 6.54,
-     "etanol": 4.32,
+     "gasolina": 6.86,
+     "etanol": 4.38,
      "postos": 15
     }
    ]
@@ -257,8 +261,8 @@
   {
    "uf": "CE",
    "nome": "Ceará",
-   "gasolina": 6.96,
-   "etanol": 4.98,
+   "gasolina": 6.94,
+   "etanol": 4.97,
    "municipios": [
     {
      "nome": "CANINDE",
@@ -268,26 +272,26 @@
     },
     {
      "nome": "CAUCAIA",
-     "gasolina": 6.84,
+     "gasolina": 6.88,
      "etanol": 4.89,
      "postos": 14
     },
     {
      "nome": "CRATEUS",
-     "gasolina": 6.55,
+     "gasolina": 6.47,
      "etanol": 5.8,
      "postos": 8
     },
     {
      "nome": "FORTALEZA",
      "gasolina": 6.98,
-     "etanol": 4.94,
-     "postos": 47
+     "etanol": 4.93,
+     "postos": 46
     },
     {
      "nome": "ICO",
      "gasolina": 7.11,
-     "etanol": 5.65,
+     "etanol": 5.62,
      "postos": 9
     },
     {
@@ -298,21 +302,21 @@
     },
     {
      "nome": "ITAPIPOCA",
-     "gasolina": 7.48,
-     "etanol": 5.73,
+     "gasolina": 7.18,
+     "etanol": 5.53,
      "postos": 9
     },
     {
      "nome": "JUAZEIRO DO NORTE",
-     "gasolina": 6.74,
-     "etanol": 5.19,
-     "postos": 15
+     "gasolina": 6.64,
+     "etanol": 5.15,
+     "postos": 14
     },
     {
      "nome": "LIMOEIRO DO NORTE",
-     "gasolina": 6.89,
-     "etanol": 5.42,
-     "postos": 9
+     "gasolina": 6.84,
+     "etanol": 5.41,
+     "postos": 11
     },
     {
      "nome": "QUIXADA",
@@ -322,22 +326,22 @@
     },
     {
      "nome": "SOBRAL",
-     "gasolina": 7.13,
-     "etanol": 5.49,
-     "postos": 4
+     "gasolina": 7.08,
+     "etanol": 5.37,
+     "postos": 8
     }
    ]
   },
   {
    "uf": "DF",
    "nome": "Distrito Federal",
-   "gasolina": 6.64,
-   "etanol": 4.48,
+   "gasolina": 6.39,
+   "etanol": 4.3,
    "municipios": [
     {
      "nome": "BRASILIA",
-     "gasolina": 6.64,
-     "etanol": 4.48,
+     "gasolina": 6.39,
+     "etanol": 4.3,
      "postos": 50
     }
    ]
@@ -345,61 +349,61 @@
   {
    "uf": "ES",
    "nome": "Espírito Santo",
-   "gasolina": 6.43,
-   "etanol": 4.68,
+   "gasolina": 6.39,
+   "etanol": 4.7,
    "municipios": [
     {
+     "nome": "ARACRUZ",
+     "gasolina": 6.66,
+     "etanol": 5.09,
+     "postos": 2
+    },
+    {
      "nome": "CACHOEIRO DE ITAPEMIRIM",
-     "gasolina": 7.12,
-     "etanol": 4.83,
+     "gasolina": 7.1,
+     "etanol": 4.79,
      "postos": 11
     },
     {
      "nome": "CARIACICA",
-     "gasolina": 6.27,
-     "etanol": 4.5,
-     "postos": 11
+     "gasolina": 6.28,
+     "etanol": 4.52,
+     "postos": 12
     },
     {
      "nome": "COLATINA",
-     "gasolina": 6.69,
-     "etanol": 4.86,
+     "gasolina": 6.67,
+     "etanol": 4.81,
      "postos": 8
     },
     {
      "nome": "GUARAPARI",
-     "gasolina": 6.99,
-     "etanol": 5.72,
-     "postos": 7
-    },
-    {
-     "nome": "LINHARES",
-     "gasolina": 6.62,
-     "etanol": 4.59,
-     "postos": 9
+     "gasolina": 6.9,
+     "etanol": 5.18,
+     "postos": 8
     },
     {
      "nome": "SAO MATEUS",
-     "gasolina": 6.65,
-     "etanol": 4.91,
-     "postos": 4
+     "gasolina": 6.58,
+     "etanol": 4.87,
+     "postos": 9
     },
     {
      "nome": "SERRA",
-     "gasolina": 6.19,
-     "etanol": 4.68,
+     "gasolina": 6.14,
+     "etanol": 4.67,
      "postos": 14
     },
     {
      "nome": "VILA VELHA",
-     "gasolina": 6.24,
-     "etanol": 4.57,
+     "gasolina": 6.21,
+     "etanol": 4.6,
      "postos": 16
     },
     {
      "nome": "VITORIA",
-     "gasolina": 6.18,
-     "etanol": 4.54,
+     "gasolina": 6.24,
+     "etanol": 4.66,
      "postos": 12
     }
    ]
@@ -407,38 +411,38 @@
   {
    "uf": "GO",
    "nome": "Goiás",
-   "gasolina": 6.55,
-   "etanol": 4.07,
+   "gasolina": 6.42,
+   "etanol": 3.94,
    "municipios": [
     {
      "nome": "AGUAS LINDAS DE GOIAS",
      "gasolina": 6.79,
-     "etanol": 4.61,
+     "etanol": 4.59,
      "postos": 8
     },
     {
      "nome": "ANAPOLIS",
-     "gasolina": 6.69,
+     "gasolina": 6.59,
      "etanol": 4.47,
-     "postos": 15
+     "postos": 16
     },
     {
      "nome": "APARECIDA DE GOIANIA",
-     "gasolina": 6.39,
-     "etanol": 3.91,
+     "gasolina": 6.24,
+     "etanol": 3.73,
      "postos": 19
     },
     {
      "nome": "CALDAS NOVAS",
-     "gasolina": 6.66,
+     "gasolina": 6.6,
      "etanol": 3.94,
-     "postos": 9
+     "postos": 10
     },
     {
      "nome": "CATALAO",
-     "gasolina": 6.4,
-     "etanol": 4.1,
-     "postos": 9
+     "gasolina": 6.41,
+     "etanol": 4.08,
+     "postos": 10
     },
     {
      "nome": "FORMOSA",
@@ -448,32 +452,32 @@
     },
     {
      "nome": "GOIANIA",
-     "gasolina": 6.61,
-     "etanol": 4,
+     "gasolina": 6.49,
+     "etanol": 3.83,
      "postos": 44
     },
     {
      "nome": "GOIATUBA",
-     "gasolina": 5.77,
+     "gasolina": 5.75,
      "etanol": 3.56,
      "postos": 6
     },
     {
      "nome": "ITUMBIARA",
-     "gasolina": 6.39,
-     "etanol": 3.87,
+     "gasolina": 6.35,
+     "etanol": 3.88,
      "postos": 9
     },
     {
      "nome": "LUZIANIA",
-     "gasolina": 6.63,
-     "etanol": 4.39,
+     "gasolina": 6.13,
+     "etanol": 4.1,
      "postos": 10
     },
     {
      "nome": "MINEIROS",
-     "gasolina": 6.79,
-     "etanol": 4.55,
+     "gasolina": 6.41,
+     "etanol": 4.3,
      "postos": 8
     },
     {
@@ -483,21 +487,27 @@
      "postos": 7
     },
     {
+     "nome": "PORANGATU",
+     "gasolina": 6.58,
+     "etanol": 3.95,
+     "postos": 7
+    },
+    {
      "nome": "RIO VERDE",
-     "gasolina": 6.43,
-     "etanol": 3.92,
+     "gasolina": 6.22,
+     "etanol": 3.8,
      "postos": 14
     },
     {
      "nome": "TRINDADE",
      "gasolina": 6.19,
-     "etanol": 3.75,
+     "etanol": 3.76,
      "postos": 8
     },
     {
      "nome": "VALPARAISO DE GOIAS",
-     "gasolina": 6.5,
-     "etanol": 4.27,
+     "gasolina": 6.32,
+     "etanol": 4.21,
      "postos": 9
     }
    ]
@@ -505,149 +515,149 @@
   {
    "uf": "MA",
    "nome": "Maranhão",
-   "gasolina": 6.58,
-   "etanol": 4.92,
+   "gasolina": 6.52,
+   "etanol": 4.91,
    "municipios": [
     {
      "nome": "ACAILANDIA",
-     "gasolina": 6.75,
-     "etanol": 5.01,
+     "gasolina": 6.67,
+     "etanol": 5.02,
      "postos": 10
     },
     {
+     "nome": "BACABAL",
+     "gasolina": 6.39,
+     "etanol": 4.75,
+     "postos": 8
+    },
+    {
      "nome": "BALSAS",
-     "gasolina": 7.34,
+     "gasolina": 7.11,
      "etanol": 5.38,
-     "postos": 9
+     "postos": 10
     },
     {
      "nome": "BARRA DO CORDA",
-     "gasolina": 6.72,
-     "etanol": 5.55,
+     "gasolina": 6.54,
+     "etanol": 5.68,
      "postos": 9
     },
     {
      "nome": "CODO",
-     "gasolina": 7.25,
-     "etanol": 5.48,
+     "gasolina": 7.2,
+     "etanol": 5.46,
      "postos": 7
     },
     {
      "nome": "IMPERATRIZ",
-     "gasolina": 6.47,
+     "gasolina": 6.41,
      "etanol": 5.23,
      "postos": 16
     },
     {
      "nome": "PINHEIRO",
-     "gasolina": 7.04,
+     "gasolina": 7.11,
      "etanol": 5.59,
-     "postos": 6
+     "postos": 7
     },
     {
      "nome": "PRESIDENTE DUTRA",
-     "gasolina": 6.77,
+     "gasolina": 6.69,
      "etanol": 5.42,
      "postos": 17
     },
     {
      "nome": "SAO JOSE DE RIBAMAR",
-     "gasolina": 6.42,
-     "etanol": 4.75,
-     "postos": 10
+     "gasolina": 6.31,
+     "etanol": 4.56,
+     "postos": 9
     },
     {
      "nome": "SAO LUIS",
-     "gasolina": 6.45,
-     "etanol": 4.8,
-     "postos": 21
+     "gasolina": 6.43,
+     "etanol": 4.82,
+     "postos": 22
     }
    ]
   },
   {
    "uf": "MT",
    "nome": "Mato Grosso",
-   "gasolina": 6.85,
-   "etanol": 4.13,
+   "gasolina": 6.75,
+   "etanol": 4.08,
    "municipios": [
     {
      "nome": "ALTA FLORESTA",
-     "gasolina": 7.07,
-     "etanol": 4.04,
+     "gasolina": 6.92,
+     "etanol": 4.03,
      "postos": 8
     },
     {
      "nome": "CACERES",
-     "gasolina": 6.69,
+     "gasolina": 6.68,
      "etanol": 4.15,
      "postos": 8
     },
     {
      "nome": "CUIABA",
-     "gasolina": 7.09,
-     "etanol": 4.22,
+     "gasolina": 6.93,
+     "etanol": 4.15,
      "postos": 19
     },
     {
      "nome": "RONDONOPOLIS",
-     "gasolina": 6.55,
+     "gasolina": 6.53,
      "etanol": 3.95,
      "postos": 16
     },
     {
      "nome": "SINOP",
-     "gasolina": 6.58,
-     "etanol": 3.89,
-     "postos": 10
+     "gasolina": 6.65,
+     "etanol": 3.96,
+     "postos": 11
     },
     {
      "nome": "SORRISO",
-     "gasolina": 6.87,
-     "etanol": 3.96,
+     "gasolina": 6.75,
+     "etanol": 3.95,
      "postos": 7
-    },
-    {
-     "nome": "VARZEA GRANDE",
-     "gasolina": 6.99,
-     "etanol": 4.18,
-     "postos": 17
     }
    ]
   },
   {
    "uf": "MS",
    "nome": "Mato Grosso do Sul",
-   "gasolina": 6.43,
+   "gasolina": 6.4,
    "etanol": 4,
    "municipios": [
     {
      "nome": "CAMPO GRANDE",
-     "gasolina": 6.27,
+     "gasolina": 6.25,
      "etanol": 3.93,
      "postos": 23
     },
     {
      "nome": "CORUMBA",
-     "gasolina": 7.09,
+     "gasolina": 7.07,
      "etanol": 4.91,
      "postos": 7
     },
     {
      "nome": "DOURADOS",
-     "gasolina": 6.68,
+     "gasolina": 6.67,
      "etanol": 4.14,
-     "postos": 14
+     "postos": 15
     },
     {
      "nome": "PONTA PORA",
-     "gasolina": 6.73,
+     "gasolina": 6.68,
      "etanol": 4.01,
-     "postos": 6
+     "postos": 7
     },
     {
      "nome": "TRES LAGOAS",
-     "gasolina": 6.55,
-     "etanol": 4.07,
+     "gasolina": 6.49,
+     "etanol": 4.05,
      "postos": 9
     }
    ]
@@ -655,181 +665,163 @@
   {
    "uf": "MG",
    "nome": "Minas Gerais",
-   "gasolina": 6.33,
-   "etanol": 4.26,
+   "gasolina": 6.32,
+   "etanol": 4.27,
    "municipios": [
     {
      "nome": "ALFENAS",
      "gasolina": 6.44,
-     "etanol": 4.12,
+     "etanol": 4.14,
      "postos": 9
     },
     {
-     "nome": "ARAGUARI",
-     "gasolina": 6.08,
-     "etanol": 3.99,
-     "postos": 10
-    },
-    {
      "nome": "ARAXA",
-     "gasolina": 6.32,
-     "etanol": 4.23,
+     "gasolina": 6.23,
+     "etanol": 4.27,
      "postos": 10
     },
     {
      "nome": "BARBACENA",
      "gasolina": 6.58,
-     "etanol": 4.31,
+     "etanol": 4.33,
      "postos": 8
     },
     {
      "nome": "BELO HORIZONTE",
-     "gasolina": 6.41,
-     "etanol": 4.38,
+     "gasolina": 6.42,
+     "etanol": 4.39,
      "postos": 41
     },
     {
      "nome": "BETIM",
-     "gasolina": 6.28,
-     "etanol": 4.27,
+     "gasolina": 6.27,
+     "etanol": 4.28,
      "postos": 14
-    },
-    {
-     "nome": "BOM DESPACHO",
-     "gasolina": 6.16,
-     "etanol": 4.05,
-     "postos": 8
     },
     {
      "nome": "CAMPO BELO",
      "gasolina": 6.25,
-     "etanol": 4.16,
+     "etanol": 4.22,
      "postos": 8
     },
     {
      "nome": "CARATINGA",
      "gasolina": 6.37,
-     "etanol": 4.18,
+     "etanol": 4.21,
      "postos": 7
     },
     {
      "nome": "CONGONHAS",
      "gasolina": 6.34,
-     "etanol": 4.22,
+     "etanol": 4.25,
      "postos": 8
     },
     {
-     "nome": "CONSELHEIRO LAFAIETE",
-     "gasolina": 6.55,
-     "etanol": 4.2,
-     "postos": 7
-    },
-    {
      "nome": "CONTAGEM",
-     "gasolina": 6.37,
-     "etanol": 4.37,
+     "gasolina": 6.34,
+     "etanol": 4.34,
      "postos": 19
     },
     {
      "nome": "CORONEL FABRICIANO",
      "gasolina": 6.3,
-     "etanol": 4.23,
+     "etanol": 4.22,
      "postos": 7
     },
     {
      "nome": "CURVELO",
-     "gasolina": 6.45,
-     "etanol": 4.2,
+     "gasolina": 6.41,
+     "etanol": 4.18,
      "postos": 8
     },
     {
      "nome": "DIVINOPOLIS",
-     "gasolina": 6.06,
-     "etanol": 4.07,
+     "gasolina": 5.97,
+     "etanol": 4.04,
      "postos": 14
     },
     {
      "nome": "FORMIGA",
-     "gasolina": 6.21,
-     "etanol": 4.07,
+     "gasolina": 6.18,
+     "etanol": 4.03,
      "postos": 8
     },
     {
      "nome": "FRUTAL",
-     "gasolina": 6.17,
-     "etanol": 3.78,
-     "postos": 7
+     "gasolina": 6.13,
+     "etanol": 3.79,
+     "postos": 8
     },
     {
      "nome": "GOVERNADOR VALADARES",
-     "gasolina": 6.09,
-     "etanol": 4.05,
-     "postos": 8
+     "gasolina": 6.05,
+     "etanol": 4.07,
+     "postos": 14
     },
     {
      "nome": "GUAXUPE",
-     "gasolina": 6.29,
-     "etanol": 3.99,
-     "postos": 8
+     "gasolina": 6.23,
+     "etanol": 4,
+     "postos": 6
     },
     {
      "nome": "IPATINGA",
-     "gasolina": 6.4,
-     "etanol": 4.42,
+     "gasolina": 6.41,
+     "etanol": 4.43,
      "postos": 9
     },
     {
      "nome": "ITAJUBA",
-     "gasolina": 6.45,
-     "etanol": 4.28,
-     "postos": 8
+     "gasolina": 6.47,
+     "etanol": 4.27,
+     "postos": 6
     },
     {
      "nome": "ITAUNA",
-     "gasolina": 6.17,
+     "gasolina": 6.12,
      "etanol": 4.13,
      "postos": 8
     },
     {
      "nome": "ITUIUTABA",
      "gasolina": 6.07,
-     "etanol": 3.96,
+     "etanol": 3.98,
      "postos": 10
     },
     {
      "nome": "JANAUBA",
-     "gasolina": 6.32,
-     "etanol": 4.1,
+     "gasolina": 6.23,
+     "etanol": 4.2,
      "postos": 8
     },
     {
      "nome": "JANUARIA",
-     "gasolina": 6.51,
-     "etanol": 4.27,
+     "gasolina": 6.5,
+     "etanol": 4.31,
      "postos": 8
     },
     {
      "nome": "JOAO MONLEVADE",
-     "gasolina": 6.34,
+     "gasolina": 6.32,
      "etanol": 4.35,
      "postos": 8
     },
     {
      "nome": "JOAO PINHEIRO",
-     "gasolina": 6.25,
+     "gasolina": 6.26,
      "etanol": 4.03,
      "postos": 8
     },
     {
      "nome": "JUIZ DE FORA",
-     "gasolina": 6.61,
+     "gasolina": 6.59,
      "etanol": 4.51,
      "postos": 17
     },
     {
      "nome": "LAVRAS",
-     "gasolina": 6.24,
-     "etanol": 4.18,
+     "gasolina": 6.15,
+     "etanol": 4.2,
      "postos": 10
     },
     {
@@ -839,33 +831,45 @@
      "postos": 8
     },
     {
+     "nome": "MONTE CARMELO",
+     "gasolina": 6.06,
+     "etanol": 3.9,
+     "postos": 8
+    },
+    {
      "nome": "MONTES CLAROS",
-     "gasolina": 5.98,
-     "etanol": 3.99,
+     "gasolina": 5.97,
+     "etanol": 3.98,
      "postos": 14
     },
     {
+     "nome": "MURIAE",
+     "gasolina": 6.64,
+     "etanol": 4.59,
+     "postos": 8
+    },
+    {
      "nome": "OLIVEIRA",
-     "gasolina": 6.2,
-     "etanol": 4.09,
-     "postos": 7
+     "gasolina": 6.35,
+     "etanol": 4.18,
+     "postos": 4
     },
     {
      "nome": "OURO PRETO",
-     "gasolina": 6.25,
-     "etanol": 4.3,
+     "gasolina": 6.19,
+     "etanol": 4.36,
      "postos": 8
     },
     {
      "nome": "PARA DE MINAS",
-     "gasolina": 6.3,
+     "gasolina": 6.29,
      "etanol": 4.08,
      "postos": 8
     },
     {
      "nome": "PARACATU",
-     "gasolina": 6.24,
-     "etanol": 3.98,
+     "gasolina": 6.22,
+     "etanol": 3.99,
      "postos": 8
     },
     {
@@ -876,20 +880,20 @@
     },
     {
      "nome": "PATROCINIO",
-     "gasolina": 6.55,
-     "etanol": 4.37,
+     "gasolina": 6.5,
+     "etanol": 4.39,
      "postos": 8
     },
     {
      "nome": "POCOS DE CALDAS",
-     "gasolina": 6.51,
+     "gasolina": 6.52,
      "etanol": 4.18,
      "postos": 10
     },
     {
      "nome": "SABARA",
-     "gasolina": 6.33,
-     "etanol": 4.36,
+     "gasolina": 6.35,
+     "etanol": 4.39,
      "postos": 8
     },
     {
@@ -900,21 +904,21 @@
     },
     {
      "nome": "SAO SEBASTIAO DO PARAISO",
-     "gasolina": 6.2,
-     "etanol": 4.17,
+     "gasolina": 6.08,
+     "etanol": 4.1,
      "postos": 8
     },
     {
      "nome": "SETE LAGOAS",
-     "gasolina": 5.91,
-     "etanol": 3.92,
+     "gasolina": 5.95,
+     "etanol": 4.02,
      "postos": 14
     },
     {
      "nome": "TEOFILO OTONI",
-     "gasolina": 5.94,
-     "etanol": 3.94,
-     "postos": 4
+     "gasolina": 5.97,
+     "etanol": 3.99,
+     "postos": 8
     },
     {
      "nome": "TIMOTEO",
@@ -924,38 +928,38 @@
     },
     {
      "nome": "TRES CORACOES",
-     "gasolina": 6.75,
-     "etanol": 4.59,
+     "gasolina": 6.7,
+     "etanol": 4.51,
      "postos": 8
     },
     {
      "nome": "UBERABA",
-     "gasolina": 6.01,
-     "etanol": 3.88,
-     "postos": 7
+     "gasolina": 5.96,
+     "etanol": 3.81,
+     "postos": 11
     },
     {
      "nome": "UBERLANDIA",
      "gasolina": 6.52,
-     "etanol": 4.42,
+     "etanol": 4.44,
      "postos": 21
     },
     {
      "nome": "UNAI",
      "gasolina": 6.22,
-     "etanol": 3.95,
-     "postos": 3
+     "etanol": 4.15,
+     "postos": 2
     },
     {
      "nome": "VARGINHA",
-     "gasolina": 6.06,
-     "etanol": 4.02,
+     "gasolina": 6.01,
+     "etanol": 3.99,
      "postos": 10
     },
     {
      "nome": "VICOSA",
-     "gasolina": 6.6,
-     "etanol": 4.33,
+     "gasolina": 6.58,
+     "etanol": 4.28,
      "postos": 8
     }
    ]
@@ -963,70 +967,82 @@
   {
    "uf": "PA",
    "nome": "Pará",
-   "gasolina": 6.54,
-   "etanol": 4.52,
+   "gasolina": 6.58,
+   "etanol": 4.57,
    "municipios": [
     {
      "nome": "ALENQUER",
-     "gasolina": 7.34,
+     "gasolina": 7.35,
      "etanol": 4.99,
-     "postos": 5
+     "postos": 6
     },
     {
      "nome": "ALTAMIRA",
-     "gasolina": 7.34,
-     "etanol": 5.64,
+     "gasolina": 7.32,
+     "etanol": 5.65,
      "postos": 10
     },
     {
      "nome": "ANANINDEUA",
-     "gasolina": 6.14,
+     "gasolina": 5.95,
      "etanol": 4.23,
      "postos": 11
     },
     {
      "nome": "BELEM",
      "gasolina": 6.39,
-     "etanol": 4.31,
+     "etanol": 4.36,
      "postos": 19
     },
     {
+     "nome": "BRAGANCA",
+     "gasolina": 6.93,
+     "etanol": 4.69,
+     "postos": 8
+    },
+    {
      "nome": "CASTANHAL",
-     "gasolina": 6.48,
-     "etanol": 4.75,
+     "gasolina": 6.46,
+     "etanol": 4.81,
      "postos": 8
     },
     {
      "nome": "CONCEICAO DO ARAGUAIA",
-     "gasolina": 7.03,
+     "gasolina": 6.96,
      "etanol": 5.62,
      "postos": 6
     },
     {
      "nome": "MARABA",
-     "gasolina": 6.63,
-     "etanol": 4.98,
+     "gasolina": 6.6,
+     "etanol": 5.07,
      "postos": 15
     },
     {
      "nome": "PARAGOMINAS",
-     "gasolina": 6.99,
+     "gasolina": 6.98,
      "etanol": 5.05,
      "postos": 7
     },
     {
      "nome": "PARAUAPEBAS",
-     "gasolina": 6.81,
-     "etanol": 4.81,
-     "postos": 9
+     "gasolina": 6.85,
+     "etanol": 4.9,
+     "postos": 14
+    },
+    {
+     "nome": "SANTAREM",
+     "gasolina": 7.15,
+     "etanol": 4.75,
+     "postos": 7
     }
    ]
   },
   {
    "uf": "PB",
    "nome": "Paraíba",
-   "gasolina": 6.38,
-   "etanol": 4.55,
+   "gasolina": 6.31,
+   "etanol": 4.54,
    "municipios": [
     {
      "nome": "BAYEUX",
@@ -1037,30 +1053,30 @@
     {
      "nome": "CABEDELO",
      "gasolina": 6.39,
-     "etanol": 4.7,
+     "etanol": 4.73,
      "postos": 7
     },
     {
      "nome": "CAMPINA GRANDE",
-     "gasolina": 6.49,
-     "etanol": 4.68,
+     "gasolina": 6.35,
+     "etanol": 4.65,
      "postos": 16
     },
     {
      "nome": "JOAO PESSOA",
-     "gasolina": 6.29,
-     "etanol": 4.47,
+     "gasolina": 6.24,
+     "etanol": 4.46,
      "postos": 19
     },
     {
      "nome": "PATOS",
-     "gasolina": 6.66,
-     "etanol": 4.93,
+     "gasolina": 6.54,
+     "etanol": 4.85,
      "postos": 9
     },
     {
      "nome": "SOUSA",
-     "gasolina": 6.68,
+     "gasolina": 6.55,
      "etanol": 5.35,
      "postos": 7
     }
@@ -1069,19 +1085,19 @@
   {
    "uf": "PR",
    "nome": "Paraná",
-   "gasolina": 6.58,
-   "etanol": 4.2,
+   "gasolina": 6.57,
+   "etanol": 4.23,
    "municipios": [
     {
      "nome": "APUCARANA",
      "gasolina": 6.74,
-     "etanol": 4.34,
+     "etanol": 4.37,
      "postos": 9
     },
     {
      "nome": "ARAPONGAS",
-     "gasolina": 6.38,
-     "etanol": 4.07,
+     "gasolina": 6.34,
+     "etanol": 4.13,
      "postos": 9
     },
     {
@@ -1092,8 +1108,8 @@
     },
     {
      "nome": "CAMBE",
-     "gasolina": 6.56,
-     "etanol": 3.96,
+     "gasolina": 6.49,
+     "etanol": 3.89,
      "postos": 8
     },
     {
@@ -1104,110 +1120,122 @@
     },
     {
      "nome": "CAMPO MOURAO",
-     "gasolina": 6.11,
-     "etanol": 3.77,
+     "gasolina": 6,
+     "etanol": 3.79,
      "postos": 6
     },
     {
      "nome": "CASCAVEL",
-     "gasolina": 6.35,
-     "etanol": 4.02,
-     "postos": 3
-    },
-    {
-     "nome": "CASTRO",
-     "gasolina": 6.94,
-     "etanol": 4.82,
-     "postos": 8
+     "gasolina": 6.45,
+     "etanol": 4.06,
+     "postos": 17
     },
     {
      "nome": "CIANORTE",
-     "gasolina": 5.92,
-     "etanol": 3.65,
+     "gasolina": 5.82,
+     "etanol": 3.7,
      "postos": 9
     },
     {
      "nome": "COLOMBO",
-     "gasolina": 6.77,
-     "etanol": 4.56,
+     "gasolina": 6.73,
+     "etanol": 4.55,
      "postos": 10
     },
     {
      "nome": "CORNELIO PROCOPIO",
-     "gasolina": 6.71,
-     "etanol": 4.4,
-     "postos": 6
+     "gasolina": 6.75,
+     "etanol": 4.46,
+     "postos": 7
     },
     {
      "nome": "CURITIBA",
-     "gasolina": 6.78,
-     "etanol": 4.64,
+     "gasolina": 6.76,
+     "etanol": 4.63,
      "postos": 48
     },
     {
      "nome": "FOZ DO IGUACU",
-     "gasolina": 6.49,
+     "gasolina": 6.55,
      "etanol": 3.92,
      "postos": 14
     },
     {
      "nome": "FRANCISCO BELTRAO",
-     "gasolina": 6.28,
-     "etanol": 4.15,
-     "postos": 5
+     "gasolina": 6.34,
+     "etanol": 4.14,
+     "postos": 4
     },
     {
      "nome": "GUARAPUAVA",
-     "gasolina": 5.85,
-     "etanol": 3.85,
+     "gasolina": 5.86,
+     "etanol": 3.84,
      "postos": 14
     },
     {
      "nome": "LONDRINA",
-     "gasolina": 6.46,
-     "etanol": 3.85,
+     "gasolina": 6.39,
+     "etanol": 3.83,
      "postos": 19
     },
     {
      "nome": "MARINGA",
-     "gasolina": 6.89,
+     "gasolina": 6.91,
      "etanol": 4.24,
      "postos": 17
     },
     {
+     "nome": "PARANAGUA",
+     "gasolina": 6.42,
+     "etanol": 4.2,
+     "postos": 9
+    },
+    {
      "nome": "PARANAVAI",
      "gasolina": 6.53,
-     "etanol": 3.9,
+     "etanol": 3.92,
      "postos": 8
     },
     {
      "nome": "PATO BRANCO",
-     "gasolina": 6.49,
+     "gasolina": 6.44,
      "etanol": 4.21,
      "postos": 8
     },
     {
      "nome": "PONTA GROSSA",
      "gasolina": 6.19,
-     "etanol": 4.1,
+     "etanol": 4.08,
      "postos": 16
     },
     {
+     "nome": "SANTO ANTONIO DA PLATINA",
+     "gasolina": 6.75,
+     "etanol": 4.45,
+     "postos": 3
+    },
+    {
+     "nome": "SAO JOSE DOS PINHAIS",
+     "gasolina": 6.78,
+     "etanol": 4.73,
+     "postos": 14
+    },
+    {
      "nome": "TOLEDO",
-     "gasolina": 6.45,
+     "gasolina": 6.39,
      "etanol": 4.03,
      "postos": 13
     },
     {
      "nome": "UMUARAMA",
-     "gasolina": 6.46,
+     "gasolina": 6.43,
      "etanol": 4.02,
-     "postos": 13
+     "postos": 12
     },
     {
      "nome": "UNIAO DA VITORIA",
-     "gasolina": 6.85,
-     "etanol": 4.72,
+     "gasolina": 6.81,
+     "etanol": 4.67,
      "postos": 8
     }
    ]
@@ -1215,19 +1243,19 @@
   {
    "uf": "PE",
    "nome": "Pernambuco",
-   "gasolina": 6.9,
-   "etanol": 4.95,
+   "gasolina": 6.88,
+   "etanol": 4.94,
    "municipios": [
     {
      "nome": "ARARIPINA",
-     "gasolina": 7.18,
+     "gasolina": 7.17,
      "etanol": 4.99,
      "postos": 10
     },
     {
      "nome": "ARCOVERDE",
-     "gasolina": 6.67,
-     "etanol": 5.23,
+     "gasolina": 6.62,
+     "etanol": 5.16,
      "postos": 8
     },
     {
@@ -1244,38 +1272,38 @@
     },
     {
      "nome": "CARUARU",
-     "gasolina": 6.76,
-     "etanol": 4.8,
+     "gasolina": 6.73,
+     "etanol": 4.76,
      "postos": 17
     },
     {
      "nome": "GARANHUNS",
-     "gasolina": 6.42,
-     "etanol": 4.69,
+     "gasolina": 6.21,
+     "etanol": 4.58,
      "postos": 10
     },
     {
      "nome": "GOIANA",
-     "gasolina": 6.95,
-     "etanol": 4.93,
+     "gasolina": 6.93,
+     "etanol": 4.91,
      "postos": 6
     },
     {
      "nome": "IGARASSU",
      "gasolina": 6.95,
-     "etanol": 4.95,
+     "etanol": 4.94,
      "postos": 8
     },
     {
      "nome": "JABOATAO DOS GUARARAPES",
-     "gasolina": 6.93,
-     "etanol": 4.88,
-     "postos": 14
+     "gasolina": 6.95,
+     "etanol": 4.89,
+     "postos": 13
     },
     {
      "nome": "LAJEDO",
      "gasolina": 6.46,
-     "etanol": 5.32,
+     "etanol": 4.93,
      "postos": 10
     },
     {
@@ -1292,19 +1320,19 @@
     },
     {
      "nome": "PETROLINA",
-     "gasolina": 7.25,
-     "etanol": 5.28,
+     "gasolina": 7.18,
+     "etanol": 5.19,
      "postos": 17
     },
     {
      "nome": "RECIFE",
-     "gasolina": 6.97,
-     "etanol": 4.96,
+     "gasolina": 6.96,
+     "etanol": 4.95,
      "postos": 28
     },
     {
      "nome": "SALGUEIRO",
-     "gasolina": 7.01,
+     "gasolina": 7.08,
      "etanol": 5.58,
      "postos": 8
     },
@@ -1316,14 +1344,14 @@
     },
     {
      "nome": "SERRA TALHADA",
-     "gasolina": 6.51,
-     "etanol": 5.26,
+     "gasolina": 6.48,
+     "etanol": 5.2,
      "postos": 9
     },
     {
      "nome": "VITORIA DE SANTO ANTAO",
-     "gasolina": 6.68,
-     "etanol": 4.78,
+     "gasolina": 6.65,
+     "etanol": 4.77,
      "postos": 7
     }
    ]
@@ -1331,31 +1359,31 @@
   {
    "uf": "PI",
    "nome": "Piauí",
-   "gasolina": 6.76,
-   "etanol": 4.82,
+   "gasolina": 6.71,
+   "etanol": 4.8,
    "municipios": [
     {
      "nome": "PARNAIBA",
-     "gasolina": 6.6,
+     "gasolina": 6.45,
      "etanol": 4.64,
      "postos": 12
     },
     {
      "nome": "PICOS",
-     "gasolina": 6.64,
-     "etanol": 5.16,
+     "gasolina": 6.55,
+     "etanol": 5.22,
      "postos": 10
     },
     {
      "nome": "PIRIPIRI",
-     "gasolina": 6.63,
+     "gasolina": 6.59,
      "etanol": 4.96,
      "postos": 8
     },
     {
      "nome": "TERESINA",
-     "gasolina": 6.8,
-     "etanol": 4.83,
+     "gasolina": 6.78,
+     "etanol": 4.81,
      "postos": 29
     }
    ]
@@ -1363,20 +1391,20 @@
   {
    "uf": "RJ",
    "nome": "Rio de Janeiro",
-   "gasolina": 6.61,
-   "etanol": 4.76,
+   "gasolina": 6.59,
+   "etanol": 4.77,
    "municipios": [
     {
      "nome": "ANGRA DOS REIS",
-     "gasolina": 7.12,
-     "etanol": 5.59,
+     "gasolina": 7.13,
+     "etanol": 5.61,
      "postos": 8
     },
     {
      "nome": "ARARUAMA",
      "gasolina": 6.93,
-     "etanol": 4.98,
-     "postos": 8
+     "etanol": 4.96,
+     "postos": 7
     },
     {
      "nome": "BARRA DO PIRAI",
@@ -1386,14 +1414,14 @@
     },
     {
      "nome": "BARRA MANSA",
-     "gasolina": 6.63,
-     "etanol": 4.72,
+     "gasolina": 6.58,
+     "etanol": 4.7,
      "postos": 10
     },
     {
      "nome": "BELFORD ROXO",
-     "gasolina": 6.48,
-     "etanol": 4.66,
+     "gasolina": 6.43,
+     "etanol": 4.61,
      "postos": 8
     },
     {
@@ -1404,20 +1432,20 @@
     },
     {
      "nome": "CAMPOS DOS GOYTACAZES",
-     "gasolina": 6.65,
-     "etanol": 4.85,
+     "gasolina": 6.67,
+     "etanol": 4.88,
      "postos": 11
     },
     {
      "nome": "DUQUE DE CAXIAS",
-     "gasolina": 6.47,
-     "etanol": 4.7,
+     "gasolina": 6.52,
+     "etanol": 4.78,
      "postos": 17
     },
     {
      "nome": "ITABORAI",
-     "gasolina": 6.54,
-     "etanol": 4.75,
+     "gasolina": 6.53,
+     "etanol": 4.84,
      "postos": 9
     },
     {
@@ -1427,57 +1455,57 @@
      "postos": 6
     },
     {
+     "nome": "MACAE",
+     "gasolina": 6.8,
+     "etanol": 5.28,
+     "postos": 9
+    },
+    {
      "nome": "MARICA",
-     "gasolina": 6.62,
-     "etanol": 4.7,
+     "gasolina": 6.65,
+     "etanol": 4.76,
      "postos": 8
     },
     {
      "nome": "NILOPOLIS",
-     "gasolina": 6.46,
+     "gasolina": 6.43,
      "etanol": 4.53,
      "postos": 7
     },
     {
      "nome": "NITEROI",
-     "gasolina": 6.57,
+     "gasolina": 6.54,
      "etanol": 4.68,
      "postos": 17
     },
     {
      "nome": "NOVA FRIBURGO",
-     "gasolina": 7.03,
+     "gasolina": 7.01,
      "etanol": 5,
      "postos": 11
     },
     {
      "nome": "NOVA IGUACU",
-     "gasolina": 6.45,
-     "etanol": 4.67,
-     "postos": 14
-    },
-    {
-     "nome": "PETROPOLIS",
-     "gasolina": 7.1,
-     "etanol": 5.39,
+     "gasolina": 6.43,
+     "etanol": 4.66,
      "postos": 14
     },
     {
      "nome": "RESENDE",
      "gasolina": 6.53,
-     "etanol": 4.55,
+     "etanol": 4.6,
      "postos": 8
     },
     {
      "nome": "RIO BONITO",
      "gasolina": 6.71,
-     "etanol": 4.71,
+     "etanol": 4.72,
      "postos": 6
     },
     {
      "nome": "RIO DE JANEIRO",
-     "gasolina": 6.53,
-     "etanol": 4.74,
+     "gasolina": 6.51,
+     "etanol": 4.73,
      "postos": 81
     },
     {
@@ -1488,27 +1516,27 @@
     },
     {
      "nome": "SAO GONCALO",
-     "gasolina": 6.57,
-     "etanol": 4.79,
+     "gasolina": 6.55,
+     "etanol": 4.82,
      "postos": 17
     },
     {
      "nome": "SAO JOAO DE MERITI",
-     "gasolina": 6.38,
-     "etanol": 4.6,
+     "gasolina": 6.43,
+     "etanol": 4.64,
      "postos": 10
     },
     {
      "nome": "SAQUAREMA",
-     "gasolina": 6.89,
-     "etanol": 4.94,
+     "gasolina": 6.88,
+     "etanol": 4.92,
      "postos": 7
     },
     {
      "nome": "TRES RIOS",
-     "gasolina": 6.8,
-     "etanol": 5.25,
-     "postos": 6
+     "gasolina": 6.81,
+     "etanol": 5.26,
+     "postos": 7
     },
     {
      "nome": "VALENCA",
@@ -1519,7 +1547,7 @@
     {
      "nome": "VOLTA REDONDA",
      "gasolina": 6.89,
-     "etanol": 5.02,
+     "etanol": 4.99,
      "postos": 11
     }
    ]
@@ -1527,8 +1555,8 @@
   {
    "uf": "RN",
    "nome": "Rio Grande do Norte",
-   "gasolina": 6.45,
-   "etanol": 4.85,
+   "gasolina": 6.76,
+   "etanol": 5.16,
    "municipios": [
     {
      "nome": "CAICO",
@@ -1538,20 +1566,20 @@
     },
     {
      "nome": "MOSSORO",
-     "gasolina": 6.52,
-     "etanol": 4.86,
-     "postos": 9
+     "gasolina": 6.51,
+     "etanol": 4.82,
+     "postos": 15
     },
     {
      "nome": "NATAL",
-     "gasolina": 6.38,
-     "etanol": 4.83,
-     "postos": 18
+     "gasolina": 6.82,
+     "etanol": 5.23,
+     "postos": 19
     },
     {
      "nome": "PARNAMIRIM",
-     "gasolina": 6.39,
-     "etanol": 4.79,
+     "gasolina": 6.89,
+     "etanol": 5.29,
      "postos": 2
     }
    ]
@@ -1559,14 +1587,14 @@
   {
    "uf": "RS",
    "nome": "Rio Grande do Sul",
-   "gasolina": 6.21,
-   "etanol": 4.51,
+   "gasolina": 6.16,
+   "etanol": 4.57,
    "municipios": [
     {
      "nome": "ALEGRETE",
-     "gasolina": 6.67,
+     "gasolina": 6.62,
      "etanol": 4.99,
-     "postos": 4
+     "postos": 3
     },
     {
      "nome": "ALVORADA",
@@ -1576,19 +1604,19 @@
     },
     {
      "nome": "BAGE",
-     "gasolina": 7.37,
+     "gasolina": 7.38,
      "etanol": 5.34,
      "postos": 9
     },
     {
      "nome": "BENTO GONCALVES",
-     "gasolina": 6.28,
-     "etanol": 4.73,
+     "gasolina": 6.26,
+     "etanol": 4.75,
      "postos": 10
     },
     {
      "nome": "CACHOEIRA DO SUL",
-     "gasolina": 5.98,
+     "gasolina": 5.99,
      "etanol": 4.39,
      "postos": 8
     },
@@ -1600,43 +1628,43 @@
     },
     {
      "nome": "CANOAS",
-     "gasolina": 6.09,
-     "etanol": 4.31,
-     "postos": 16
+     "gasolina": 6.01,
+     "etanol": 4.45,
+     "postos": 12
     },
     {
      "nome": "CAXIAS DO SUL",
      "gasolina": 6.09,
-     "etanol": 4.36,
+     "etanol": 4.75,
      "postos": 19
     },
     {
      "nome": "CRUZ ALTA",
-     "gasolina": 6.25,
-     "etanol": 4.55,
+     "gasolina": 6.21,
+     "etanol": 4.69,
      "postos": 8
     },
     {
      "nome": "ERECHIM",
-     "gasolina": 6.27,
-     "etanol": 5.25,
+     "gasolina": 6.3,
+     "etanol": 5.22,
      "postos": 11
     },
     {
      "nome": "ESTEIO",
-     "gasolina": 6.17,
-     "etanol": 4.44,
+     "gasolina": 6.06,
+     "etanol": 4.3,
      "postos": 7
     },
     {
      "nome": "GRAMADO",
-     "gasolina": 6.65,
+     "gasolina": 6.64,
      "etanol": 5.11,
      "postos": 7
     },
     {
      "nome": "GRAVATAI",
-     "gasolina": 6.23,
+     "gasolina": 6.15,
      "etanol": 4.29,
      "postos": 5
     },
@@ -1648,50 +1676,56 @@
     },
     {
      "nome": "IJUI",
-     "gasolina": 6.3,
+     "gasolina": 6.24,
      "etanol": 5.08,
      "postos": 8
     },
     {
      "nome": "LAJEADO",
-     "gasolina": 6.09,
-     "etanol": 4.99,
+     "gasolina": 6.02,
+     "etanol": 4.87,
      "postos": 10
     },
     {
      "nome": "NOVO HAMBURGO",
-     "gasolina": 6.16,
-     "etanol": 4.34,
+     "gasolina": 5.96,
+     "etanol": 4.35,
      "postos": 12
     },
     {
      "nome": "OSORIO",
-     "gasolina": 6.16,
-     "etanol": 4.41,
+     "gasolina": 6.07,
+     "etanol": 4.34,
      "postos": 9
     },
     {
      "nome": "PASSO FUNDO",
-     "gasolina": 6.42,
-     "etanol": 4.69,
-     "postos": 3
+     "gasolina": 6.28,
+     "etanol": 4.94,
+     "postos": 9
     },
     {
      "nome": "PELOTAS",
-     "gasolina": 6.6,
-     "etanol": 4.89,
+     "gasolina": 6.52,
+     "etanol": 4.87,
      "postos": 17
     },
     {
      "nome": "PORTO ALEGRE",
-     "gasolina": 5.96,
-     "etanol": 4.44,
+     "gasolina": 5.91,
+     "etanol": 4.45,
      "postos": 36
     },
     {
+     "nome": "SANTA CRUZ DO SUL",
+     "gasolina": 6.52,
+     "etanol": 5.28,
+     "postos": 14
+    },
+    {
      "nome": "SANTA MARIA",
-     "gasolina": 6.2,
-     "etanol": 4.78,
+     "gasolina": 6.21,
+     "etanol": 4.86,
      "postos": 14
     },
     {
@@ -1703,60 +1737,66 @@
     {
      "nome": "SANTANA DO LIVRAMENTO",
      "gasolina": 6.87,
-     "etanol": 5.61,
+     "etanol": 5.51,
      "postos": 9
     },
     {
      "nome": "SANTO ANGELO",
-     "gasolina": 6.7,
-     "etanol": 5.03,
+     "gasolina": 6.74,
+     "etanol": 4.95,
      "postos": 8
     },
     {
      "nome": "SAO GABRIEL",
-     "gasolina": 6.41,
+     "gasolina": 6.39,
      "etanol": 4.89,
      "postos": 8
     },
     {
      "nome": "SAO LEOPOLDO",
-     "gasolina": 6.19,
-     "etanol": 4.47,
+     "gasolina": 6.03,
+     "etanol": 4.56,
      "postos": 10
     },
     {
      "nome": "SAO LUIZ GONZAGA",
      "gasolina": 6.53,
-     "etanol": 4.91,
+     "etanol": 4.95,
      "postos": 6
     },
     {
      "nome": "SAPIRANGA",
-     "gasolina": 6.2,
-     "etanol": 4.45,
+     "gasolina": 6.15,
+     "etanol": 4.42,
      "postos": 8
     },
     {
      "nome": "SAPUCAIA DO SUL",
-     "gasolina": 6.15,
-     "etanol": 4.31,
+     "gasolina": 6,
+     "etanol": 4.37,
      "postos": 8
     },
     {
      "nome": "TORRES",
-     "gasolina": 6.25,
+     "gasolina": 6.32,
      "etanol": 4.79,
      "postos": 3
     },
     {
+     "nome": "URUGUAIANA",
+     "gasolina": 6.41,
+     "etanol": 5.39,
+     "postos": 8
+    },
+    {
      "nome": "VACARIA",
-     "gasolina": 6.47,
-     "etanol": 4.75,
+     "gasolina": 6.46,
+     "etanol": 4.85,
      "postos": 8
     },
     {
      "nome": "VIAMAO",
-     "gasolina": 5.94,
+     "gasolina": 5.92,
      "etanol": 4.65,
      "postos": 6
     }
@@ -1766,7 +1806,7 @@
    "uf": "RO",
    "nome": "Rondônia",
    "gasolina": 7.43,
-   "etanol": 5.09,
+   "etanol": 5.08,
    "municipios": [
     {
      "nome": "CACOAL",
@@ -1776,7 +1816,7 @@
     },
     {
      "nome": "JI-PARANA",
-     "gasolina": 7.29,
+     "gasolina": 7.26,
      "etanol": 4.99,
      "postos": 12
     },
@@ -1794,9 +1834,9 @@
     },
     {
      "nome": "VILHENA",
-     "gasolina": 7.44,
-     "etanol": 5.2,
-     "postos": 7
+     "gasolina": 7.42,
+     "etanol": 5.18,
+     "postos": 6
     }
    ]
   },
@@ -1817,25 +1857,25 @@
   {
    "uf": "SC",
    "nome": "Santa Catarina",
-   "gasolina": 6.43,
-   "etanol": 4.52,
+   "gasolina": 6.29,
+   "etanol": 4.4,
    "municipios": [
     {
      "nome": "ARARANGUA",
-     "gasolina": 6.42,
-     "etanol": 4.94,
+     "gasolina": 6.3,
+     "etanol": 4.99,
      "postos": 8
     },
     {
      "nome": "BLUMENAU",
-     "gasolina": 6.5,
+     "gasolina": 6.41,
      "etanol": 4.21,
      "postos": 16
     },
     {
      "nome": "BRUSQUE",
      "gasolina": 6.36,
-     "etanol": 4.41,
+     "etanol": 4.47,
      "postos": 10
     },
     {
@@ -1846,56 +1886,50 @@
     },
     {
      "nome": "CHAPECO",
-     "gasolina": 6.5,
-     "etanol": 5.1,
+     "gasolina": 6.42,
+     "etanol": 4.86,
      "postos": 13
     },
     {
      "nome": "CONCORDIA",
-     "gasolina": 6.59,
-     "etanol": 5.15,
+     "gasolina": 6.57,
+     "etanol": 5.05,
      "postos": 8
     },
     {
      "nome": "CRICIUMA",
-     "gasolina": 6.36,
-     "etanol": 4.66,
+     "gasolina": 6.33,
+     "etanol": 4.6,
      "postos": 14
     },
     {
-     "nome": "FLORIANOPOLIS",
-     "gasolina": 6.7,
-     "etanol": 4.71,
-     "postos": 16
-    },
-    {
      "nome": "ITAJAI",
-     "gasolina": 6.67,
-     "etanol": 4.33,
+     "gasolina": 6.58,
+     "etanol": 4.34,
      "postos": 14
     },
     {
      "nome": "JOINVILLE",
-     "gasolina": 6.02,
-     "etanol": 4.2,
+     "gasolina": 5.92,
+     "etanol": 4.18,
      "postos": 19
     },
     {
      "nome": "LAGUNA",
-     "gasolina": 6.43,
+     "gasolina": 6.4,
      "etanol": 4.59,
      "postos": 5
     },
     {
      "nome": "MAFRA",
-     "gasolina": 6.38,
-     "etanol": 4.39,
-     "postos": 4
+     "gasolina": 6.36,
+     "etanol": 4.55,
+     "postos": 5
     },
     {
      "nome": "SAO JOSE",
-     "gasolina": 6.67,
-     "etanol": 4.74,
+     "gasolina": 6.47,
+     "etanol": 4.51,
      "postos": 14
     },
     {
@@ -1906,14 +1940,14 @@
     },
     {
      "nome": "VIDEIRA",
-     "gasolina": 6.54,
-     "etanol": 5.24,
-     "postos": 6
+     "gasolina": 6.48,
+     "etanol": 5.05,
+     "postos": 7
     },
     {
      "nome": "XANXERE",
      "gasolina": 6.26,
-     "etanol": 4.76,
+     "etanol": 4.75,
      "postos": 8
     }
    ]
@@ -1921,114 +1955,114 @@
   {
    "uf": "SP",
    "nome": "São Paulo",
-   "gasolina": 6.36,
-   "etanol": 3.86,
+   "gasolina": 6.35,
+   "etanol": 3.89,
    "municipios": [
     {
      "nome": "ADAMANTINA",
-     "gasolina": 6.36,
+     "gasolina": 6.32,
      "etanol": 3.44,
      "postos": 8
     },
     {
      "nome": "AMERICANA",
-     "gasolina": 6.42,
-     "etanol": 3.86,
+     "gasolina": 6.39,
+     "etanol": 3.88,
      "postos": 14
     },
     {
      "nome": "ARACATUBA",
-     "gasolina": 6.24,
-     "etanol": 3.5,
+     "gasolina": 6.3,
+     "etanol": 3.59,
      "postos": 14
     },
     {
      "nome": "ARARAQUARA",
-     "gasolina": 6.1,
-     "etanol": 3.7,
+     "gasolina": 6.25,
+     "etanol": 3.83,
      "postos": 17
     },
     {
      "nome": "ARARAS",
-     "gasolina": 6.36,
-     "etanol": 3.68,
+     "gasolina": 6.32,
+     "etanol": 3.71,
      "postos": 11
     },
     {
      "nome": "ASSIS",
      "gasolina": 6.62,
-     "etanol": 4.04,
+     "etanol": 3.99,
      "postos": 10
     },
     {
      "nome": "ATIBAIA",
-     "gasolina": 6.7,
-     "etanol": 4.41,
+     "gasolina": 6.85,
+     "etanol": 4.51,
      "postos": 14
     },
     {
      "nome": "AVARE",
-     "gasolina": 6.41,
-     "etanol": 3.82,
+     "gasolina": 6.25,
+     "etanol": 3.81,
      "postos": 8
     },
     {
      "nome": "BARRETOS",
-     "gasolina": 6.49,
-     "etanol": 3.73,
+     "gasolina": 6.48,
+     "etanol": 3.75,
      "postos": 10
     },
     {
      "nome": "BARUERI",
-     "gasolina": 6.69,
-     "etanol": 4.13,
+     "gasolina": 6.54,
+     "etanol": 4.19,
      "postos": 14
     },
     {
      "nome": "BAURU",
-     "gasolina": 6.19,
-     "etanol": 3.58,
+     "gasolina": 6.22,
+     "etanol": 3.62,
      "postos": 17
     },
     {
      "nome": "BEBEDOURO",
-     "gasolina": 6.39,
-     "etanol": 3.67,
+     "gasolina": 6.41,
+     "etanol": 3.71,
      "postos": 8
     },
     {
      "nome": "BIRIGUI",
-     "gasolina": 6.48,
-     "etanol": 3.62,
+     "gasolina": 6.49,
+     "etanol": 3.66,
      "postos": 10
     },
     {
      "nome": "BOTUCATU",
-     "gasolina": 6.14,
-     "etanol": 3.85,
+     "gasolina": 6.17,
+     "etanol": 3.91,
      "postos": 10
     },
     {
      "nome": "BRAGANCA PAULISTA",
-     "gasolina": 6.32,
-     "etanol": 3.92,
+     "gasolina": 6.45,
+     "etanol": 4.16,
      "postos": 10
     },
     {
      "nome": "CACAPAVA",
-     "gasolina": 6.43,
+     "gasolina": 6.41,
      "etanol": 4.2,
      "postos": 8
     },
     {
      "nome": "CAMPINAS",
-     "gasolina": 6.45,
-     "etanol": 3.97,
+     "gasolina": 6.36,
+     "etanol": 3.94,
      "postos": 25
     },
     {
      "nome": "CARAGUATATUBA",
-     "gasolina": 6.83,
+     "gasolina": 6.82,
      "etanol": 4.46,
      "postos": 9
     },
@@ -2040,25 +2074,25 @@
     },
     {
      "nome": "CATANDUVA",
-     "gasolina": 6.4,
-     "etanol": 3.74,
+     "gasolina": 6.42,
+     "etanol": 3.79,
      "postos": 10
     },
     {
      "nome": "COSMOPOLIS",
      "gasolina": 6.21,
-     "etanol": 3.93,
+     "etanol": 3.92,
      "postos": 8
     },
     {
      "nome": "COTIA",
-     "gasolina": 6.29,
-     "etanol": 3.93,
+     "gasolina": 6.23,
+     "etanol": 3.97,
      "postos": 12
     },
     {
      "nome": "CRUZEIRO",
-     "gasolina": 6.21,
+     "gasolina": 6.2,
      "etanol": 3.95,
      "postos": 7
     },
@@ -2070,123 +2104,123 @@
     },
     {
      "nome": "DIADEMA",
-     "gasolina": 6.29,
-     "etanol": 3.92,
+     "gasolina": 6.32,
+     "etanol": 3.99,
      "postos": 14
     },
     {
      "nome": "EMBU DAS ARTES",
-     "gasolina": 6.46,
-     "etanol": 4.09,
+     "gasolina": 6.5,
+     "etanol": 4.19,
      "postos": 8
     },
     {
      "nome": "FRANCA",
-     "gasolina": 6.6,
-     "etanol": 3.8,
+     "gasolina": 6.63,
+     "etanol": 3.83,
      "postos": 19
     },
     {
      "nome": "GARCA",
-     "gasolina": 6.27,
-     "etanol": 3.68,
+     "gasolina": 6.24,
+     "etanol": 3.71,
      "postos": 8
     },
     {
      "nome": "GUARATINGUETA",
-     "gasolina": 6.52,
-     "etanol": 4.11,
+     "gasolina": 6.49,
+     "etanol": 4.14,
      "postos": 9
     },
     {
      "nome": "GUARUJA",
-     "gasolina": 6.78,
-     "etanol": 4.37,
+     "gasolina": 6.74,
+     "etanol": 4.38,
      "postos": 10
     },
     {
      "nome": "GUARULHOS",
-     "gasolina": 6.34,
-     "etanol": 3.85,
+     "gasolina": 6.32,
+     "etanol": 3.87,
      "postos": 24
     },
     {
      "nome": "HORTOLANDIA",
-     "gasolina": 6.4,
-     "etanol": 3.9,
-     "postos": 9
+     "gasolina": 6.44,
+     "etanol": 3.98,
+     "postos": 10
     },
     {
      "nome": "IBITINGA",
      "gasolina": 6.4,
-     "etanol": 3.9,
+     "etanol": 3.91,
      "postos": 8
     },
     {
      "nome": "INDAIATUBA",
-     "gasolina": 6.25,
-     "etanol": 3.75,
-     "postos": 9
+     "gasolina": 6.27,
+     "etanol": 3.86,
+     "postos": 13
     },
     {
      "nome": "ITANHAEM",
-     "gasolina": 6.75,
-     "etanol": 4.24,
+     "gasolina": 6.6,
+     "etanol": 4.33,
      "postos": 8
     },
     {
      "nome": "ITAPECERICA DA SERRA",
      "gasolina": 6.36,
-     "etanol": 3.96,
+     "etanol": 3.98,
      "postos": 8
     },
     {
      "nome": "ITAPETININGA",
-     "gasolina": 6.23,
-     "etanol": 3.78,
+     "gasolina": 6.29,
+     "etanol": 3.9,
      "postos": 10
     },
     {
      "nome": "ITAPEVA",
      "gasolina": 6.44,
-     "etanol": 3.84,
+     "etanol": 3.86,
      "postos": 8
     },
     {
      "nome": "ITAPIRA",
-     "gasolina": 6.69,
-     "etanol": 4.15,
+     "gasolina": 6.56,
+     "etanol": 4.12,
      "postos": 8
     },
     {
      "nome": "ITAPOLIS",
-     "gasolina": 6.17,
-     "etanol": 3.64,
+     "gasolina": 6.07,
+     "etanol": 3.66,
      "postos": 6
     },
     {
      "nome": "ITAQUAQUECETUBA",
-     "gasolina": 6.31,
-     "etanol": 3.83,
+     "gasolina": 6.43,
+     "etanol": 4.01,
      "postos": 10
     },
     {
      "nome": "ITATIBA",
-     "gasolina": 6.29,
-     "etanol": 3.88,
+     "gasolina": 6.24,
+     "etanol": 3.91,
      "postos": 11
     },
     {
      "nome": "ITU",
-     "gasolina": 6.33,
-     "etanol": 3.77,
+     "gasolina": 6.27,
+     "etanol": 3.82,
      "postos": 10
     },
     {
      "nome": "JACAREI",
-     "gasolina": 6.14,
-     "etanol": 3.85,
-     "postos": 13
+     "gasolina": 6.11,
+     "etanol": 3.84,
+     "postos": 12
     },
     {
      "nome": "JALES",
@@ -2196,45 +2230,51 @@
     },
     {
      "nome": "JAU",
-     "gasolina": 6.47,
-     "etanol": 3.83,
+     "gasolina": 6.42,
+     "etanol": 3.87,
      "postos": 10
     },
     {
+     "nome": "JOSE BONIFACIO",
+     "gasolina": 6.17,
+     "etanol": 3.69,
+     "postos": 6
+    },
+    {
      "nome": "JUNDIAI",
-     "gasolina": 6.4,
-     "etanol": 4.01,
+     "gasolina": 6.41,
+     "etanol": 4.07,
      "postos": 17
     },
     {
      "nome": "LEME",
-     "gasolina": 6.42,
-     "etanol": 4.08,
+     "gasolina": 6.41,
+     "etanol": 4.09,
      "postos": 8
     },
     {
      "nome": "LIMEIRA",
-     "gasolina": 6.26,
-     "etanol": 3.81,
+     "gasolina": 6.19,
+     "etanol": 3.84,
      "postos": 15
     },
     {
      "nome": "LINS",
-     "gasolina": 6.46,
-     "etanol": 3.5,
+     "gasolina": 6.51,
+     "etanol": 3.63,
      "postos": 10
     },
     {
      "nome": "LORENA",
      "gasolina": 6.51,
-     "etanol": 4.08,
+     "etanol": 4.23,
      "postos": 8
     },
     {
      "nome": "MARILIA",
-     "gasolina": 5.89,
-     "etanol": 3.53,
-     "postos": 3
+     "gasolina": 6.17,
+     "etanol": 3.62,
+     "postos": 11
     },
     {
      "nome": "MATAO",
@@ -2244,272 +2284,266 @@
     },
     {
      "nome": "MAUA",
-     "gasolina": 6.43,
-     "etanol": 4.02,
+     "gasolina": 6.63,
+     "etanol": 4.2,
      "postos": 11
     },
     {
      "nome": "MOCOCA",
-     "gasolina": 6.73,
+     "gasolina": 6.66,
      "etanol": 4.23,
      "postos": 8
     },
     {
      "nome": "MOGI DAS CRUZES",
-     "gasolina": 6.39,
-     "etanol": 3.95,
+     "gasolina": 6.34,
+     "etanol": 3.93,
      "postos": 17
     },
     {
      "nome": "MOGI GUACU",
-     "gasolina": 6.32,
-     "etanol": 3.8,
+     "gasolina": 6.3,
+     "etanol": 3.84,
      "postos": 9
     },
     {
      "nome": "MOGI MIRIM",
-     "gasolina": 6.2,
-     "etanol": 3.75,
+     "gasolina": 6.27,
+     "etanol": 3.96,
      "postos": 8
     },
     {
      "nome": "MONTE ALTO",
-     "gasolina": 6.61,
-     "etanol": 3.86,
+     "gasolina": 6.66,
+     "etanol": 3.81,
      "postos": 7
     },
     {
      "nome": "OLIMPIA",
-     "gasolina": 6.3,
-     "etanol": 3.62,
+     "gasolina": 6.36,
+     "etanol": 3.75,
      "postos": 8
     },
     {
      "nome": "OSASCO",
-     "gasolina": 6.37,
-     "etanol": 3.94,
+     "gasolina": 6.27,
+     "etanol": 3.93,
      "postos": 19
     },
     {
      "nome": "OURINHOS",
-     "gasolina": 6.7,
-     "etanol": 4.15,
+     "gasolina": 6.43,
+     "etanol": 3.96,
      "postos": 8
     },
     {
      "nome": "PARAGUACU PAULISTA",
-     "gasolina": 6.06,
-     "etanol": 3.59,
-     "postos": 7
+     "gasolina": 6.07,
+     "etanol": 3.64,
+     "postos": 6
     },
     {
      "nome": "PAULINIA",
-     "gasolina": 6.21,
-     "etanol": 3.78,
+     "gasolina": 6.09,
+     "etanol": 3.7,
      "postos": 9
     },
     {
      "nome": "PIRACICABA",
-     "gasolina": 6.2,
-     "etanol": 3.71,
+     "gasolina": 6.17,
+     "etanol": 3.75,
      "postos": 16
     },
     {
      "nome": "PIRASSUNUNGA",
      "gasolina": 6.34,
-     "etanol": 3.78,
+     "etanol": 3.76,
      "postos": 7
     },
     {
      "nome": "POA",
      "gasolina": 6.67,
-     "etanol": 4.05,
+     "etanol": 4.09,
      "postos": 8
     },
     {
      "nome": "PORTO FERREIRA",
-     "gasolina": 6.7,
+     "gasolina": 6.69,
      "etanol": 4.05,
      "postos": 7
     },
     {
      "nome": "PRAIA GRANDE",
-     "gasolina": 6.71,
-     "etanol": 4.42,
+     "gasolina": 6.66,
+     "etanol": 4.47,
      "postos": 13
     },
     {
      "nome": "PRESIDENTE PRUDENTE",
      "gasolina": 6.39,
-     "etanol": 3.51,
+     "etanol": 3.61,
      "postos": 16
     },
     {
      "nome": "RIBEIRAO PIRES",
-     "gasolina": 6.49,
-     "etanol": 4.06,
+     "gasolina": 6.4,
+     "etanol": 4.03,
      "postos": 8
     },
     {
      "nome": "RIBEIRAO PRETO",
-     "gasolina": 6.69,
-     "etanol": 3.93,
-     "postos": 24
+     "gasolina": 6.62,
+     "etanol": 3.9,
+     "postos": 23
     },
     {
      "nome": "RIO CLARO",
-     "gasolina": 6.13,
-     "etanol": 3.67,
-     "postos": 12
+     "gasolina": 6.08,
+     "etanol": 3.73,
+     "postos": 13
     },
     {
      "nome": "SALTO",
-     "gasolina": 6.18,
-     "etanol": 3.79,
+     "gasolina": 6.25,
+     "etanol": 3.94,
      "postos": 8
     },
     {
      "nome": "SANTO ANDRE",
-     "gasolina": 6.32,
-     "etanol": 3.91,
+     "gasolina": 6.34,
+     "etanol": 3.93,
      "postos": 19
     },
     {
      "nome": "SANTOS",
-     "gasolina": 6.44,
+     "gasolina": 6.46,
      "etanol": 4.18,
      "postos": 15
     },
     {
      "nome": "SAO BERNARDO DO CAMPO",
-     "gasolina": 6.59,
+     "gasolina": 6.58,
      "etanol": 4.08,
      "postos": 19
     },
     {
      "nome": "SAO CAETANO DO SUL",
-     "gasolina": 6.44,
-     "etanol": 4.06,
+     "gasolina": 6.51,
+     "etanol": 4.14,
      "postos": 11
     },
     {
      "nome": "SAO CARLOS",
-     "gasolina": 6.32,
-     "etanol": 3.71,
+     "gasolina": 6.3,
+     "etanol": 3.72,
      "postos": 15
     },
     {
      "nome": "SAO JOAO DA BOA VISTA",
-     "gasolina": 6.37,
-     "etanol": 4.01,
+     "gasolina": 6.29,
+     "etanol": 3.99,
      "postos": 9
     },
     {
      "nome": "SAO JOSE DO RIO PRETO",
      "gasolina": 6.32,
-     "etanol": 3.44,
+     "etanol": 3.45,
      "postos": 19
     },
     {
      "nome": "SAO JOSE DOS CAMPOS",
-     "gasolina": 6.08,
-     "etanol": 3.86,
+     "gasolina": 6.07,
+     "etanol": 3.85,
      "postos": 19
     },
     {
      "nome": "SAO PAULO",
-     "gasolina": 6.34,
-     "etanol": 3.91,
-     "postos": 209
+     "gasolina": 6.33,
+     "etanol": 3.94,
+     "postos": 210
     },
     {
      "nome": "SAO VICENTE",
-     "gasolina": 6.57,
-     "etanol": 4.15,
-     "postos": 9
+     "gasolina": 6.56,
+     "etanol": 4.17,
+     "postos": 8
     },
     {
      "nome": "SERTAOZINHO",
      "gasolina": 6.57,
-     "etanol": 3.75,
+     "etanol": 3.77,
      "postos": 9
     },
     {
      "nome": "SOROCABA",
-     "gasolina": 6.32,
-     "etanol": 3.76,
+     "gasolina": 6.29,
+     "etanol": 3.79,
      "postos": 19
     },
     {
      "nome": "SUMARE",
      "gasolina": 6.26,
-     "etanol": 3.81,
+     "etanol": 3.83,
      "postos": 14
     },
     {
      "nome": "SUZANO",
-     "gasolina": 6.2,
-     "etanol": 3.7,
+     "gasolina": 6.25,
+     "etanol": 3.79,
      "postos": 10
     },
     {
      "nome": "TABOAO DA SERRA",
      "gasolina": 6.33,
-     "etanol": 4.01,
+     "etanol": 4.03,
      "postos": 8
     },
     {
      "nome": "TATUI",
-     "gasolina": 6.33,
-     "etanol": 3.98,
+     "gasolina": 6.32,
+     "etanol": 4.01,
      "postos": 9
     },
     {
      "nome": "TAUBATE",
-     "gasolina": 5.95,
-     "etanol": 3.71,
+     "gasolina": 5.93,
+     "etanol": 3.7,
      "postos": 15
     },
     {
      "nome": "TUPA",
      "gasolina": 6.46,
-     "etanol": 3.69,
+     "etanol": 3.71,
      "postos": 8
     },
     {
      "nome": "UBATUBA",
-     "gasolina": 6.6,
-     "etanol": 4.29,
+     "gasolina": 6.53,
+     "etanol": 4.35,
      "postos": 8
     },
     {
      "nome": "VALINHOS",
-     "gasolina": 6.4,
-     "etanol": 3.91,
+     "gasolina": 6.32,
+     "etanol": 3.84,
      "postos": 10
-    },
-    {
-     "nome": "VARZEA PAULISTA",
-     "gasolina": 6.24,
-     "etanol": 4,
-     "postos": 8
     },
     {
      "nome": "VINHEDO",
      "gasolina": 6.31,
-     "etanol": 3.97,
+     "etanol": 3.99,
      "postos": 8
     },
     {
      "nome": "VOTORANTIM",
-     "gasolina": 6.24,
-     "etanol": 3.67,
+     "gasolina": 6.23,
+     "etanol": 3.73,
      "postos": 8
     },
     {
      "nome": "VOTUPORANGA",
-     "gasolina": 6.39,
-     "etanol": 3.47,
+     "gasolina": 6.38,
+     "etanol": 3.57,
      "postos": 9
     }
    ]
@@ -2518,7 +2552,7 @@
    "uf": "SE",
    "nome": "Sergipe",
    "gasolina": 6.93,
-   "etanol": 5.25,
+   "etanol": 5.24,
    "municipios": [
     {
      "nome": "ARACAJU",
@@ -2529,46 +2563,46 @@
     {
      "nome": "ITABAIANA",
      "gasolina": 6.9,
-     "etanol": 5.39,
+     "etanol": 5.29,
      "postos": 8
     },
     {
      "nome": "LAGARTO",
      "gasolina": 6.9,
-     "etanol": 5.19,
-     "postos": 5
+     "etanol": 5.17,
+     "postos": 7
     },
     {
      "nome": "NOSSA SENHORA DO SOCORRO",
-     "gasolina": 6.97,
-     "etanol": 5.26,
-     "postos": 7
+     "gasolina": 6.96,
+     "etanol": 5.22,
+     "postos": 8
     }
    ]
   },
   {
    "uf": "TO",
    "nome": "Tocantins",
-   "gasolina": 6.92,
-   "etanol": 5,
+   "gasolina": 6.94,
+   "etanol": 5.01,
    "municipios": [
     {
      "nome": "ARAGUAINA",
-     "gasolina": 6.75,
-     "etanol": 4.83,
+     "gasolina": 6.66,
+     "etanol": 4.86,
      "postos": 11
     },
     {
      "nome": "GURUPI",
-     "gasolina": 7.15,
+     "gasolina": 7.06,
      "etanol": 4.99,
-     "postos": 7
+     "postos": 5
     },
     {
      "nome": "PALMAS",
-     "gasolina": 6.98,
-     "etanol": 5.1,
-     "postos": 2
+     "gasolina": 7.07,
+     "etanol": 5.09,
+     "postos": 14
     },
     {
      "nome": "PARAISO DO TOCANTINS",
@@ -2578,7 +2612,7 @@
     },
     {
      "nome": "PORTO NACIONAL",
-     "gasolina": 6.76,
+     "gasolina": 6.74,
      "etanol": 4.74,
      "postos": 8
     }
