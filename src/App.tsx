@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 import {StatusBar} from 'expo-status-bar';
 import CampoNumero from './components/CampoNumero';
+import ListaPostos from './components/ListaPostos';
 import ResultadoCard from './components/ResultadoCard';
 import Seletor from './components/Seletor';
 import {compararCombustiveis, lerNumero} from './lib/calculo';
 import {formatarSemana} from './lib/precos';
 import useLocalPrecos, {BRASIL} from './hooks/useLocalPrecos';
+import usePostos from './hooks/usePostos';
 import {Carregamento} from './services/precos.service';
 import {useCores} from './theme';
 
@@ -33,6 +35,7 @@ export default function App() {
   const esquema = useColorScheme();
   const local = useLocalPrecos();
   const {dados, estado, uf, cidade, gasolina, etanol} = local;
+  const postos = usePostos(uf, cidade);
   const [kmGasolina, setKmGasolina] = useState('');
   const [kmEtanol, setKmEtanol] = useState('');
 
@@ -109,6 +112,12 @@ export default function App() {
         </View>
 
         <ResultadoCard resultado={resultado} />
+
+        <ListaPostos
+          estado={postos.estado}
+          onEscolher={local.preencher}
+          postos={postos.postos}
+        />
 
         <Text style={[nota, styles.notaTopo]}>{descreverFonte(dados)}</Text>
         <Text style={nota}>

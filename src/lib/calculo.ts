@@ -33,6 +33,16 @@ export function lerNumero(texto: string): number {
   );
 }
 
+/** Combustível mais vantajoso pela regra dos 70%, para comparar postos. */
+export const melhorPelaRegra = (
+  gasolina: number,
+  etanol: number,
+): Combustivel => (etanol / LIMITE_ETANOL <= gasolina ? 'etanol' : 'gasolina');
+
+/** Custo equivalente em "litros de gasolina": o menor entre os dois combustíveis. */
+export const custoEfetivo = (gasolina: number, etanol: number) =>
+  Math.min(gasolina, etanol / LIMITE_ETANOL);
+
 const valido = (n?: number): n is number =>
   typeof n === 'number' && Number.isFinite(n) && n > 0;
 
