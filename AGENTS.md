@@ -4,11 +4,11 @@ Regras para agentes de IA e contribuidores deste repositório (app React Native/
 
 ## Contexto do projeto
 
-- Stack: Expo 50, React Native 0.73, React 18, MobX 6 (decorators), React Navigation 6, UI Kitten 5, Jest 29.
+- Stack: Expo 50, React Native 0.73, React 18, TypeScript, Jest 29. Sem biblioteca de estado ou UI: o app é uma tela só.
 - Gerenciador de pacotes: **pnpm**. Não adicione `package-lock.json`/`yarn.lock` novos.
-- Código em `src/`: `containers/` (telas), `components/` (UI reutilizável), `stores/` (estado e regra de negócio), `services/`, `utils/`, `routes/`.
-- Arquivos `*.web.tsx` sobrescrevem a versão nativa no Web; ao mudar uma tela, verifique as duas.
-- Dados de postos/preços são mock. Não invente backend nem chaves de API.
+- Código em `src/`: `components/` (UI), `hooks/` (estado da tela), `lib/` (cálculo e formatação, sem React), `services/` (acesso aos preços). `scripts/` gera `data/precos.json`.
+- O app também roda no Web (`pnpm web`); confira lá ao mudar a UI.
+- Os preços são reais: médias de revenda da ANP, em `data/precos.json` (atualizado por `pnpm precos` e pelo workflow semanal). Nunca invente ou simule preços; cidade sem pesquisa da ANP só pode usar a cidade pesquisada mais próxima ou a média do estado/região, sempre com aviso na tela. Sem rede o app usa o arquivo embutido. Não invente backend nem chaves de API.
 
 ## Princípios
 
@@ -19,7 +19,7 @@ Regras para agentes de IA e contribuidores deste repositório (app React Native/
 
 ## Qualidade de código
 
-- **Limite de 180 linhas por arquivo novo ou alterado.** Alguns arquivos legados excedem (ex.: `containers/home/index.tsx`, `stores/stations.store.ts`); ao tocá-los, extraia em vez de crescer.
+- **Limite de 180 linhas por arquivo novo ou alterado.** Se um arquivo crescer, extraia em vez de ultrapassar o limite.
 - Regra de negócio e cálculos nas stores/utils, nunca dentro de JSX.
 - Nomes descritivos e consistentes: componentes `PascalCase`, stores `nome.store.ts`, testes `nome.test.ts` em `__tests__/`.
 - Comentários só para o "porquê" não óbvio; nunca para narrar o código.
