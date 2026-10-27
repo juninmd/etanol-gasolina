@@ -14,8 +14,8 @@ Fonte: [Levantamento de Preços de Combustíveis](https://www.gov.br/anp/pt-br/a
 - O workflow `Atualizar preços ANP` roda toda segunda-feira e commita `data/`.
 - O app busca os JSON no GitHub; sem rede ou com resposta inválida, usa a cópia embutida das médias. A lista de postos só existe online.
 - Ao escolher uma cidade, o app lista os postos mais baratos pesquisados pela ANP (nome, bandeira, endereço e os dois preços); tocar em um posto usa os preços dele na comparação.
-- A ANP não pesquisa todas as cidades (cerca de 400 por semana têm gasolina e etanol). As demais usam a **média do estado**, e o app avisa na tela; estado sem pesquisa completa (ex.: Amapá) usa a média da região. Nenhum preço é inventado.
-- A lista de cidades é o IBGE (`data/municipios.json`, estática); o script junta a ela os preços da ANP.
+- A ANP não pesquisa todas as cidades: cerca de 400 por semana têm gasolina e etanol. Para cada uma das demais o app usa os preços da **cidade pesquisada mais próxima do mesmo estado** (até 150 km, calculada pelas coordenadas do IBGE) e avisa que é **estimativa**. Sem cidade pesquisada por perto, usa a média do estado; estado sem pesquisa completa (ex.: Amapá) usa a média da região. Nenhum preço é inventado.
+- A lista de cidades e coordenadas é do IBGE (`data/municipios.json`, estática); o script junta a ela os preços da ANP e a referência de cada cidade.
 - Postos só entram se tiverem gasolina e etanol na semana.
 
 ## Estrutura

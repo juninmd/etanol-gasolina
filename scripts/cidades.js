@@ -22,14 +22,28 @@ const titulo = (nome) =>
     )
     .join(' ');
 
+// Além disso a cidade pesquisada mais próxima deixa de ser referência útil.
+const RAIO_MAX_KM = 150;
+
+function distanciaKm(a, b) {
+  const rad = (g) => (g * Math.PI) / 180;
+  const h =
+    Math.sin(rad(b.lat - a.lat) / 2) ** 2 +
+    Math.cos(rad(a.lat)) *
+      Math.cos(rad(b.lat)) *
+      Math.sin(rad(b.lon - a.lon) / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(h));
+}
+
 /**
- * Todas as cidades da UF (lista do IBGE). As pesquisadas pela ANP levam
- * preços; as demais ficam só com o nome e usam a média do estado no app.
+ * Todas as cidades da UF (lista do IBGE: [nome, lat, lon]). As pesquisadas
+ * pela ANP levam preços. As demais levam `ref`/`km`: a cidade pesquisada
+ * mais próxima do mesmo estado (até RAIO_MAX_KM), usada como estimativa.
  */
 function listarCidades(nomeAnp, ibge, pesquisadas) {
   const cidades = new Map();
-  for (const nome of ibge ?? []) {
-    cidades.set(normalizar(nome), {nome});
+  for (const [nome, lat, lon] of ibge ?? []) {
+    cidades.set(normalizar(nome), {nome, lat, lon});
   }
   for (const [chave, v] of pesquisadas) {
     if (!chave.startsWith(`${nomeAnp}|`) || !completo(v)) {
@@ -45,9 +59,27 @@ function listarCidades(nomeAnp, ibge, pesquisadas) {
       postos: v.postos,
     });
   }
-  return [...cidades.values()].sort((a, b) =>
-    a.nome.localeCompare(b.nome, 'pt-BR'),
+  const lista = [...cidades.values()];
+  const pesquisadasComLocal = lista.filter(
+    (c) => c.gasolina && c.lat !== undefined,
   );
+  return lista
+    .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+    .map(({lat, lon, ...cidade}) => {
+      if (cidade.gasolina || lat === undefined) {
+        return cidade;
+      }
+      let melhor = null;
+      for (const outra of pesquisadasComLocal) {
+        const km = distanciaKm({lat, lon}, outra);
+        if (!melhor || km < melhor.km) {
+          melhor = {nome: outra.nome, km};
+        }
+      }
+      return melhor && melhor.km <= RAIO_MAX_KM
+        ? {...cidade, ref: melhor.nome, km: Math.round(melhor.km)}
+        : cidade;
+    });
 }
 
-module.exports = {completo, listarCidades, normalizar};
+module.exports = {completo, listarCidades, normalizar, RAIO_MAX_KM};

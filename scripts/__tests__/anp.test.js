@@ -97,8 +97,14 @@ describe('montarDados', () => {
       ESTADOS: abas.ESTADOS.filter((l) => l[3] !== 'ACRE'),
     };
     const completa = montarDados(semAcre, 'x', {
-      SP: ['Campinas', 'Adamantina'],
-      AC: ['Rio Branco', 'Acrelândia'],
+      SP: [
+        ['Campinas', -22.9, -47.06],
+        ['Adamantina', -21.68, -51.07],
+      ],
+      AC: [
+        ['Rio Branco', -9.97, -67.81],
+        ['Acrelândia', -9.83, -66.9],
+      ],
     });
     const ac = completa.estados.find((e) => e.uf === 'AC');
     expect(ac).toMatchObject({

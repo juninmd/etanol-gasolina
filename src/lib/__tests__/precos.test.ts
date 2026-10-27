@@ -1,11 +1,11 @@
 import dados from '../../../data/precos.json';
 import {
-  avisoDeOrigem,
   formatarReais,
   normalizar,
   formatarSemana,
   nomeLegivel,
   precoParaTexto,
+  resolverPreco,
   validarPrecos,
 } from '../precos';
 
@@ -50,39 +50,56 @@ describe('normalizar', () => {
   });
 });
 
-describe('avisoDeOrigem', () => {
+describe('resolverPreco', () => {
   const estado = {
     uf: 'SP',
     nome: 'São Paulo',
     gasolina: 6.3,
     etanol: 3.9,
-    municipios: [],
+    municipios: [
+      {nome: 'Campinas', gasolina: 6.4, etanol: 3.8, postos: 8},
+      {nome: 'Adolfo', ref: 'Campinas', km: 35},
+      {nome: 'Longe'},
+    ],
   };
 
-  it('não avisa para cidade pesquisada ou estado com pesquisa', () => {
-    expect(
-      avisoDeOrigem(estado, {nome: 'Campinas', gasolina: 6, etanol: 4}),
-    ).toBeNull();
-    expect(avisoDeOrigem(estado, undefined)).toBeNull();
-    expect(avisoDeOrigem(undefined, undefined)).toBeNull();
+  it('usa o preço da própria cidade, sem aviso', () => {
+    expect(resolverPreco(estado, estado.municipios[0])).toEqual({
+      gasolina: 6.4,
+      etanol: 3.8,
+      aviso: null,
+    });
   });
 
-  it('avisa quando a cidade não foi pesquisada', () => {
-    expect(avisoDeOrigem(estado, {nome: 'Adolfo'})).toBe(
-      'A ANP não pesquisou Adolfo: usando a média de São Paulo.',
-    );
+  it('usa a cidade pesquisada mais próxima como estimativa', () => {
+    expect(resolverPreco(estado, estado.municipios[1])).toEqual({
+      gasolina: 6.4,
+      etanol: 3.8,
+      aviso:
+        'Estimativa: a ANP não pesquisou Adolfo; usando os preços de Campinas, a 35 km.',
+    });
   });
 
-  it('avisa quando o estado usa a média da região', () => {
+  it('cai para a média do estado quando não há referência', () => {
+    expect(resolverPreco(estado, estado.municipios[2])).toEqual({
+      gasolina: 6.3,
+      etanol: 3.9,
+      aviso: 'A ANP não pesquisou Longe: usando a média de São Paulo.',
+    });
+    expect(resolverPreco(estado)).toMatchObject({gasolina: 6.3, aviso: null});
+  });
+
+  it('usa a média da região quando o estado não tem pesquisa', () => {
     const ap = {
       ...estado,
       nome: 'Amapá',
       regiao: 'NORTE',
       base: 'regiao' as const,
+      municipios: [{nome: 'Macapá'}],
     };
-    expect(avisoDeOrigem(ap, undefined)).toBe(
+    expect(resolverPreco(ap).aviso).toBe(
       'A ANP não pesquisou Amapá nesta semana: usando a média da região Norte.',
     );
-    expect(avisoDeOrigem(ap, {nome: 'Macapá'})).toContain('região Norte');
+    expect(resolverPreco(ap, ap.municipios[0]).aviso).toContain('região Norte');
   });
 });

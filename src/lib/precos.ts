@@ -1,9 +1,12 @@
-/** Sem gasolina/etanol: a ANP não pesquisou a cidade e vale a média do estado. */
+/** Sem gasolina/etanol a ANP não pesquisou a cidade: vale `ref` ou a média do estado. */
 export type Municipio = {
   nome: string;
   gasolina?: number;
   etanol?: number;
   postos?: number;
+  /** Cidade pesquisada mais próxima (mesmo estado) e distância em km. */
+  ref?: string;
+  km?: number;
 };
 
 export type Estado = {
@@ -98,27 +101,55 @@ export function nomeLegivel(nome: string): string {
 
 export const temPreco = (
   m: Municipio,
-): m is Required<Omit<Municipio, 'postos'>> =>
+): m is Required<Pick<Municipio, 'gasolina' | 'etanol'>> & Municipio =>
   m.gasolina !== undefined && m.etanol !== undefined;
 
-/** Explica quando os preços exibidos não são da cidade escolhida. */
-export function avisoDeOrigem(
-  estado: Estado | undefined,
-  municipio: Municipio | undefined,
-): string | null {
-  if (!estado) {
-    return null;
+export type PrecoResolvido = {
+  gasolina: number;
+  etanol: number;
+  /** Explica quando os preços não são da cidade escolhida. */
+  aviso: string | null;
+};
+
+/**
+ * Preço a usar para a cidade: o da ANP; senão o da cidade pesquisada mais
+ * próxima (estimativa); senão a média do estado ou da região.
+ */
+export function resolverPreco(
+  estado: Estado,
+  municipio?: Municipio,
+): PrecoResolvido {
+  const regiao = estado.base === 'regiao';
+  const media = regiao
+    ? `a média da região ${nomeLegivel(estado.regiao ?? '')}`
+    : `a média de ${estado.nome}`;
+  if (!municipio) {
+    return {
+      gasolina: estado.gasolina,
+      etanol: estado.etanol,
+      aviso: regiao
+        ? `A ANP não pesquisou ${estado.nome} nesta semana: usando ${media}.`
+        : null,
+    };
   }
-  const media =
-    estado.base === 'regiao'
-      ? `a média da região ${nomeLegivel(estado.regiao ?? '')}`
-      : `a média de ${estado.nome}`;
-  if (municipio) {
-    return temPreco(municipio)
-      ? null
-      : `A ANP não pesquisou ${municipio.nome}: usando ${media}.`;
+  if (temPreco(municipio)) {
+    return {
+      gasolina: municipio.gasolina,
+      etanol: municipio.etanol,
+      aviso: null,
+    };
   }
-  return estado.base === 'regiao'
-    ? `A ANP não pesquisou ${estado.nome} nesta semana: usando ${media}.`
-    : null;
+  const ref = estado.municipios.find((m) => m.nome === municipio.ref);
+  if (ref && temPreco(ref)) {
+    return {
+      gasolina: ref.gasolina,
+      etanol: ref.etanol,
+      aviso: `Estimativa: a ANP não pesquisou ${municipio.nome}; usando os preços de ${ref.nome}, a ${municipio.km} km.`,
+    };
+  }
+  return {
+    gasolina: estado.gasolina,
+    etanol: estado.etanol,
+    aviso: `A ANP não pesquisou ${municipio.nome}: usando ${media}.`,
+  };
 }
