@@ -8,7 +8,7 @@ Regras para agentes de IA e contribuidores deste repositório (app React Native/
 - Gerenciador de pacotes: **pnpm**. Não adicione `package-lock.json`/`yarn.lock` novos.
 - Código em `src/`: `components/` (UI), `hooks/` (estado da tela), `lib/` (cálculo e formatação, sem React), `services/` (acesso aos preços). `scripts/` gera `data/precos.json`.
 - O app também roda no Web (`pnpm web`); confira lá ao mudar a UI.
-- Os preços são reais: médias de revenda da ANP, em `data/precos.json` (atualizado por `pnpm precos` e pelo workflow semanal). Nunca invente ou simule preços; sem rede o app usa o arquivo embutido. Não invente backend nem chaves de API.
+- Os preços são reais: médias de revenda da ANP, em `data/precos.json` (atualizado por `pnpm precos` e pelo workflow semanal). Nunca invente ou simule preços; cidade sem pesquisa da ANP só pode usar a cidade pesquisada mais próxima ou a média do estado/região, sempre com aviso na tela. Sem rede o app usa o arquivo embutido. Não invente backend nem chaves de API.
 
 ## Princípios
 

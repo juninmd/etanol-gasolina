@@ -1,33 +1,36 @@
 // Converte o resumo semanal da ANP (abas ESTADOS, MUNICIPIOS e BRASIL) em JSON.
+const {completo, listarCidades} = require('./cidades');
 const ESTADOS = {
-  ACRE: ['AC', 'Acre'],
-  ALAGOAS: ['AL', 'Alagoas'],
-  AMAPA: ['AP', 'Amapá'],
-  AMAZONAS: ['AM', 'Amazonas'],
-  BAHIA: ['BA', 'Bahia'],
-  CEARA: ['CE', 'Ceará'],
-  'DISTRITO FEDERAL': ['DF', 'Distrito Federal'],
-  'ESPIRITO SANTO': ['ES', 'Espírito Santo'],
-  GOIAS: ['GO', 'Goiás'],
-  MARANHAO: ['MA', 'Maranhão'],
-  'MATO GROSSO': ['MT', 'Mato Grosso'],
-  'MATO GROSSO DO SUL': ['MS', 'Mato Grosso do Sul'],
-  'MINAS GERAIS': ['MG', 'Minas Gerais'],
-  PARA: ['PA', 'Pará'],
-  PARAIBA: ['PB', 'Paraíba'],
-  PARANA: ['PR', 'Paraná'],
-  PERNAMBUCO: ['PE', 'Pernambuco'],
-  PIAUI: ['PI', 'Piauí'],
-  'RIO DE JANEIRO': ['RJ', 'Rio de Janeiro'],
-  'RIO GRANDE DO NORTE': ['RN', 'Rio Grande do Norte'],
-  'RIO GRANDE DO SUL': ['RS', 'Rio Grande do Sul'],
-  RONDONIA: ['RO', 'Rondônia'],
-  RORAIMA: ['RR', 'Roraima'],
-  'SANTA CATARINA': ['SC', 'Santa Catarina'],
-  'SAO PAULO': ['SP', 'São Paulo'],
-  SERGIPE: ['SE', 'Sergipe'],
-  TOCANTINS: ['TO', 'Tocantins'],
+  ACRE: ['AC', 'Acre', 'NORTE'],
+  ALAGOAS: ['AL', 'Alagoas', 'NORDESTE'],
+  AMAPA: ['AP', 'Amapá', 'NORTE'],
+  AMAZONAS: ['AM', 'Amazonas', 'NORTE'],
+  BAHIA: ['BA', 'Bahia', 'NORDESTE'],
+  CEARA: ['CE', 'Ceará', 'NORDESTE'],
+  'DISTRITO FEDERAL': ['DF', 'Distrito Federal', 'CENTRO OESTE'],
+  'ESPIRITO SANTO': ['ES', 'Espírito Santo', 'SUDESTE'],
+  GOIAS: ['GO', 'Goiás', 'CENTRO OESTE'],
+  MARANHAO: ['MA', 'Maranhão', 'NORDESTE'],
+  'MATO GROSSO': ['MT', 'Mato Grosso', 'CENTRO OESTE'],
+  'MATO GROSSO DO SUL': ['MS', 'Mato Grosso do Sul', 'CENTRO OESTE'],
+  'MINAS GERAIS': ['MG', 'Minas Gerais', 'SUDESTE'],
+  PARA: ['PA', 'Pará', 'NORTE'],
+  PARAIBA: ['PB', 'Paraíba', 'NORDESTE'],
+  PARANA: ['PR', 'Paraná', 'SUL'],
+  PERNAMBUCO: ['PE', 'Pernambuco', 'NORDESTE'],
+  PIAUI: ['PI', 'Piauí', 'NORDESTE'],
+  'RIO DE JANEIRO': ['RJ', 'Rio de Janeiro', 'SUDESTE'],
+  'RIO GRANDE DO NORTE': ['RN', 'Rio Grande do Norte', 'NORDESTE'],
+  'RIO GRANDE DO SUL': ['RS', 'Rio Grande do Sul', 'SUL'],
+  RONDONIA: ['RO', 'Rondônia', 'NORTE'],
+  RORAIMA: ['RR', 'Roraima', 'NORTE'],
+  'SANTA CATARINA': ['SC', 'Santa Catarina', 'SUL'],
+  'SAO PAULO': ['SP', 'São Paulo', 'SUDESTE'],
+  SERGIPE: ['SE', 'Sergipe', 'NORDESTE'],
+  TOCANTINS: ['TO', 'Tocantins', 'NORTE'],
 };
+
+const ESTADOS_TOTAL = Object.keys(ESTADOS).length;
 
 const PRODUTOS = {'GASOLINA COMUM': 'gasolina', 'ETANOL HIDRATADO': 'etanol'};
 const CABECALHO = 'DATA INICIAL';
@@ -41,6 +44,7 @@ const serialParaIso = (serial) =>
 const COLUNAS = {
   ESTADOS: {local: 3, cidade: null, produto: 4},
   MUNICIPIOS: {local: 2, cidade: 3, produto: 4},
+  REGIOES: {local: 2, cidade: null, produto: 3},
   BRASIL: {local: 2, cidade: null, produto: 3},
 };
 
@@ -77,45 +81,45 @@ function agrupar(registros, chave) {
   return mapa;
 }
 
-const completo = (item) => item && item.gasolina && item.etanol;
-
-function montarDados(abas, fonteUrl) {
+/**
+ * @param abas planilha do resumo semanal da ANP
+ * @param fonteUrl endereço da planilha
+ * @param municipios {UF: [nomes]} do IBGE; sem ele só entram cidades da ANP
+ */
+function montarDados(abas, fonteUrl, municipios = {}) {
   const estados = lerAba(abas.ESTADOS, COLUNAS.ESTADOS);
-  const municipios = lerAba(abas.MUNICIPIOS, COLUNAS.MUNICIPIOS);
+  const cidades = lerAba(abas.MUNICIPIOS, COLUNAS.MUNICIPIOS);
+  const regioes = lerAba(abas.REGIOES, COLUNAS.REGIOES);
   const brasil = lerAba(abas.BRASIL, COLUNAS.BRASIL);
-  if (!estados.length || !municipios.length || !brasil.length) {
+  if (!estados.length || !cidades.length || !brasil.length) {
     throw new Error('Planilha da ANP sem dados de preços');
   }
   const porEstado = agrupar(estados, (r) => r.local);
-  const porCidade = agrupar(municipios, (r) => `${r.local}|${r.cidade}`);
+  const porRegiao = agrupar(regioes, (r) => r.local);
+  const porCidade = agrupar(cidades, (r) => `${r.local}|${r.cidade}`);
   const nacional = [...agrupar(brasil, (r) => r.local).values()][0];
 
   const lista = Object.entries(ESTADOS)
-    .map(([nomeAnp, [uf, nome]]) => {
-      const media = porEstado.get(nomeAnp);
-      const cidades = [...porCidade.entries()]
-        .filter(([k, v]) => k.startsWith(`${nomeAnp}|`) && completo(v))
-        .map(([k, v]) => ({
-          nome: k.slice(nomeAnp.length + 1),
-          gasolina: v.gasolina,
-          etanol: v.etanol,
-          postos: v.postos,
-        }))
-        .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    .map(([nomeAnp, [uf, nome, regiao]]) => {
+      // Sem pesquisa de um dos combustíveis no estado, usa a média da região.
+      const proprio = completo(porEstado.get(nomeAnp));
+      const media = proprio ? porEstado.get(nomeAnp) : porRegiao.get(regiao);
       return completo(media)
         ? {
             uf,
             nome,
+            regiao,
+            base: proprio ? 'estado' : 'regiao',
             gasolina: media.gasolina,
             etanol: media.etanol,
-            municipios: cidades,
+            municipios: listarCidades(nomeAnp, municipios[uf], porCidade),
           }
         : null;
     })
     .filter(Boolean)
     .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
 
-  if (!completo(nacional) || lista.length < ESTADOS.length / 2) {
+  if (!completo(nacional) || lista.length < ESTADOS_TOTAL / 2) {
     throw new Error('Dados da ANP incompletos');
   }
   return {
@@ -131,87 +135,4 @@ function montarDados(abas, fonteUrl) {
   };
 }
 
-// Na planilha de postos o etanol se chama apenas ETANOL.
-const PRODUTOS_POSTO = {'GASOLINA COMUM': 'gasolina', ETANOL: 'etanol'};
-
-// Colunas da aba "POSTOS REVENDEDORES" (planilha revendas_lpc da ANP).
-const COL_POSTO = {
-  cnpj: 0,
-  razao: 1,
-  fantasia: 2,
-  rua: 3,
-  numero: 4,
-  bairro: 6,
-  municipio: 8,
-  estado: 9,
-  bandeira: 10,
-  produto: 11,
-  preco: 13,
-  coleta: 14,
-};
-
-const endereco = (l) =>
-  [
-    [l[COL_POSTO.rua], l[COL_POSTO.numero]].filter(Boolean).join(', '),
-    l[COL_POSTO.bairro],
-  ]
-    .filter(Boolean)
-    .join(' - ');
-
-/** Postos com gasolina comum e etanol hidratado, agrupados por UF. */
-function montarPostos(linhas) {
-  const inicio = linhas.findIndex((l) => l[0] === 'CNPJ');
-  if (inicio < 0) {
-    throw new Error('Cabeçalho da planilha de postos da ANP não encontrado');
-  }
-  const periodo = linhas
-    .map((l) =>
-      /PER[ÍI]ODO: (\d\d)\/(\d\d)\/(\d{4}) A (\d\d)\/(\d\d)\/(\d{4})/.exec(
-        l[0] ?? '',
-      ),
-    )
-    .find(Boolean);
-  if (!periodo) {
-    throw new Error('Período da planilha de postos não encontrado');
-  }
-  const semana = {
-    inicio: `${periodo[3]}-${periodo[2]}-${periodo[1]}`,
-    fim: `${periodo[6]}-${periodo[5]}-${periodo[4]}`,
-  };
-
-  const porCnpj = new Map();
-  for (const l of linhas.slice(inicio + 1)) {
-    const produto = PRODUTOS_POSTO[l[COL_POSTO.produto]];
-    const preco = l[COL_POSTO.preco];
-    if (!produto || !ESTADOS[l[COL_POSTO.estado]] || !(preco > 0)) {
-      continue;
-    }
-    const posto = porCnpj.get(l[COL_POSTO.cnpj]) ?? {
-      uf: ESTADOS[l[COL_POSTO.estado]][0],
-      nome: l[COL_POSTO.fantasia] || l[COL_POSTO.razao],
-      bandeira: l[COL_POSTO.bandeira],
-      endereco: endereco(l),
-      municipio: l[COL_POSTO.municipio],
-    };
-    posto[produto] = preco;
-    posto.coleta = serialParaIso(l[COL_POSTO.coleta]);
-    porCnpj.set(l[COL_POSTO.cnpj], posto);
-  }
-
-  const porUf = {};
-  for (const {uf, ...posto} of porCnpj.values()) {
-    if (posto.gasolina && posto.etanol) {
-      (porUf[uf] ??= []).push(posto);
-    }
-  }
-  for (const lista of Object.values(porUf)) {
-    lista.sort(
-      (a, b) =>
-        a.municipio.localeCompare(b.municipio, 'pt-BR') ||
-        a.nome.localeCompare(b.nome, 'pt-BR'),
-    );
-  }
-  return {semana, porUf};
-}
-
-module.exports = {montarDados, montarPostos, serialParaIso, ESTADOS};
+module.exports = {montarDados, serialParaIso, ESTADOS};

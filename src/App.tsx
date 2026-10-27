@@ -84,6 +84,12 @@ export default function App() {
           valor={cidade}
         />
 
+        {local.aviso && (
+          <Text style={[styles.aviso, {color: cores.alerta}]}>
+            {local.aviso}
+          </Text>
+        )}
+
         <View style={styles.linha}>
           <CampoNumero
             onChange={local.setGasolina}
@@ -136,6 +142,7 @@ const styles = StyleSheet.create({
   subtitulo: {fontSize: 15, marginBottom: 18},
   linha: {flexDirection: 'row', gap: 12, marginBottom: 14},
   linhaFinal: {marginBottom: 20},
+  aviso: {fontSize: 14, fontWeight: '600', marginBottom: 12},
   nota: {fontSize: 13, marginTop: 4},
   notaTopo: {marginTop: 20},
 });
