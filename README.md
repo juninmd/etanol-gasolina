@@ -2,7 +2,7 @@
 
 App (Android, iOS e Web) que diz se compensa abastecer com **etanol** ou **gasolina**.
 
-- Escolha estado e cidade: os preços vêm preenchidos com a **média de revenda da ANP** (dados reais, semanais).
+- Escolha estado e cidade (**todas as 5.571 cidades do Brasil**): os preços vêm preenchidos com a **média de revenda da ANP** (dados reais, semanais).
 - Ajuste os preços com o valor da bomba, se quiser.
 - Opcional: informe o consumo (km/l) de cada combustível para comparar pelo custo por km. Sem o consumo, vale a regra dos 70%.
 
@@ -14,7 +14,9 @@ Fonte: [Levantamento de Preços de Combustíveis](https://www.gov.br/anp/pt-br/a
 - O workflow `Atualizar preços ANP` roda toda segunda-feira e commita `data/`.
 - O app busca os JSON no GitHub; sem rede ou com resposta inválida, usa a cópia embutida das médias. A lista de postos só existe online.
 - Ao escolher uma cidade, o app lista os postos mais baratos pesquisados pela ANP (nome, bandeira, endereço e os dois preços); tocar em um posto usa os preços dele na comparação.
-- Só entram municípios e postos pesquisados pela ANP que tenham gasolina e etanol na semana (ex.: o Amapá pode ficar de fora).
+- A ANP não pesquisa todas as cidades (cerca de 400 por semana têm gasolina e etanol). As demais usam a **média do estado**, e o app avisa na tela; estado sem pesquisa completa (ex.: Amapá) usa a média da região. Nenhum preço é inventado.
+- A lista de cidades é o IBGE (`data/municipios.json`, estática); o script junta a ela os preços da ANP.
+- Postos só entram se tiverem gasolina e etanol na semana.
 
 ## Estrutura
 
@@ -26,7 +28,8 @@ src/
   lib/                 calculo.ts e precos.ts (sem React)
   services/            preços (online + cópia embutida) e postos (online)
 scripts/               download e conversão dos dados da ANP
-data/precos.json       médias reais da última semana
+data/precos.json       médias da última semana: Brasil, estados e todas as cidades
+data/municipios.json   cidades por UF (IBGE)
 data/postos/<UF>.json  postos pesquisados pela ANP, por estado
 ```
 

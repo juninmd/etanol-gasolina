@@ -1,6 +1,8 @@
 import dados from '../../../data/precos.json';
 import {
+  avisoDeOrigem,
   formatarReais,
+  normalizar,
   formatarSemana,
   nomeLegivel,
   precoParaTexto,
@@ -10,8 +12,7 @@ import {
 describe('validarPrecos', () => {
   it('aceita o arquivo de preços do repositório', () => {
     const precos = validarPrecos(dados);
-    // Estados sem gasolina e etanol na semana (ex.: AP) ficam de fora.
-    expect(precos?.estados.length).toBeGreaterThanOrEqual(25);
+    expect(precos?.estados.length).toBe(27);
     expect(precos?.brasil.gasolina).toBeGreaterThan(0);
   });
 
@@ -39,5 +40,49 @@ describe('formatação', () => {
 
   it('deixa nomes de cidades legíveis', () => {
     expect(nomeLegivel('SAO JOSE DO RIO PRETO')).toBe('Sao Jose do Rio Preto');
+  });
+});
+
+describe('normalizar', () => {
+  it('compara nomes do IBGE e da ANP', () => {
+    expect(normalizar("Santa Bárbara d'Oeste")).toBe('SANTA BARBARA D OESTE');
+    expect(normalizar('SÃO JOÃO DEL-REI')).toBe(normalizar('Sao Joao del Rei'));
+  });
+});
+
+describe('avisoDeOrigem', () => {
+  const estado = {
+    uf: 'SP',
+    nome: 'São Paulo',
+    gasolina: 6.3,
+    etanol: 3.9,
+    municipios: [],
+  };
+
+  it('não avisa para cidade pesquisada ou estado com pesquisa', () => {
+    expect(
+      avisoDeOrigem(estado, {nome: 'Campinas', gasolina: 6, etanol: 4}),
+    ).toBeNull();
+    expect(avisoDeOrigem(estado, undefined)).toBeNull();
+    expect(avisoDeOrigem(undefined, undefined)).toBeNull();
+  });
+
+  it('avisa quando a cidade não foi pesquisada', () => {
+    expect(avisoDeOrigem(estado, {nome: 'Adolfo'})).toBe(
+      'A ANP não pesquisou Adolfo: usando a média de São Paulo.',
+    );
+  });
+
+  it('avisa quando o estado usa a média da região', () => {
+    const ap = {
+      ...estado,
+      nome: 'Amapá',
+      regiao: 'NORTE',
+      base: 'regiao' as const,
+    };
+    expect(avisoDeOrigem(ap, undefined)).toBe(
+      'A ANP não pesquisou Amapá nesta semana: usando a média da região Norte.',
+    );
+    expect(avisoDeOrigem(ap, {nome: 'Macapá'})).toContain('região Norte');
   });
 });

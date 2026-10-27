@@ -1,4 +1,5 @@
-const {montarDados, montarPostos, serialParaIso} = require('../anp');
+const {montarDados, serialParaIso} = require('../anp');
+const {montarPostos} = require('../postos');
 
 const CAB = ['DATA INICIAL', 'DATA FINAL'];
 const linha = (...resto) => [46306, 46312, ...resto];
@@ -56,6 +57,11 @@ const abas = {
     cidade('ACRE', 'RIO BRANCO', 'GASOLINA COMUM', 7.5),
     cidade('ACRE', 'RIO BRANCO', 'ETANOL HIDRATADO', 5.1),
   ],
+  REGIOES: [
+    CAB,
+    linha('NORTE', 'GASOLINA COMUM', 100, 'R$/l', 6.9),
+    linha('NORTE', 'ETANOL HIDRATADO', 100, 'R$/l', 4.9),
+  ],
   BRASIL: [
     CAB,
     linha('BRASIL', 'GASOLINA COMUM', 4500, 'R$/l', 6.53),
@@ -81,8 +87,37 @@ describe('montarDados', () => {
 
   it('inclui só municípios com gasolina e etanol', () => {
     const sp = dados.estados.find((e) => e.uf === 'SP');
-    expect(sp.municipios.map((m) => m.nome)).toEqual(['CAMPINAS']);
+    expect(sp.municipios.map((m) => m.nome)).toEqual(['Campinas']);
     expect(sp.municipios[0]).toMatchObject({gasolina: 6.4, etanol: 3.9});
+  });
+
+  it('lista as cidades do IBGE e cai para a região quando o estado não tem pesquisa', () => {
+    const semAcre = {
+      ...abas,
+      ESTADOS: abas.ESTADOS.filter((l) => l[3] !== 'ACRE'),
+    };
+    const completa = montarDados(semAcre, 'x', {
+      SP: ['Campinas', 'Adamantina'],
+      AC: ['Rio Branco', 'Acrelândia'],
+    });
+    const ac = completa.estados.find((e) => e.uf === 'AC');
+    expect(ac).toMatchObject({
+      base: 'regiao',
+      regiao: 'NORTE',
+      gasolina: 6.9,
+      etanol: 4.9,
+    });
+    expect(ac.municipios.map((m) => m.nome)).toEqual([
+      'Acrelândia',
+      'Rio Branco',
+    ]);
+    expect(ac.municipios[1].gasolina).toBe(7.5);
+    const sp = completa.estados.find((e) => e.uf === 'SP');
+    expect(sp.base).toBe('estado');
+    expect(sp.municipios).toEqual([
+      {nome: 'Adamantina'},
+      {nome: 'Campinas', gasolina: 6.4, etanol: 3.9, postos: 8},
+    ]);
   });
 
   it('falha com planilha sem cabeçalho ou sem preços', () => {

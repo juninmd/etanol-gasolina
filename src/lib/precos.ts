@@ -1,13 +1,17 @@
+/** Sem gasolina/etanol: a ANP não pesquisou a cidade e vale a média do estado. */
 export type Municipio = {
   nome: string;
-  gasolina: number;
-  etanol: number;
-  postos: number;
+  gasolina?: number;
+  etanol?: number;
+  postos?: number;
 };
 
 export type Estado = {
   uf: string;
   nome: string;
+  regiao?: string;
+  /** 'regiao': o estado não tem pesquisa completa e usa a média da região. */
+  base?: 'estado' | 'regiao';
   gasolina: number;
   etanol: number;
   municipios: Municipio[];
@@ -52,8 +56,8 @@ export function validarPrecos(dados: unknown): Precos | null {
           (m: unknown) =>
             objeto(m) &&
             typeof m.nome === 'string' &&
-            preco(m.gasolina) &&
-            preco(m.etanol),
+            (m.gasolina === undefined ||
+              (preco(m.gasolina) && preco(m.etanol))),
         ),
     );
   return ok ? (dados as Precos) : null;
@@ -70,7 +74,17 @@ export const precoParaTexto = (valor: number) =>
 
 export const formatarReais = (valor: number) => `R$ ${precoParaTexto(valor)}`;
 
-/** "SAO JOSE DO RIO PRETO" -> "Sao Jose do Rio Preto". */
+/** Compara nomes sem acento, caixa ou hífen: "São João del-Rei" = "SAO JOAO DEL REI". */
+export const normalizar = (nome: string) =>
+  nome
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[-']/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toUpperCase();
+
+/** "AUTO POSTO DO ZE" -> "Auto Posto do Ze". */
 export function nomeLegivel(nome: string): string {
   const minusculas = new Set(['de', 'do', 'da', 'dos', 'das', 'e']);
   return nome
@@ -80,4 +94,31 @@ export function nomeLegivel(nome: string): string {
       i > 0 && minusculas.has(p) ? p : p.charAt(0).toUpperCase() + p.slice(1),
     )
     .join(' ');
+}
+
+export const temPreco = (
+  m: Municipio,
+): m is Required<Omit<Municipio, 'postos'>> =>
+  m.gasolina !== undefined && m.etanol !== undefined;
+
+/** Explica quando os preços exibidos não são da cidade escolhida. */
+export function avisoDeOrigem(
+  estado: Estado | undefined,
+  municipio: Municipio | undefined,
+): string | null {
+  if (!estado) {
+    return null;
+  }
+  const media =
+    estado.base === 'regiao'
+      ? `a média da região ${nomeLegivel(estado.regiao ?? '')}`
+      : `a média de ${estado.nome}`;
+  if (municipio) {
+    return temPreco(municipio)
+      ? null
+      : `A ANP não pesquisou ${municipio.nome}: usando ${media}.`;
+  }
+  return estado.base === 'regiao'
+    ? `A ANP não pesquisou ${estado.nome} nesta semana: usando ${media}.`
+    : null;
 }

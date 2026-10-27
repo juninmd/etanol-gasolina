@@ -3,7 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const {lerXlsx} = require('./xlsx');
-const {montarDados, montarPostos} = require('./anp');
+const {montarDados} = require('./anp');
+const {montarPostos} = require('./postos');
+const MUNICIPIOS = require('../data/municipios.json').municipios;
 
 const PAGINA =
   'https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/levantamento-de-precos-de-combustiveis-ultimas-semanas-pesquisadas';
@@ -37,9 +39,9 @@ async function main() {
   if (!resumo || !revendas) {
     throw new Error('Planilhas semanais não encontradas na página da ANP');
   }
-  const dados = montarDados(lerXlsx(await baixar(resumo)), resumo);
+  const dados = montarDados(lerXlsx(await baixar(resumo)), resumo, MUNICIPIOS);
   fs.mkdirSync(PASTA_POSTOS, {recursive: true});
-  fs.writeFileSync(DESTINO, `${JSON.stringify(dados, null, 1)}\n`);
+  fs.writeFileSync(DESTINO, `${JSON.stringify(dados)}\n`);
 
   const {semana, porUf} = montarPostos(
     lerXlsx(await baixar(revendas))['POSTOS REVENDEDORES'],

@@ -1,4 +1,5 @@
 import {custoEfetivo} from './calculo';
+import {normalizar} from './precos';
 
 export type Posto = {
   nome: string;
@@ -53,8 +54,9 @@ export function postosDaCidade(
   if (!lista || !municipio) {
     return [];
   }
+  const alvo = normalizar(municipio);
   return lista.postos
-    .filter((p) => p.municipio === municipio)
+    .filter((p) => normalizar(p.municipio) === alvo)
     .sort(
       (a, b) =>
         custoEfetivo(a.gasolina, a.etanol) - custoEfetivo(b.gasolina, b.etanol),

@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from 'react';
-import {nomeLegivel, precoParaTexto} from '../lib/precos';
+import {avisoDeOrigem, temPreco, precoParaTexto} from '../lib/precos';
 import {Carregamento, carregarPrecos} from '../services/precos.service';
 
 export const BRASIL = 'BR';
@@ -50,7 +50,7 @@ export default function useLocalPrecos() {
     () =>
       (estado?.municipios ?? []).map((m) => ({
         valor: m.nome,
-        rotulo: nomeLegivel(m.nome),
+        rotulo: temPreco(m) ? m.nome : `${m.nome} · média do estado`,
       })),
     [estado],
   );
@@ -65,11 +65,15 @@ export default function useLocalPrecos() {
     }
   };
 
+  const municipio = estado?.municipios.find((m) => m.nome === cidade);
+
   const escolherCidade = (nome: string) => {
     setCidade(nome);
-    const municipio = estado?.municipios.find((m) => m.nome === nome);
-    if (municipio) {
-      preencher(municipio.gasolina, municipio.etanol);
+    const escolhida = estado?.municipios.find((m) => m.nome === nome);
+    if (escolhida && temPreco(escolhida)) {
+      preencher(escolhida.gasolina, escolhida.etanol);
+    } else if (estado) {
+      preencher(estado.gasolina, estado.etanol);
     }
   };
 
@@ -88,5 +92,6 @@ export default function useLocalPrecos() {
     escolherEstado,
     escolherCidade,
     preencher,
+    aviso: avisoDeOrigem(estado, municipio),
   };
 }
