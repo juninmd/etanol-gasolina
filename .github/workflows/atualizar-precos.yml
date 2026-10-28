@@ -2,7 +2,8 @@ name: Atualizar preços ANP
 
 on:
   schedule:
-    - cron: '17 12 * * 1'
+    # Diário: a ANP publica uma vez por semana, mas o dia varia; sem novidade nada é commitado.
+    - cron: '17 12 * * *'
   workflow_dispatch:
 
 permissions:
@@ -18,8 +19,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: git clone --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
 
-      - name: Baixar preços da ANP
-        run: node scripts/atualizar-precos.js
+      - name: Baixar preços da ANP e atualizar o histórico
+        # node:sqlite exige Node 22.5+; o Node padrão do runner é mais antigo.
+        run: npx -y node@22 --no-warnings scripts/atualizar-precos.js
 
       - name: Commitar se mudou
         run: |

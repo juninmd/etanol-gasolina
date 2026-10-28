@@ -9,5 +9,6 @@ module.exports = {
     'src/services/**/*.ts',
     'scripts/anp.js',
     'scripts/xlsx.js',
+    'scripts/historico.js',
   ],
 };
