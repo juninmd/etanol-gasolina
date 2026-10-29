@@ -62,3 +62,7 @@ buck-out/
 .env
 **/.env
 dist/
+
+# Gerados
+coverage/
+*.log

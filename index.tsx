@@ -1,6 +1,8 @@
 import {AppRegistry, Platform} from 'react-native';
 import App from './src/App';
-import {name as appName} from './app.json';
+
+// O projeto nativo gerado pelo Expo registra o componente raiz como "main".
+const appName = 'main';
 
 AppRegistry.registerComponent(appName, () => App);
 

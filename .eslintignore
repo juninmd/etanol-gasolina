@@ -1,0 +1,6 @@
+coverage/
+android/
+ios/
+build/
+dist/
+.expo/
