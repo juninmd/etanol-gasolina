@@ -21,6 +21,12 @@ describe('compararCombustiveis', () => {
     expect(r?.razao).toBeCloseTo(0.646, 3);
   });
 
+  it('trata empate exato de 70% apesar do erro de ponto flutuante', () => {
+    const r = compararCombustiveis({precoGasolina: 7, precoEtanol: 4.9});
+    expect(r?.melhor).toBe('etanol');
+    expect(r?.economiaPct).toBeCloseTo(0, 6);
+  });
+
   it('escolhe gasolina quando o etanol passa de 70%', () => {
     const r = compararCombustiveis({precoGasolina: 6.5, precoEtanol: 4.9});
     expect(r?.melhor).toBe('gasolina');
