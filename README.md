@@ -11,7 +11,8 @@ App (Android, iOS e Web) que diz se compensa abastecer com **etanol** ou **gasol
 Fonte: [Levantamento de Preços de Combustíveis](https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/levantamento-de-precos-de-combustiveis-ultimas-semanas-pesquisadas) (resumo semanal: Brasil, estados e municípios).
 
 - `pnpm precos` (`scripts/`) baixa as duas planilhas semanais da ANP: o resumo (médias) vira `data/precos.json` e a lista de postos vira `data/postos/<UF>.json`.
-- O workflow `Atualizar preços ANP` roda toda segunda-feira e commita `data/`.
+- O workflow `Atualizar preços ANP` roda todo dia (a ANP publica uma vez por semana, em dia variável) e commita `data/` só quando há semana nova. O app busca os JSON no `master` a cada abertura, então não precisa de atualização do app.
+- `data/historico.sqlite` guarda a série semanal de preços **medidos** (Brasil, estados e cidades pesquisadas; estimativas não entram). A view `variacao` traz a diferença em R$ e % para a semana anterior. Exige Node 22.5+; `pnpm precos -- --semanas 12` preenche semanas passadas.
 - O app busca os JSON no GitHub; sem rede ou com resposta inválida, usa a cópia embutida das médias. A lista de postos só existe online.
 - Ao escolher uma cidade, o app lista os postos mais baratos pesquisados pela ANP (nome, bandeira, endereço e os dois preços); tocar em um posto usa os preços dele na comparação.
 - A ANP não pesquisa todas as cidades: cerca de 400 por semana têm gasolina e etanol. Para cada uma das demais o app usa os preços da **cidade pesquisada mais próxima do mesmo estado** (até 150 km, calculada pelas coordenadas do IBGE) e avisa que é **estimativa**. Sem cidade pesquisada por perto, usa a média do estado; estado sem pesquisa completa (ex.: Amapá) usa a média da região. Nenhum preço é inventado.
@@ -29,6 +30,7 @@ src/
   services/            preços (online + cópia embutida) e postos (online)
 scripts/               download e conversão dos dados da ANP
 data/precos.json       médias da última semana: Brasil, estados e todas as cidades
+data/historico.sqlite  histórico semanal e variação (SQLite)
 data/municipios.json   cidades por UF (IBGE)
 data/postos/<UF>.json  postos pesquisados pela ANP, por estado
 ```
@@ -55,3 +57,11 @@ cd android && ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a
 ```
 
 O release usa a chave debug; use uma keystore própria para publicar. Os ícones em `assets/` são provisórios.
+
+### Consultar a variação
+
+```bash
+node --no-warnings -e "const {abrirHistorico}=require('./scripts/historico');
+const db=abrirHistorico();
+console.table(db.prepare(\"SELECT inicio, gasolina, etanol, var_gasolina_pct, var_etanol_pct FROM variacao WHERE uf='SP' AND cidade='Campinas' ORDER BY inicio DESC LIMIT 8\").all())"
+```
