@@ -61,8 +61,9 @@ export function compararCombustiveis(entrada: Entrada): Resultado | null {
   // Sem o consumo real, assume que o etanol rende 70% da gasolina.
   const custoGasolina = custoKmGasolina ?? precoGasolina;
   const custoEtanol = custoKmEtanol ?? precoEtanol / LIMITE_ETANOL;
+  // Tolera erro de ponto flutuante em empates exatos (ex.: 4.9 / 0.7).
   const melhor: Combustivel =
-    custoEtanol <= custoGasolina ? 'etanol' : 'gasolina';
+    custoEtanol <= custoGasolina + 1e-9 ? 'etanol' : 'gasolina';
   const [barato, caro] =
     melhor === 'etanol'
       ? [custoEtanol, custoGasolina]
