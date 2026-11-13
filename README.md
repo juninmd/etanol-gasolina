@@ -4,6 +4,10 @@
 
 # Etanol ou Gasolina?
 
+<p align="center">
+  <img src="docs/readme/hero.png" alt="Banner ilustrativo do Etanol ou Gasolina? (mockup com dados fictícios)" width="100%">
+</p>
+
 **Descubra em segundos se compensa abastecer com etanol ou gasolina — com preços da ANP para as 5.571 cidades do Brasil, medidos onde há pesquisa e estimados onde não há.**
 
 </div>
@@ -227,6 +231,18 @@ scripts/__tests__/xlsx.test.js
 | `security.yml` | Varredura de segurança no push. |
 | `release-drafter.yml` | Mantém o rascunho de release a partir de PRs e pushes. |
 | `dependabot-auto-merge.yml` | Auto-merge de PRs do Dependabot com checks verdes. |
+
+## Imagens
+
+> [!NOTE]
+> **Mockups ilustrativos.** As telas abaixo foram geradas em HTML com dados fictícios (Playwright) e não são capturas de uma instalação real.
+
+<p align="center">
+  <img src="docs/readme/calculator.png" alt="Cálculo por cidade — mockup ilustrativo com dados fictícios" width="100%">
+  <br>
+  <sub>Cálculo por cidade — dados fictícios.</sub>
+</p>
+
 
 ## Limitações
 
