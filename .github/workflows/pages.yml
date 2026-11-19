@@ -1,0 +1,26 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  # pushes made with GITHUB_TOKEN by the price updater do not trigger `push`
+  workflow_run:
+    workflows: ["Atualizar preços ANP"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  pages:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    uses: juninmd/base-actions/.github/workflows/reusable-pages.yml@main
+    with:
+      build-command: >-
+        npx -y pnpm@10.34.5 install --frozen-lockfile &&
+        npx -y pnpm@10.34.5 build &&
+        cp build/index.html build/404.html
+      artifact-path: build
