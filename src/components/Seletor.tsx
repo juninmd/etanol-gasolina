@@ -70,8 +70,13 @@ export default function Seletor({
 
       <Modal animationType="slide" visible={aberto} onRequestClose={fechar}>
         <View style={[styles.modal, {backgroundColor: cores.fundo}]}>
-          <Text style={[styles.titulo, {color: cores.texto}]}>{rotulo}</Text>
+          <Text
+            accessibilityRole="header"
+            style={[styles.titulo, {color: cores.texto}]}>
+            {rotulo}
+          </Text>
           <TextInput
+            accessibilityLabel={`Buscar ${rotulo.toLowerCase()}`}
             autoCorrect={false}
             onChangeText={setBusca}
             placeholder="Buscar"
@@ -91,6 +96,7 @@ export default function Seletor({
             renderItem={({item}) => (
               <Pressable
                 accessibilityRole="button"
+                accessibilityState={{selected: item.valor === valor}}
                 onPress={() => {
                   onChange(item.valor);
                   fechar();
