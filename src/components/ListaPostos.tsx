@@ -28,7 +28,9 @@ export default function ListaPostos({estado, postos, onEscolher}: Props) {
 
   return (
     <View style={styles.caixa}>
-      <Text style={[styles.titulo, {color: cores.texto}]}>
+      <Text
+        accessibilityRole="header"
+        style={[styles.titulo, {color: cores.texto}]}>
         Postos mais baratos
       </Text>
       {mensagem && (

@@ -61,7 +61,9 @@ export default function App() {
       <ScrollView
         contentContainerStyle={styles.conteudo}
         keyboardShouldPersistTaps="handled">
-        <Text style={[styles.titulo, {color: cores.texto}]}>
+        <Text
+          accessibilityRole="header"
+          style={[styles.titulo, {color: cores.texto}]}>
           Etanol ou gasolina?
         </Text>
         <Text style={[styles.subtitulo, {color: cores.suave}]}>
