@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {precoParaTexto, resolverPreco, temPreco} from '../lib/precos';
 import {Carregamento, carregarPrecos} from '../services/precos.service';
 
@@ -11,6 +11,17 @@ export default function useLocalPrecos() {
   const [cidade, setCidade] = useState<string | null>(null);
   const [gasolina, setGasolina] = useState('');
   const [etanol, setEtanol] = useState('');
+  // Campos que o usuário já digitou: a carga inicial não pode sobrescrevê-los.
+  const digitado = useRef({gasolina: false, etanol: false});
+
+  const digitarGasolina = (texto: string) => {
+    digitado.current.gasolina = true;
+    setGasolina(texto);
+  };
+  const digitarEtanol = (texto: string) => {
+    digitado.current.etanol = true;
+    setEtanol(texto);
+  };
 
   const preencher = (g: number, e: number) => {
     setGasolina(precoParaTexto(g));
@@ -22,10 +33,13 @@ export default function useLocalPrecos() {
     carregarPrecos().then((carregado) => {
       if (ativo) {
         setDados(carregado);
-        preencher(
-          carregado.precos.brasil.gasolina,
-          carregado.precos.brasil.etanol,
-        );
+        const {gasolina: g, etanol: e} = carregado.precos.brasil;
+        if (!digitado.current.gasolina) {
+          setGasolina(precoParaTexto(g));
+        }
+        if (!digitado.current.etanol) {
+          setEtanol(precoParaTexto(e));
+        }
       }
     });
     return () => {
@@ -86,8 +100,8 @@ export default function useLocalPrecos() {
     cidade,
     gasolina,
     etanol,
-    setGasolina,
-    setEtanol,
+    setGasolina: digitarGasolina,
+    setEtanol: digitarEtanol,
     opcoesEstado,
     opcoesCidade,
     escolherEstado,
