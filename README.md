@@ -149,11 +149,10 @@ O `eas.json` define `development` (dev client), `preview` (APK) e `production` (
 ### Web
 
 ```bash
-pnpm build
-# publica build/ (netlify.toml já aponta publish = "build")
+pnpm build   # gera build/ com o subcaminho /etanol-gasolina/ (experiments.baseUrl no app.json)
 ```
 
-O `netlify.toml` usa `pnpm build` para produção. O bloco `[dev]` ainda chama `yarn start`; para desenvolvimento local, prefira `pnpm web`.
+O workflow `.github/workflows/pages.yml` publica `build/` no GitHub Pages em https://juninmd.github.io/etanol-gasolina/ a cada push no `master` e depois de cada atualização de preços da ANP. Para desenvolvimento local, use `pnpm web`.
 
 ## Arquitetura
 
