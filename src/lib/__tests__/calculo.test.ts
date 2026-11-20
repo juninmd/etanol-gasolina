@@ -53,6 +53,17 @@ describe('compararCombustiveis', () => {
       consumoGasolina: 12,
     });
     expect(r?.criterio).toBe('regra70');
+    // O app precisa avisar que o consumo digitado não entrou na conta.
+    expect(r?.consumoIncompleto).toBe(true);
+  });
+
+  it('não acusa consumo incompleto quando nenhum ou os dois foram informados', () => {
+    const base = {precoGasolina: 6.5, precoEtanol: 4.2};
+    expect(compararCombustiveis(base)?.consumoIncompleto).toBe(false);
+    expect(
+      compararCombustiveis({...base, consumoGasolina: 12, consumoEtanol: 9})
+        ?.consumoIncompleto,
+    ).toBe(false);
   });
 
   it('devolve null para preços ausentes ou inválidos', () => {
