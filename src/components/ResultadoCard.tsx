@@ -23,18 +23,26 @@ export default function ResultadoCard({
   }
   const {custoKmEtanol, custoKmGasolina} = resultado;
   const cor = {color: cores.destaqueTexto};
+  // Below 0.05% the saving prints as "0,0%": recommending one fuel then is noise.
+  const empate = resultado.economiaPct < 0.05;
   return (
     <View
       accessibilityLiveRegion="polite"
       style={[styles.cartao, {backgroundColor: cores.destaque}]}>
-      <Text style={[styles.etiqueta, cor]}>MELHOR OPÇÃO</Text>
+      <Text style={[styles.etiqueta, cor]}>
+        {empate ? 'EMPATE' : 'MELHOR OPÇÃO'}
+      </Text>
       <Text style={[styles.titulo, cor]}>
-        {resultado.melhor === 'etanol'
+        {empate
+          ? 'Tanto faz'
+          : resultado.melhor === 'etanol'
           ? 'Abasteça com etanol'
           : 'Abasteça com gasolina'}
       </Text>
       <Text style={[styles.destaque, cor]}>
-        Economia de {pct(resultado.economiaPct)} por km rodado.
+        {empate
+          ? 'Os dois custam o mesmo por km rodado.'
+          : `Economia de ${pct(resultado.economiaPct)} por km rodado.`}
       </Text>
       <Text style={[styles.detalhe, cor]}>
         O etanol custa {pct(resultado.razao * 100)} do preço da gasolina.
