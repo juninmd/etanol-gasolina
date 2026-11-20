@@ -17,6 +17,8 @@ export type Resultado = {
   economiaPct: number;
   custoKmGasolina?: number;
   custoKmEtanol?: number;
+  /** Só um dos consumos foi informado: a regra dos 70% foi usada no lugar do custo por km. */
+  consumoIncompleto: boolean;
 };
 
 /** Etanol rende em média 70% do que a gasolina rende. */
@@ -53,6 +55,8 @@ export function compararCombustiveis(entrada: Entrada): Resultado | null {
   }
   const razao = precoEtanol / precoGasolina;
   const usaConsumo = valido(consumoGasolina) && valido(consumoEtanol);
+  const consumoIncompleto =
+    !usaConsumo && (valido(consumoGasolina) || valido(consumoEtanol));
   const custoKmGasolina = usaConsumo
     ? precoGasolina / consumoGasolina
     : undefined;
@@ -76,5 +80,6 @@ export function compararCombustiveis(entrada: Entrada): Resultado | null {
     economiaPct: (1 - barato / caro) * 100,
     custoKmGasolina,
     custoKmEtanol,
+    consumoIncompleto,
   };
 }

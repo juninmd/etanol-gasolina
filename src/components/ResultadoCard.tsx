@@ -42,6 +42,12 @@ export default function ResultadoCard({
           ? ' Regra prática: compensa até 70%.'
           : ''}
       </Text>
+      {resultado.consumoIncompleto && (
+        <Text style={[styles.detalhe, cor]}>
+          Para comparar pelo custo por km, informe o consumo (km/l) dos dois
+          combustíveis.
+        </Text>
+      )}
       {custoKmEtanol !== undefined && custoKmGasolina !== undefined && (
         <Text style={[styles.detalhe, cor]}>
           Custo por km: etanol {formatarReais(custoKmEtanol)} · gasolina{' '}
