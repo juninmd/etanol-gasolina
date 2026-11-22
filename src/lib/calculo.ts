@@ -35,11 +35,15 @@ export function lerNumero(texto: string): number {
   );
 }
 
+// Tolera erro de ponto flutuante em empates exatos (ex.: 2.1 / 0.7).
+const escolher = (custoEtanol: number, custoGasolina: number): Combustivel =>
+  custoEtanol <= custoGasolina + 1e-9 ? 'etanol' : 'gasolina';
+
 /** Combustível mais vantajoso pela regra dos 70%, para comparar postos. */
 export const melhorPelaRegra = (
   gasolina: number,
   etanol: number,
-): Combustivel => (etanol / LIMITE_ETANOL <= gasolina ? 'etanol' : 'gasolina');
+): Combustivel => escolher(etanol / LIMITE_ETANOL, gasolina);
 
 /** Custo equivalente em "litros de gasolina": o menor entre os dois combustíveis. */
 export const custoEfetivo = (gasolina: number, etanol: number) =>
@@ -65,9 +69,7 @@ export function compararCombustiveis(entrada: Entrada): Resultado | null {
   // Sem o consumo real, assume que o etanol rende 70% da gasolina.
   const custoGasolina = custoKmGasolina ?? precoGasolina;
   const custoEtanol = custoKmEtanol ?? precoEtanol / LIMITE_ETANOL;
-  // Tolera erro de ponto flutuante em empates exatos (ex.: 4.9 / 0.7).
-  const melhor: Combustivel =
-    custoEtanol <= custoGasolina + 1e-9 ? 'etanol' : 'gasolina';
+  const melhor = escolher(custoEtanol, custoGasolina);
   const [barato, caro] =
     melhor === 'etanol'
       ? [custoEtanol, custoGasolina]
