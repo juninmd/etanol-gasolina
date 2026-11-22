@@ -1,58 +1,51 @@
 # AGENTS.md
 
-Regras para agentes de IA e contribuidores deste repositório (app React Native/Expo + Web em TypeScript). Visão geral e comandos: [`README.md`](README.md).
+Etanol ou Gasolina?: a single-screen Expo / React Native app (Android, iOS and web) that compares ethanol and gasoline prices using ANP retail averages for all Brazilian municipalities. Overview and user docs: [`README.md`](README.md).
 
-## Contexto do projeto
+## Stack
 
-- Stack: Expo 50, React Native 0.73, React 18, TypeScript, Jest 29. Sem biblioteca de estado ou UI: o app é uma tela só.
-- Gerenciador de pacotes: **pnpm**. Não adicione `package-lock.json`/`yarn.lock` novos.
-- Código em `src/`: `components/` (UI), `hooks/` (estado da tela), `lib/` (cálculo e formatação, sem React), `services/` (acesso aos preços). `scripts/` gera `data/precos.json`.
-- O app também roda no Web (`pnpm web`); confira lá ao mudar a UI.
-- Os preços são reais: médias de revenda da ANP, em `data/precos.json` (atualizado por `pnpm precos` e pelo workflow semanal). Nunca invente ou simule preços; cidade sem pesquisa da ANP só pode usar a cidade pesquisada mais próxima ou a média do estado/região, sempre com aviso na tela. Sem rede o app usa o arquivo embutido. Não invente backend nem chaves de API.
+- Expo 50, React Native 0.73, React 18.2, TypeScript, Jest 29
+- No state or UI library. The app is one screen
+- Package manager: pnpm (`pnpm-lock.yaml`). Do not add `package-lock.json` or `yarn.lock`
 
-## Princípios
+## Commands
 
-1. **DRY** — um conceito, um lugar. Extraia padrões repetidos (ex.: modais de extras com layout igual).
-2. **KISS** — prefira a solução mais simples e legível.
-3. **SOLID** — uma responsabilidade por módulo; componentes dependem de stores/serviços, não de detalhes internos.
-4. **YAGNI** — implemente só o que foi pedido; sem features, flags ou abstrações especulativas.
+- Install: `pnpm install`
+- Start: `pnpm start`. Also `pnpm web`, `pnpm android`, `pnpm ios`
+- Test: `pnpm test` (Jest)
+- Lint: `pnpm lint` (ESLint, config in `.eslintrc.js`). Format with Prettier (`.prettierrc.js`)
+- Web build: `pnpm build` (`expo export -p web --output-dir build`)
+- Price data refresh: `pnpm precos` (`scripts/atualizar-precos.js`, also run weekly by `.github/workflows/atualizar-precos.yml`)
+- Native builds: `pnpm build:android`, `pnpm build:android:preview` (EAS)
 
-## Qualidade de código
+## Structure
 
-- **Limite de 180 linhas por arquivo novo ou alterado.** Se um arquivo crescer, extraia em vez de ultrapassar o limite.
-- Regra de negócio e cálculos nas stores/utils, nunca dentro de JSX.
-- Nomes descritivos e consistentes: componentes `PascalCase`, stores `nome.store.ts`, testes `nome.test.ts` em `__tests__/`.
-- Comentários só para o "porquê" não óbvio; nunca para narrar o código.
-- Tratamento de erro básico em I/O e parsing; não exponha detalhes internos ao usuário.
-- Formatação: Prettier (`.prettierrc.js`) e ESLint (`.eslintrc.js`). Não commite warnings novos.
-- Textos de UI em português do Brasil.
-- Nunca versione segredos (keystores, `service-account-key.json`, chaves de API). O CI roda gitleaks.
-- Não commite artefatos gerados: logs (`*.log`), `coverage/`, `build/`.
+- `src/components/`: UI. `src/hooks/`: screen state. `src/lib/`: calculation and formatting, no React
+- `src/services/`: access to price data. `src/__tests__/`: app-level tests. Unit tests sit in `__tests__/` next to their module
+- `scripts/`: data pipeline (ANP, IBGE municipalities, gas stations, history). Generates `data/precos.json`
+- `data/`: bundled price and municipality data (`precos.json`, `municipios.json`, `postos/`, `historico.sqlite`)
+- `android/`, `ios/`: native projects. `public/`: web shell
 
-## Testes
+## Conventions
 
-- Todo código novo de lógica (stores, utils, services) precisa de teste unitário; bug fix começa por um teste que reproduz.
-- Cobertura mínima global: **80%**. Dados de teste realistas (preços em R$, consumo em km/l).
-- Antes de abrir PR:
+- DRY, KISS, SOLID, YAGNI. One concept, one place. Implement only what was asked.
+- Max 180 lines per new or changed file. If a file grows past that, extract it.
+- Business rules and calculations live in stores or utils, never inside JSX.
+- Names: components `PascalCase`, stores `nome.store.ts`, tests `nome.test.ts` in `__tests__/`.
+- Comments only for a non-obvious "why". Never narrate the code.
+- Basic error handling on I/O and parsing. Do not expose internal details to the user.
+- UI text is pt-BR. Commit prefixes: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`.
+- Do not commit new ESLint or Prettier warnings.
+- Tests: every new logic module (stores, utils, services) needs a unit test. A bug fix starts with a test that reproduces it. Target: 80% global coverage. Use realistic data (R$ prices, km/l consumption).
+- Before a PR: `pnpm lint` and `pnpm test`, both passing. Update `README.md` in the same PR when commands, structure or features change.
 
-```bash
-pnpm lint
-pnpm test
-```
+## Gotchas
 
-## Fluxo de desenvolvimento
-
-- Branch a partir da principal; commits pequenos com mensagens claras (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`).
-- PR descreve o que mudou e como foi testado; só mergeia com o workflow **Validate** verde.
-- Mudou comando, estrutura ou feature? Atualize o `README.md` no mesmo PR.
-
-## Checklist do agente
-
-- [ ] Mudança mínima e dentro do escopo pedido
-- [ ] Arquivos ≤ 180 linhas, sem duplicação
-- [ ] Testes adicionados/atualizados; `pnpm lint` e `pnpm test` passando
-- [ ] Versão `.web.tsx` conferida quando aplicável
-- [ ] README atualizado se necessário
+- Prices are real ANP averages. Never invent or simulate prices. A city without an ANP survey may only use the nearest surveyed city or the state/region average, and the screen must say so.
+- Offline, the app uses the bundled file. Do not add a backend or API keys.
+- Never commit secrets: release keystores, `service-account-key.json`, API keys. `android/app/debug.keystore` is the committed debug key. CI runs gitleaks (`security.yml`).
+- Do not commit generated artifacts: logs (`*.log`), `coverage/`, `build/`.
+- Jest does not enforce the 80% threshold in `jest.config.js`. Check coverage manually when a change touches logic.
 
 <!-- base-actions-main-policy -->
 ## GitHub Actions — padrão obrigatório (@main)
