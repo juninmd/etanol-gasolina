@@ -1,4 +1,4 @@
-import {compararCombustiveis, lerNumero} from '../calculo';
+import {compararCombustiveis, lerNumero, melhorPelaRegra} from '../calculo';
 
 describe('lerNumero', () => {
   it('aceita vírgula e ponto decimais', () => {
@@ -71,5 +71,26 @@ describe('compararCombustiveis', () => {
       compararCombustiveis({precoGasolina: NaN, precoEtanol: 4}),
     ).toBeNull();
     expect(compararCombustiveis({precoGasolina: 6, precoEtanol: 0})).toBeNull();
+  });
+});
+
+describe('melhorPelaRegra', () => {
+  it('concorda com o cartão do resultado em empates exatos de 70%', () => {
+    // 2,10 / 3,00 = 70%: a lista de postos e o cartão precisam dar a mesma resposta.
+    for (const [gasolina, etanol] of [
+      [3.0, 2.1],
+      [3.2, 2.24],
+      [3.5, 2.45],
+    ]) {
+      expect(melhorPelaRegra(gasolina, etanol)).toBe(
+        compararCombustiveis({precoGasolina: gasolina, precoEtanol: etanol})
+          ?.melhor,
+      );
+    }
+  });
+
+  it('escolhe gasolina quando o etanol passa de 70%', () => {
+    expect(melhorPelaRegra(5.0, 3.6)).toBe('gasolina');
+    expect(melhorPelaRegra(5.0, 3.4)).toBe('etanol');
   });
 });
